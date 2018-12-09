@@ -105,10 +105,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="left-arrow.png" />
+    <None Include="Resources\left-arrow.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="right-arrow.png" />
+    <None Include="Resources\right-arrow.png" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\search.png" />
@@ -124,9 +124,6 @@
       <ProductName>.NET Framework 3.5 SP1</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="search.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
