@@ -23,14 +23,19 @@ namespace MouseNet.Logophi
                 foreach (var def in _thesaurus.Definitions)
                     _cDefList.Items.Add(
                         $"{def.PartOfSpeech}: {def.Definition}");
+            else return;
             //if Definitions was null or something weird happened,
             //so put an error message in the list box. Otherwise
             //go ahead and add the word to the search history,
             //unless it's identical to the last page.
-            if (_cDefList.Items.Count == 0)
-                _cDefList.Items.Add("No results found.");
-            else if (word != _history.CurrentItem)
+            if (_cDefList.Items.Count != 0
+             && word != _history.CurrentItem)
+                {
                 _history.AddItem(word);
+                if (!_cSearchText.Items.Contains(_cSearchText.Text))
+                    _cSearchText.Items.Add(_cSearchText.Text);
+                } else _cDefList.Items.Add("No results found.");
+
             _cDefList.SelectedIndex = 0;
             _cBackBtn.Enabled = _history.CanGoBackward;
             _cForwardBtn.Enabled = _history.CanGoForward;
@@ -59,11 +64,13 @@ namespace MouseNet.Logophi
             return item;
             }
 
+        private void OnSearchTextSelectionChangeCommitted
+            (object sender,
+             EventArgs e) { }
+
         private void Search()
             {
             FetchDefinitions(_cSearchText.Text);
-            if (_thesaurus.Definitions != null)
-                _cSearchText.Items.Add(_cSearchText.Text);
             }
 
         private void SearchFromHistory()
