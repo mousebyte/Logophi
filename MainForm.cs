@@ -2,7 +2,7 @@
 using System.Drawing;
 using System.Windows.Forms;
 
-namespace Thesaurus.Forms
+namespace MouseNet.Logophi
 {
     public partial class MainForm : Form
     {

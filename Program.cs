@@ -8,7 +8,7 @@ using System.Windows.Forms;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
-namespace Thesaurus.Forms
+namespace MouseNet.Logophi
 {
     internal class SearchHistory
     {

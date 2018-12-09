@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Thesaurus.Forms.Properties
+namespace MouseNet.Logophi.Properties
 {
 
 

@@ -1,4 +1,4 @@
-﻿namespace Thesaurus.Forms
+﻿namespace MouseNet.Logophi
 {
     partial class MainForm
     {
@@ -124,7 +124,7 @@
             this._cSearchBtn.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this._cSearchBtn.FlatAppearance.BorderSize = 0;
             this._cSearchBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this._cSearchBtn.Image = global::Thesaurus.Forms.Properties.Resources.search;
+            this._cSearchBtn.Image = global::MouseNet.Logophi.Properties.Resources.search;
             this._cSearchBtn.Location = new System.Drawing.Point(293, 27);
             this._cSearchBtn.Name = "_cSearchBtn";
             this._cSearchBtn.Size = new System.Drawing.Size(30, 30);
