@@ -66,7 +66,10 @@ namespace MouseNet.Logophi
 
         private void OnSearchTextSelectionChangeCommitted
             (object sender,
-             EventArgs e) { }
+             EventArgs e)
+            {
+            FetchDefinitions(_cSearchText.SelectedItem.ToString());
+            }
 
         private void Search()
             {

@@ -176,6 +176,7 @@
             this._cSearchText.Size = new System.Drawing.Size(280, 21);
             this._cSearchText.Sorted = true;
             this._cSearchText.TabIndex = 7;
+            this._cSearchText.SelectionChangeCommitted += new System.EventHandler(this.OnSearchTextSelectionChangeCommitted);
             this._cSearchText.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnSearchTextReturnPressed);
             // 
             // menuStrip1
