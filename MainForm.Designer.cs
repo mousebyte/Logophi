@@ -101,7 +101,7 @@
             this._cTabAntonyms.Location = new System.Drawing.Point(4, 22);
             this._cTabAntonyms.Name = "_cTabAntonyms";
             this._cTabAntonyms.Padding = new System.Windows.Forms.Padding(3);
-            this._cTabAntonyms.Size = new System.Drawing.Size(430, 215);
+            this._cTabAntonyms.Size = new System.Drawing.Size(399, 213);
             this._cTabAntonyms.TabIndex = 1;
             this._cTabAntonyms.Text = "Antonyms";
             this._cTabAntonyms.UseVisualStyleBackColor = true;
@@ -112,10 +112,11 @@
             this._cAntonymList.Dock = System.Windows.Forms.DockStyle.Fill;
             this._cAntonymList.Location = new System.Drawing.Point(3, 3);
             this._cAntonymList.Name = "_cAntonymList";
-            this._cAntonymList.Size = new System.Drawing.Size(424, 209);
+            this._cAntonymList.Size = new System.Drawing.Size(393, 207);
             this._cAntonymList.TabIndex = 0;
             this._cAntonymList.UseCompatibleStateImageBehavior = false;
             this._cAntonymList.View = System.Windows.Forms.View.List;
+            this._cAntonymList.ItemActivate += new System.EventHandler(this.OnTermEntryDoubleClick);
             // 
             // _cSearchBtn
             // 
@@ -124,7 +125,7 @@
             this._cSearchBtn.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this._cSearchBtn.FlatAppearance.BorderSize = 0;
             this._cSearchBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this._cSearchBtn.Image = global::MouseNet.Logophi.Properties.Resources.search;
+            this._cSearchBtn.Image = ((System.Drawing.Image)(resources.GetObject("_cSearchBtn.Image")));
             this._cSearchBtn.Location = new System.Drawing.Point(293, 27);
             this._cSearchBtn.Name = "_cSearchBtn";
             this._cSearchBtn.Size = new System.Drawing.Size(30, 30);
