@@ -1,13 +1,17 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
+using MouseNet.Logophi.Properties;
 
 namespace MouseNet.Logophi
 {
     public partial class MainForm : Form
     {
         private readonly SearchHistory _history = new SearchHistory();
-        private readonly Thesaurus _thesaurus = new Thesaurus();
+
+        private readonly Thesaurus _thesaurus =
+            new Thesaurus(Settings.Default.PersistentCache);
 
         public MainForm()
             {
@@ -24,21 +28,28 @@ namespace MouseNet.Logophi
                     _cDefList.Items.Add(
                         $"{def.PartOfSpeech}: {def.Definition}");
             else return;
-            //if Definitions was null or something weird happened,
-            //so put an error message in the list box. Otherwise
-            //go ahead and add the word to the search history,
-            //unless it's identical to the last page.
-            if (_cDefList.Items.Count != 0
-             && word != _history.CurrentItem)
+            
+            
+            if (_cDefList.Items.Count != 0)
                 {
-                _history.AddItem(word);
-                if (!_cSearchText.Items.Contains(_cSearchText.Text))
-                    _cSearchText.Items.Add(_cSearchText.Text);
-                } else _cDefList.Items.Add("No results found.");
+                _cBookmarkBtn.Enabled = true;
+                if (word != _history.CurrentItem)
+                    {
+                    _history.AddItem(word);
+                    if (!_cSearchText.Items.Contains(
+                            _cSearchText.Text))
+                        _cSearchText.Items.Add(_cSearchText.Text);
+                    }
+                } else
+                {
+                _cBookmarkBtn.Enabled = false;
+                _cDefList.Items.Add("No results found.");
+                }
 
             _cDefList.SelectedIndex = 0;
             _cBackBtn.Enabled = _history.CanGoBackward;
             _cForwardBtn.Enabled = _history.CanGoForward;
+            UpdateBookmarkButton(_thesaurus.IsBookmarked);
             }
 
         private static ListViewItem MakeListViewItem
@@ -93,6 +104,29 @@ namespace MouseNet.Logophi
             SearchFromHistory();
             }
 
+        private void OnViewBookmarksClicked
+            (object sender,
+             EventArgs e)
+            {
+            var bookmarksForm =
+                new BookmarksForm(_thesaurus.Bookmarks);
+            bookmarksForm.BookmarkDoubleClick +=
+                (o,
+                 s) =>
+                    {
+                    _cSearchText.Text = s;
+                    FetchDefinitions(s);
+                    };
+            bookmarksForm.BookmarkRemoved +=
+                (o,
+                 s) =>
+                    {
+                    _thesaurus.RemoveBookmark(s);
+                    UpdateBookmarkButton(_thesaurus.IsBookmarked);
+                    };
+            bookmarksForm.Show(this);
+            }
+
         private void OnDefListSelectedIndexChanged
             (object sender,
              EventArgs e)
@@ -105,6 +139,29 @@ namespace MouseNet.Logophi
                 _cSynonymList.Items.Add(MakeListViewItem(syn));
             foreach (var ant in def.Antonyms)
                 _cAntonymList.Items.Add(MakeListViewItem(ant));
+            }
+
+        private void UpdateBookmarkButton
+            (bool val)
+            {
+            if (val)
+                {
+                _cBookmarkBtn.Image = Resources.bookmark_enabled;
+                _cToolTip.SetToolTip(_cBookmarkBtn,
+                                     "Remove Bookmark");
+                } else
+                {
+                _cBookmarkBtn.Image = Resources.bookmark_disabled;
+                _cToolTip.SetToolTip(_cBookmarkBtn, "Add Bookmark");
+                }
+            }
+
+        private void OnBookmarkClicked
+            (object sender,
+             EventArgs e)
+            {
+            _thesaurus.IsBookmarked = !_thesaurus.IsBookmarked;
+            UpdateBookmarkButton(_thesaurus.IsBookmarked);
             }
 
         private void OnForwardClicked

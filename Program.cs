@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.IO;
 using System.Linq;
 using System.Net;
 using System.Runtime.Caching;
+using System.Runtime.Serialization.Formatters.Binary;
 using System.Windows.Forms;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -104,44 +106,114 @@ namespace MouseNet.Logophi
 
     internal class Thesaurus
     {
+        private readonly string _bookmarkPath =
+            Path.Combine(Directory.GetCurrentDirectory(),
+                         "data/bookmarks.lphi");
+
+        private readonly string _cachePath =
+            Path.Combine(Directory.GetCurrentDirectory(),
+                         "data/cache.lphi");
+
+        private ObjectCache
+            _cache = new MemoryCache("ThesaurusCache");
+
+        private List<string> _bookmarks = new List<string>();
         private string _searchTerm;
 
-        public Thesaurus()
+        public Thesaurus
+            (bool persistentCache)
             {
             Definitions = new List<WordDefinition>();
+            PersistentCache = persistentCache;
+            var dataPath =
+                Path.Combine(Directory.GetCurrentDirectory(), "data");
+            if (!Directory.Exists(dataPath))
+                Directory.CreateDirectory(dataPath);
+            else LoadSavedData();
             }
 
         public List<WordDefinition> Definitions { get; private set; }
+        public IEnumerable<string> Bookmarks => _bookmarks;
+
+        public bool IsBookmarked {
+            get => Bookmarks.Contains(SearchTerm);
+            set {
+                if (value) AddBookmark(SearchTerm);
+                else RemoveBookmark(SearchTerm);
+            }
+        }
+
+        public bool PersistentCache { get; set; }
 
         public string SearchTerm {
             get => _searchTerm;
             set => SearchWord(value);
         }
 
+        public void AddBookmark
+            (string value)
+            {
+            if (_bookmarks.Contains(value)) return;
+            _bookmarks.Add(value);
+            SaveBookmarks();
+            }
+
+        public void RemoveBookmark
+            (string value)
+            {
+            if (!_bookmarks.Contains(value)) return;
+            _bookmarks.Remove(value);
+            SaveBookmarks();
+            }
+
+        private void UpdateCache()
+            {
+            if (Definitions == null || _cache.Contains(SearchTerm))
+                return;
+            _cache[SearchTerm] = Definitions;
+            if (!PersistentCache) return;
+            var formatter = new BinaryFormatter();
+            using (var strm = File.OpenWrite(_cachePath))
+                formatter.Serialize(strm, _cache);
+            }
+
+        private void LoadFromWeb
+            (string term)
+            {
+            var request = WebRequest.CreateHttp(
+                "https://tuna.thesaurus.com/pageData/"
+              + term.Trim().ToLower());
+            var data = RequestWordData(request)
+               .SelectToken("data.definitionData.definitions");
+            Definitions = data?.ToObject<List<WordDefinition>>();
+            UpdateCache();
+            }
+
         public void SearchWord
             (string word)
             {
             _searchTerm = word;
-            if (!MemoryCache.Default.Contains(_searchTerm))
-                {
-                var request = WebRequest.CreateHttp(
-                    "https://tuna.thesaurus.com/pageData/"
-                  + word.Trim().ToLower());
-                var data = RequestWordData(request)
-                   .SelectToken("data.definitionData.definitions");
-                Definitions = data?.ToObject<List<WordDefinition>>();
-                if (Definitions != null)
-                    MemoryCache.Default[_searchTerm] = Definitions;
-                } else
-                Definitions =
-                    MemoryCache.Default[_searchTerm] as
-                        List<WordDefinition>;
+            if (_cache.Contains(word))
+                Definitions = _cache[word] as List<WordDefinition>;
+            else LoadFromWeb(word);
             }
 
         public void SearchWord
             (TermEntry term)
             {
             SearchWord(term.Value);
+            }
+
+        private void LoadSavedData()
+            {
+            if (!File.Exists(_bookmarkPath)) return;
+            var formatter = new BinaryFormatter();
+            using (var strm = File.OpenRead(_bookmarkPath))
+                _bookmarks =
+                    formatter.Deserialize(strm) as List<string>;
+            if (!PersistentCache || !File.Exists(_cachePath)) return;
+            using (var strm = File.OpenRead(_cachePath))
+                _cache = formatter.Deserialize(strm) as MemoryCache;
             }
 
         private static JObject RequestWordData
@@ -152,6 +224,13 @@ namespace MouseNet.Logophi
                     new StreamReader(resp.GetResponseStream()))
                     using (var jr = new JsonTextReader(sr))
                         return JObject.Load(jr);
+            }
+
+        private void SaveBookmarks()
+            {
+            var formatter = new BinaryFormatter();
+            using (var strm = File.OpenWrite(_bookmarkPath))
+                formatter.Serialize(strm, _bookmarks);
             }
     }
 
