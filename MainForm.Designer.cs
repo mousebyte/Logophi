@@ -39,10 +39,10 @@
             this._cSearchText = new System.Windows.Forms.ComboBox();
             this._cMenuStrip = new System.Windows.Forms.MenuStrip();
             this._cBookmarksMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this._cOptionsMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this._cBookmarksView = new System.Windows.Forms.ToolStripMenuItem();
-            this._cToolTip = new System.Windows.Forms.ToolTip(this.components);
+            this._cOptionsMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.preferencesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this._cToolTip = new System.Windows.Forms.ToolTip(this.components);
             this._cBookmarkBtn = new System.Windows.Forms.Button();
             this._cSearchBtn = new System.Windows.Forms.Button();
             this._cForwardBtn = new System.Windows.Forms.Button();
@@ -106,7 +106,7 @@
             this._cTabAntonyms.Location = new System.Drawing.Point(4, 22);
             this._cTabAntonyms.Name = "_cTabAntonyms";
             this._cTabAntonyms.Padding = new System.Windows.Forms.Padding(3);
-            this._cTabAntonyms.Size = new System.Drawing.Size(399, 188);
+            this._cTabAntonyms.Size = new System.Drawing.Size(399, 210);
             this._cTabAntonyms.TabIndex = 1;
             this._cTabAntonyms.Text = "Antonyms";
             this._cTabAntonyms.UseVisualStyleBackColor = true;
@@ -117,7 +117,7 @@
             this._cAntonymList.Dock = System.Windows.Forms.DockStyle.Fill;
             this._cAntonymList.Location = new System.Drawing.Point(3, 3);
             this._cAntonymList.Name = "_cAntonymList";
-            this._cAntonymList.Size = new System.Drawing.Size(393, 182);
+            this._cAntonymList.Size = new System.Drawing.Size(393, 204);
             this._cAntonymList.TabIndex = 0;
             this._cAntonymList.UseCompatibleStateImageBehavior = false;
             this._cAntonymList.View = System.Windows.Forms.View.List;
@@ -156,6 +156,13 @@
             this._cBookmarksMenuItem.Size = new System.Drawing.Size(78, 20);
             this._cBookmarksMenuItem.Text = "&Bookmarks";
             // 
+            // _cBookmarksView
+            // 
+            this._cBookmarksView.Name = "_cBookmarksView";
+            this._cBookmarksView.Size = new System.Drawing.Size(161, 22);
+            this._cBookmarksView.Text = "&View Bookmarks";
+            this._cBookmarksView.Click += new System.EventHandler(this.OnViewBookmarksClicked);
+            // 
             // _cOptionsMenuItem
             // 
             this._cOptionsMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -163,13 +170,6 @@
             this._cOptionsMenuItem.Name = "_cOptionsMenuItem";
             this._cOptionsMenuItem.Size = new System.Drawing.Size(61, 20);
             this._cOptionsMenuItem.Text = "&Options";
-            // 
-            // _cBookmarksView
-            // 
-            this._cBookmarksView.Name = "_cBookmarksView";
-            this._cBookmarksView.Size = new System.Drawing.Size(180, 22);
-            this._cBookmarksView.Text = "&View Bookmarks";
-            this._cBookmarksView.Click += new System.EventHandler(this.OnViewBookmarksClicked);
             // 
             // preferencesToolStripMenuItem
             // 
@@ -200,7 +200,7 @@
             this._cSearchBtn.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this._cSearchBtn.FlatAppearance.BorderSize = 0;
             this._cSearchBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this._cSearchBtn.Image = ((System.Drawing.Image)(resources.GetObject("_cSearchBtn.Image")));
+            this._cSearchBtn.Image = global::MouseNet.Logophi.Properties.Resources.search;
             this._cSearchBtn.Location = new System.Drawing.Point(266, 27);
             this._cSearchBtn.Name = "_cSearchBtn";
             this._cSearchBtn.Size = new System.Drawing.Size(30, 30);
@@ -217,7 +217,7 @@
             this._cForwardBtn.Enabled = false;
             this._cForwardBtn.FlatAppearance.BorderSize = 0;
             this._cForwardBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this._cForwardBtn.Image = ((System.Drawing.Image)(resources.GetObject("_cForwardBtn.Image")));
+            this._cForwardBtn.Image = global::MouseNet.Logophi.Properties.Resources.right_arrow;
             this._cForwardBtn.Location = new System.Drawing.Point(338, 27);
             this._cForwardBtn.Name = "_cForwardBtn";
             this._cForwardBtn.Size = new System.Drawing.Size(30, 30);
@@ -234,7 +234,7 @@
             this._cBackBtn.Enabled = false;
             this._cBackBtn.FlatAppearance.BorderSize = 0;
             this._cBackBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this._cBackBtn.Image = ((System.Drawing.Image)(resources.GetObject("_cBackBtn.Image")));
+            this._cBackBtn.Image = global::MouseNet.Logophi.Properties.Resources.left_arrow;
             this._cBackBtn.Location = new System.Drawing.Point(302, 27);
             this._cBackBtn.Name = "_cBackBtn";
             this._cBackBtn.Size = new System.Drawing.Size(30, 30);
@@ -256,6 +256,7 @@
             this.Controls.Add(this._cTabs);
             this.Controls.Add(this._cDefList);
             this.Controls.Add(this._cMenuStrip);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this._cMenuStrip;
             this.Name = "MainForm";
             this.Text = "Logophi";
