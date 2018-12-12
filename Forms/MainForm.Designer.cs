@@ -1,4 +1,4 @@
-﻿namespace MouseNet.Logophi
+﻿namespace MouseNet.Logophi.Forms
 {
     partial class MainForm
     {
@@ -62,7 +62,7 @@
             this._cDefList.Name = "_cDefList";
             this._cDefList.Size = new System.Drawing.Size(388, 186);
             this._cDefList.TabIndex = 2;
-            this._cDefList.SelectedIndexChanged += new System.EventHandler(this.OnDefListSelectedIndexChanged);
+            this._cDefList.SelectedIndexChanged += new System.EventHandler(this.InvokeSelectedDefinitionChanged);
             // 
             // _cTabs
             // 
@@ -159,7 +159,7 @@
             // _cBookmarksView
             // 
             this._cBookmarksView.Name = "_cBookmarksView";
-            this._cBookmarksView.Size = new System.Drawing.Size(161, 22);
+            this._cBookmarksView.Size = new System.Drawing.Size(180, 22);
             this._cBookmarksView.Text = "&View Bookmarks";
             this._cBookmarksView.Click += new System.EventHandler(this.OnViewBookmarksClicked);
             // 
@@ -174,8 +174,9 @@
             // preferencesToolStripMenuItem
             // 
             this.preferencesToolStripMenuItem.Name = "preferencesToolStripMenuItem";
-            this.preferencesToolStripMenuItem.Size = new System.Drawing.Size(135, 22);
+            this.preferencesToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.preferencesToolStripMenuItem.Text = "&Preferences";
+            this.preferencesToolStripMenuItem.Click += new System.EventHandler(this.InvokeMenuItemClicked);
             // 
             // _cBookmarkBtn
             // 
@@ -191,7 +192,7 @@
             this._cBookmarkBtn.TabIndex = 10;
             this._cToolTip.SetToolTip(this._cBookmarkBtn, "Forward");
             this._cBookmarkBtn.UseVisualStyleBackColor = true;
-            this._cBookmarkBtn.Click += new System.EventHandler(this.OnBookmarkClicked);
+            this._cBookmarkBtn.Click += new System.EventHandler(this.InvokeBookmarkClicked);
             // 
             // _cSearchBtn
             // 
@@ -224,7 +225,7 @@
             this._cForwardBtn.TabIndex = 5;
             this._cToolTip.SetToolTip(this._cForwardBtn, "Forward");
             this._cForwardBtn.UseVisualStyleBackColor = true;
-            this._cForwardBtn.Click += new System.EventHandler(this.OnForwardClicked);
+            this._cForwardBtn.Click += new System.EventHandler(this.InvokeForwardClicked);
             // 
             // _cBackBtn
             // 
@@ -241,7 +242,7 @@
             this._cBackBtn.TabIndex = 4;
             this._cToolTip.SetToolTip(this._cBackBtn, "Back");
             this._cBackBtn.UseVisualStyleBackColor = true;
-            this._cBackBtn.Click += new System.EventHandler(this.OnBackClicked);
+            this._cBackBtn.Click += new System.EventHandler(this.InvokeBackClicked);
             // 
             // MainForm
             // 

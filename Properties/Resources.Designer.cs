@@ -61,6 +61,15 @@ namespace MouseNet.Logophi.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Logophi.
+        /// </summary>
+        internal static string AppName {
+            get {
+                return ResourceManager.GetString("AppName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         internal static System.Drawing.Bitmap bookmark_disabled {
@@ -77,6 +86,15 @@ namespace MouseNet.Logophi.Properties {
             get {
                 object obj = ResourceManager.GetObject("bookmark_enabled", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No results found..
+        /// </summary>
+        internal static string InvalidSearch {
+            get {
+                return ResourceManager.GetString("InvalidSearch", resourceCulture);
             }
         }
         

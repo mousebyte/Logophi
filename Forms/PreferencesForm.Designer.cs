@@ -1,4 +1,4 @@
-﻿namespace MouseNet.Logophi
+﻿namespace MouseNet.Logophi.Forms
 {
     partial class PreferencesForm
     {

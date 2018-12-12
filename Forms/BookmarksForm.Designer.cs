@@ -1,4 +1,4 @@
-﻿namespace MouseNet.Logophi
+﻿namespace MouseNet.Logophi.Forms
 {
     partial class BookmarksForm
     {
@@ -41,9 +41,9 @@
             this._cBookmarksList.Location = new System.Drawing.Point(12, 12);
             this._cBookmarksList.Name = "_cBookmarksList";
             this._cBookmarksList.SelectionMode = System.Windows.Forms.SelectionMode.MultiSimple;
-            this._cBookmarksList.Size = new System.Drawing.Size(186, 252);
+            this._cBookmarksList.Size = new System.Drawing.Size(186, 251);
             this._cBookmarksList.TabIndex = 0;
-            this._cBookmarksList.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.OnBookmarkListItemDoubleClick);
+            this._cBookmarksList.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.InvokeBookmarkActivated);
             // 
             // _cRemoveBtn
             // 
@@ -53,7 +53,7 @@
             this._cRemoveBtn.TabIndex = 1;
             this._cRemoveBtn.Text = "-";
             this._cRemoveBtn.UseVisualStyleBackColor = true;
-            this._cRemoveBtn.Click += new System.EventHandler(this.OnRemoveClicked);
+            this._cRemoveBtn.Click += new System.EventHandler(this.InvokeBookmarkRemoved);
             // 
             // BookmarksForm
             // 
