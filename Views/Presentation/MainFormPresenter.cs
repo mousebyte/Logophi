@@ -44,14 +44,6 @@ namespace MouseNet.Logophi.Views.Presentation
             OnSearch(this, word);
             }
 
-        private void OnViewDictionaryClicked
-            (object sender,
-             EventArgs e)
-            {
-            if (!SearchValid) return;
-            Process.Start(Resources.DictionaryUrl + View.SearchText);
-            }
-
         private void HandleInvalidSearch()
             {
             View.Definitions.Add(Resources.InvalidSearch);
@@ -165,6 +157,14 @@ namespace MouseNet.Logophi.Views.Presentation
                 View.Synonyms.Add(MakeListViewItem(syn));
             foreach (var ant in def.Antonyms)
                 View.Antonyms.Add(MakeListViewItem(ant));
+            }
+
+        private void OnViewDictionaryClicked
+            (object sender,
+             EventArgs e)
+            {
+            if (!SearchValid) return;
+            Process.Start(Resources.DictionaryUrl + View.SearchText);
             }
     }
 }

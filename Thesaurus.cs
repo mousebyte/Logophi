@@ -43,8 +43,10 @@ namespace MouseNet.Logophi
               | SecurityProtocolType.Ssl3;
             Definitions = new List<WordDefinition>();
             PersistentCache = persistentCache;
-            var dataPath =
-                Path.Combine(Directory.GetCurrentDirectory(), "data");
+            var dataPath = Path.Combine(
+                Environment.GetFolderPath(
+                    Environment.SpecialFolder.LocalApplicationData),
+                "data");
             if (!Directory.Exists(dataPath))
                 Directory.CreateDirectory(dataPath);
             else LoadSavedData();
@@ -74,6 +76,7 @@ namespace MouseNet.Logophi
             if (_bookmarks.Contains(value)) return;
             _bookmarks.Add(value);
             SaveBookmarks();
+            InvokeBookmarkAdded(this, value);
             }
 
         public void RemoveBookmark
@@ -82,6 +85,7 @@ namespace MouseNet.Logophi
             if (!_bookmarks.Contains(value)) return;
             _bookmarks.Remove(value);
             SaveBookmarks();
+            InvokeBookmarkRemoved(this, value);
             }
 
         public void SearchWord
@@ -143,5 +147,22 @@ namespace MouseNet.Logophi
             using (var strm = File.OpenWrite(_cachePath))
                 formatter.Serialize(strm, _cache);
             }
+
+        private void InvokeBookmarkAdded
+            (object sender,
+             string args)
+            {
+            BookmarkAdded?.Invoke(sender, args);
+            }
+
+        private void InvokeBookmarkRemoved
+            (object sender,
+             string args)
+            {
+            BookmarkRemoved?.Invoke(sender, args);
+            }
+
+        public event EventHandler<string> BookmarkRemoved;
+        public event EventHandler<string> BookmarkAdded;
     }
 }

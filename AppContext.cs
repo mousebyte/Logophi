@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Net;
+using System.Diagnostics;
 using System.Windows.Forms;
 using MouseNet.Logophi.Forms;
 using MouseNet.Logophi.Properties;
@@ -43,21 +43,6 @@ namespace MouseNet.Logophi
             _trayIcon.DoubleClick += OnOpen;
             }
 
-        private void OnAboutClicked
-            (object sender,
-             EventArgs e)
-            {
-            var form = new About();
-            form.ShowDialog((IWin32Window) _mainFormPresenter.View);
-            }
-
-        private void OnGithubProjectClicked
-            (object sender,
-             EventArgs e)
-            {
-            System.Diagnostics.Process.Start(Resources.GithubUrl);
-            }
-
         private void PresentMainForm()
             {
             if (_mainFormPresenter.IsPresenting) return;
@@ -65,9 +50,18 @@ namespace MouseNet.Logophi
             form.ViewBookmarksClicked += OnViewBookmarksClicked;
             form.GithubProjectClicked += OnGithubProjectClicked;
             form.AboutClicked += OnAboutClicked;
-            form.ExitClicked += (sender,
-                                 args) => Application.Exit();
+            form.ExitClicked +=
+                (sender,
+                 args) => Application.Exit();
             _mainFormPresenter.Present(form);
+            }
+
+        private void OnAboutClicked
+            (object sender,
+             EventArgs e)
+            {
+            var form = new About();
+            form.ShowDialog((IWin32Window) _mainFormPresenter.View);
             }
 
         private void OnApplicationExit
@@ -78,6 +72,13 @@ namespace MouseNet.Logophi
                 _mainFormPresenter.View.Close();
             _trayIcon.Visible = false;
             _trayIcon.Dispose();
+            }
+
+        private void OnGithubProjectClicked
+            (object sender,
+             EventArgs e)
+            {
+            Process.Start(Resources.GithubUrl);
             }
 
         private void OnOpen
@@ -91,8 +92,15 @@ namespace MouseNet.Logophi
             (object sender,
              EventArgs e)
             {
-            if (_bookmarksFormPresenter.IsPresenting) return;
+            if (!_mainFormPresenter.IsPresenting
+             || _bookmarksFormPresenter.IsPresenting) return;
             var form = new BookmarksForm();
+            _mainFormPresenter.Thesaurus.BookmarkRemoved +=
+                (o,
+                 s) => form.Items.Remove(s);
+            _mainFormPresenter.Thesaurus.BookmarkAdded +=
+                (o,
+                 s) => form.Items.Add(s);
             _bookmarksFormPresenter.Present(form);
             }
     }

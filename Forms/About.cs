@@ -12,7 +12,6 @@ namespace MouseNet.Logophi.Forms
             _lblProduct.Text = Resources.AppName;
             _lblVersion.Text = Application.ProductVersion;
             _lblAbout.Text = Resources.about;
-            
             }
 
         private void OnLinkClicked

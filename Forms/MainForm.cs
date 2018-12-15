@@ -67,6 +67,8 @@ namespace MouseNet.Logophi.Forms
                 }
             }
 
+        public event EventHandler ViewDictionaryClicked;
+
         private void TrySearch()
             {
             InvokeSearch(this, _cSearchText.Text);
@@ -147,13 +149,6 @@ namespace MouseNet.Logophi.Forms
                 _cDefList.SelectedIndex);
             }
 
-        public event EventHandler ViewBookmarksClicked;
-        public event EventHandler GithubProjectClicked;
-        public event EventHandler AboutClicked;
-        public event EventHandler ExitClicked;
-        public event EventHandler PreferencesClicked;
-        public event EventHandler ViewDictionaryClicked;
-
         private void InvokeViewDictionaryClicked
             (object sender,
              EventArgs args)
@@ -188,5 +183,11 @@ namespace MouseNet.Logophi.Forms
             {
             GithubProjectClicked?.Invoke(sender, args);
             }
+
+        public event EventHandler ViewBookmarksClicked;
+        public event EventHandler GithubProjectClicked;
+        public event EventHandler AboutClicked;
+        public event EventHandler ExitClicked;
+        public event EventHandler PreferencesClicked;
     }
 }
