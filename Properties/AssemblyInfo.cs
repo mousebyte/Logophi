@@ -7,7 +7,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("Logophi")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("MouseNet")]
 [assembly: AssemblyProduct("Logophi")]
 [assembly: AssemblyCopyright("")]
 [assembly: AssemblyTrademark("")]

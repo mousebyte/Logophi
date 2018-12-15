@@ -29,6 +29,12 @@ namespace MouseNet.Logophi
         public Thesaurus
             (bool persistentCache)
             {
+            ServicePointManager.Expect100Continue = true;
+            ServicePointManager.SecurityProtocol =
+                SecurityProtocolType.Tls
+              | SecurityProtocolType.Tls11
+              | SecurityProtocolType.Tls12
+              | SecurityProtocolType.Ssl3;
             Definitions = new List<WordDefinition>();
             PersistentCache = persistentCache;
             var dataPath =
