@@ -4,9 +4,9 @@ using MouseNet.Logophi.Properties;
 
 namespace MouseNet.Logophi.Forms
 {
-    public partial class About : Form
+    public partial class AboutForm : Form
     {
-        public About()
+        public AboutForm()
             {
             InitializeComponent();
             _lblProduct.Text = Resources.AppName;

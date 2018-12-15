@@ -60,7 +60,7 @@ namespace MouseNet.Logophi
             (object sender,
              EventArgs e)
             {
-            var form = new About();
+            var form = new AboutForm();
             form.ShowDialog((IWin32Window) _mainFormPresenter.View);
             }
 

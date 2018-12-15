@@ -1,6 +1,6 @@
 ﻿namespace MouseNet.Logophi.Forms
 {
-    partial class About
+    partial class AboutForm
     {
         /// <summary>
         /// Required designer variable.
@@ -80,7 +80,7 @@
             // 
             this._lblGithubLink.AutoSize = true;
             this._lblGithubLink.LinkArea = new System.Windows.Forms.LinkArea(21, 6);
-            this._lblGithubLink.Location = new System.Drawing.Point(281, 251);
+            this._lblGithubLink.Location = new System.Drawing.Point(281, 210);
             this._lblGithubLink.Name = "_lblGithubLink";
             this._lblGithubLink.Size = new System.Drawing.Size(134, 17);
             this._lblGithubLink.TabIndex = 4;
@@ -100,7 +100,7 @@
             this.Controls.Add(this._lblProduct);
             this.Controls.Add(this.pictureBox1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
-            this.Name = "About";
+            this.Name = "AboutForm";
             this.Text = "About";
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
