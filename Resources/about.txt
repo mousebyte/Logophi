@@ -1,0 +1,1 @@
+Logophi is an open source thesaurus developed by mousebyte, using the super secret Thesaurus.com API.

@@ -70,11 +70,20 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AppContext.cs" />
+    <Compile Include="Forms\About.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\About.Designer.cs">
+      <DependentUpon>About.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\BookmarksForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\BookmarksForm.Designer.cs">
       <DependentUpon>BookmarksForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\WrappingLabel.cs">
+      <SubType>Component</SubType>
     </Compile>
     <Compile Include="SearchHistory.cs" />
     <Compile Include="TermEntry.cs" />
@@ -98,6 +107,9 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="WordDefinition.cs" />
+    <EmbeddedResource Include="Forms\About.resx">
+      <DependentUpon>About.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\BookmarksForm.resx">
       <DependentUpon>BookmarksForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -162,6 +174,13 @@
   <ItemGroup>
     <None Include="Resources\logophi.ico" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Content Include="Resources\about.txt" />
+    <Content Include="Resources\dictionary.png" />
+    <Content Include="Resources\exit.png" />
+    <Content Include="Resources\github.png" />
+    <Content Include="Resources\info.png" />
+    <Content Include="Resources\logophi.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

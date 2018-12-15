@@ -147,10 +147,51 @@ namespace MouseNet.Logophi.Forms
             (object sender,
              EventArgs args)
             {
-            MenuItemClicked?.Invoke(sender, args);
-            }
+
+        }
 
         public event EventHandler ViewBookmarksClicked;
+        public event EventHandler GithubProjectClicked;
+        public event EventHandler AboutClicked;
+        public event EventHandler ExitClicked;
+        public event EventHandler PreferencesClicked;
+        public event EventHandler ViewDictionaryClicked;
+
+        private void InvokeViewDictionaryClicked
+            (object sender,
+             EventArgs args)
+            {
+            ViewDictionaryClicked?.Invoke(sender, args);
+            }
+
+        private void InvokePreferencesClicked
+            (object sender,
+             EventArgs args)
+            {
+            PreferencesClicked?.Invoke(sender, args);
+            }
+
+        private void InvokeExitClicked
+            (object sender,
+             EventArgs args)
+            {
+            ExitClicked?.Invoke(sender, args);
+            }
+
+        private void InvokeAboutClicked
+            (object sender,
+             EventArgs args)
+            {
+            AboutClicked?.Invoke(sender, args);
+            }
+
+        private void InvokeGithubProjectClicked
+            (object sender,
+             EventArgs args)
+            {
+            GithubProjectClicked?.Invoke(sender, args);
+            
+            }
         public event EventHandler MenuItemClicked;
     }
 }

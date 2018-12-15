@@ -61,6 +61,15 @@ namespace MouseNet.Logophi.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Logophi is an open source thesaurus developed by mousebyte, using the super secret Thesaurus.com API..
+        /// </summary>
+        internal static string about {
+            get {
+                return ResourceManager.GetString("about", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Logophi.
         /// </summary>
         internal static string AppName {
@@ -85,6 +94,55 @@ namespace MouseNet.Logophi.Properties {
         internal static System.Drawing.Bitmap bookmark_enabled {
             get {
                 object obj = ResourceManager.GetObject("bookmark_enabled", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap dictionary {
+            get {
+                object obj = ResourceManager.GetObject("dictionary", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap exit {
+            get {
+                object obj = ResourceManager.GetObject("exit", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap github {
+            get {
+                object obj = ResourceManager.GetObject("github", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to http://github.com/mousebyte/logophi.
+        /// </summary>
+        internal static string GithubUrl {
+            get {
+                return ResourceManager.GetString("GithubUrl", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap info {
+            get {
+                object obj = ResourceManager.GetObject("info", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -115,6 +173,16 @@ namespace MouseNet.Logophi.Properties {
             get {
                 object obj = ResourceManager.GetObject("logophi", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap logophi1 {
+            get {
+                object obj = ResourceManager.GetObject("logophi1", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         

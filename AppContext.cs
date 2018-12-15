@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net;
 using System.Windows.Forms;
 using MouseNet.Logophi.Forms;
 using MouseNet.Logophi.Properties;
@@ -42,11 +43,28 @@ namespace MouseNet.Logophi
             _trayIcon.DoubleClick += OnOpen;
             }
 
+        private void OnAboutClicked
+            (object sender,
+             EventArgs e)
+            {
+            var form = new About();
+            form.ShowDialog((IWin32Window)_mainFormPresenter.View);
+            }
+
+        private void OnGithubProjectClicked
+            (object sender,
+             EventArgs e)
+            {
+            System.Diagnostics.Process.Start(Resources.GithubUrl);
+            }
+
         private void PresentMainForm()
             {
             if (_mainFormPresenter.IsPresenting) return;
             var form = new MainForm();
             form.ViewBookmarksClicked += OnViewBookmarksClicked;
+            form.GithubProjectClicked += OnGithubProjectClicked;
+            form.AboutClicked += OnAboutClicked;
             _mainFormPresenter.Present(form);
             }
 
