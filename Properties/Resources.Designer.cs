@@ -109,6 +109,15 @@ namespace MouseNet.Logophi.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to https://dictionary.com/browse/.
+        /// </summary>
+        internal static string DictionaryUrl {
+            get {
+                return ResourceManager.GetString("DictionaryUrl", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         internal static System.Drawing.Bitmap exit {
@@ -203,6 +212,15 @@ namespace MouseNet.Logophi.Properties {
             get {
                 object obj = ResourceManager.GetObject("search", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to https://tuna.thesaurus.com/pageData/.
+        /// </summary>
+        internal static string ThesaurusUrl {
+            get {
+                return ResourceManager.GetString("ThesaurusUrl", resourceCulture);
             }
         }
     }

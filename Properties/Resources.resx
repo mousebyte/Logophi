@@ -152,6 +152,7 @@
   </data>
   <data name="GithubUrl" xml:space="preserve">
     <value>http://github.com/mousebyte/logophi</value>
+    <comment>The project's Github URL.</comment>
   </data>
   <data name="info" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\resources\info.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -162,7 +163,15 @@
   <data name="dictionary" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\resources\dictionary.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="DictionaryUrl" xml:space="preserve">
+    <value>https://dictionary.com/browse/</value>
+    <comment>The Dictionary.com URL.</comment>
+  </data>
   <data name="exit" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\resources\exit.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ThesaurusUrl" xml:space="preserve">
+    <value>https://tuna.thesaurus.com/pageData/</value>
+    <comment>The Thesaurus.com URL.</comment>
   </data>
 </root>

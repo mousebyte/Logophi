@@ -69,9 +69,10 @@
             // 
             // _lblAbout
             // 
+            this._lblAbout.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this._lblAbout.Location = new System.Drawing.Point(278, 98);
             this._lblAbout.Name = "_lblAbout";
-            this._lblAbout.Size = new System.Drawing.Size(202, 13);
+            this._lblAbout.Size = new System.Drawing.Size(202, 15);
             this._lblAbout.TabIndex = 3;
             this._lblAbout.Text = "_lblAbout";
             // 

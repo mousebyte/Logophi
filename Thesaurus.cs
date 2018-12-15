@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net;
 using System.Runtime.Caching;
 using System.Runtime.Serialization.Formatters.Binary;
+using MouseNet.Logophi.Properties;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -96,8 +97,7 @@ namespace MouseNet.Logophi
             (string term)
             {
             var request = WebRequest.CreateHttp(
-                "https://tuna.thesaurus.com/pageData/"
-              + term.Trim().ToLower());
+                Resources.ThesaurusUrl + term.Trim().ToLower());
             var data = RequestWordData(request)
                .SelectToken("data.definitionData.definitions");
             Definitions = data?.ToObject<List<WordDefinition>>();

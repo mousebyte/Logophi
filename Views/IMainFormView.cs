@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections;
+using System.Windows.Forms;
 
 namespace MouseNet.Logophi.Views
 {
-    public interface IMainFormView
+    public interface IMainFormView : IView<IWin32Window>
     {
         IList Definitions { get; }
         IList Synonyms { get; }
@@ -18,12 +19,12 @@ namespace MouseNet.Logophi.Views
         void SetBookmarkState
             (bool bookmarked);
 
-        void Show();
         event EventHandler Closed;
         event EventHandler<string> Search;
         event EventHandler BackClicked;
         event EventHandler ForwardClicked;
         event EventHandler BookmarkClicked;
+        event EventHandler ViewDictionaryClicked;
         event EventHandler<int> SelectedDefinitionChanged;
     }
 }

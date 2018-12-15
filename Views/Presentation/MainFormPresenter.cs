@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Drawing;
 using System.Windows.Forms;
 using MouseNet.Logophi.Properties;
@@ -28,6 +29,7 @@ namespace MouseNet.Logophi.Views.Presentation
             View.BackClicked += OnBackClicked;
             View.ForwardClicked += OnForwardClicked;
             View.BookmarkClicked += OnBookmarkClicked;
+            View.ViewDictionaryClicked += OnViewDictionaryClicked;
             View.Closed += OnClosed;
             View.Show();
             IsPresenting = true;
@@ -40,6 +42,14 @@ namespace MouseNet.Logophi.Views.Presentation
             (string word)
             {
             OnSearch(this, word);
+            }
+
+        private void OnViewDictionaryClicked
+            (object sender,
+             EventArgs e)
+            {
+            if (!SearchValid) return;
+            Process.Start(Resources.DictionaryUrl + View.SearchText);
             }
 
         private void HandleInvalidSearch()

@@ -48,7 +48,7 @@ namespace MouseNet.Logophi
              EventArgs e)
             {
             var form = new About();
-            form.ShowDialog((IWin32Window)_mainFormPresenter.View);
+            form.ShowDialog((IWin32Window) _mainFormPresenter.View);
             }
 
         private void OnGithubProjectClicked
@@ -65,6 +65,8 @@ namespace MouseNet.Logophi
             form.ViewBookmarksClicked += OnViewBookmarksClicked;
             form.GithubProjectClicked += OnGithubProjectClicked;
             form.AboutClicked += OnAboutClicked;
+            form.ExitClicked += (sender,
+                                 args) => Application.Exit();
             _mainFormPresenter.Present(form);
             }
 
@@ -72,6 +74,8 @@ namespace MouseNet.Logophi
             (object sender,
              EventArgs e)
             {
+            if (_mainFormPresenter.IsPresenting)
+                _mainFormPresenter.View.Close();
             _trayIcon.Visible = false;
             _trayIcon.Dispose();
             }

@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections;
+using System.Windows.Forms;
 
 namespace MouseNet.Logophi.Views
 {
-    public interface IBookmarksFormView
+    public interface IBookmarksFormView : IView<IWin32Window>
     {
         IList Items { get; }
-        void Show();
         event EventHandler Closed;
         event EventHandler<string> BookmarkRemoved;
         event EventHandler<string> BookmarkActivated;

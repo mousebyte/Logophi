@@ -40,7 +40,10 @@ namespace MouseNet.Logophi.Forms
 
         public bool EnableBookmarkButton {
             get => _cBookmarkBtn.Enabled;
-            set => _cBookmarkBtn.Enabled = value;
+            set {
+                _cBookmarkBtn.Enabled = value;
+                addToolStripMenuItem.Enabled = value;
+            }
         }
 
         public int SelectedDefinitionIndex {
@@ -51,6 +54,7 @@ namespace MouseNet.Logophi.Forms
         public void SetBookmarkState
             (bool bookmarked)
             {
+            if (!EnableBookmarkButton) return;
             if (bookmarked)
                 {
                 _cBookmarkBtn.Image = Resources.bookmark_enabled;
@@ -143,13 +147,6 @@ namespace MouseNet.Logophi.Forms
                 _cDefList.SelectedIndex);
             }
 
-        private void InvokeMenuItemClicked
-            (object sender,
-             EventArgs args)
-            {
-
-        }
-
         public event EventHandler ViewBookmarksClicked;
         public event EventHandler GithubProjectClicked;
         public event EventHandler AboutClicked;
@@ -190,8 +187,6 @@ namespace MouseNet.Logophi.Forms
              EventArgs args)
             {
             GithubProjectClicked?.Invoke(sender, args);
-            
             }
-        public event EventHandler MenuItemClicked;
     }
 }

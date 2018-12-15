@@ -197,6 +197,7 @@
             this.addToolStripMenuItem.Name = "addToolStripMenuItem";
             this.addToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.addToolStripMenuItem.Text = "&Add";
+            this.addToolStripMenuItem.Click += new System.EventHandler(this.InvokeBookmarkClicked);
             // 
             // _cBookmarksView
             // 
@@ -252,6 +253,7 @@
             this._cBookmarkBtn.Enabled = false;
             this._cBookmarkBtn.FlatAppearance.BorderSize = 0;
             this._cBookmarkBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this._cBookmarkBtn.Image = global::MouseNet.Logophi.Properties.Resources.bookmark_disabled;
             this._cBookmarkBtn.Location = new System.Drawing.Point(374, 27);
             this._cBookmarkBtn.Name = "_cBookmarkBtn";
             this._cBookmarkBtn.Size = new System.Drawing.Size(21, 30);
