@@ -44,6 +44,7 @@ namespace MouseNet.Logophi
 
         private void PresentMainForm()
             {
+            if (_mainFormPresenter.IsPresenting) return;
             var form = new MainForm();
             form.ViewBookmarksClicked += OnViewBookmarksClicked;
             _mainFormPresenter.Present(form);
@@ -68,6 +69,7 @@ namespace MouseNet.Logophi
             (object sender,
              EventArgs e)
             {
+            if (_bookmarksFormPresenter.IsPresenting) return;
             var form = new BookmarksForm();
             _bookmarksFormPresenter.Present(form);
             }

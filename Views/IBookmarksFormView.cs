@@ -7,6 +7,7 @@ namespace MouseNet.Logophi.Views
     {
         IList Items { get; }
         void Show();
+        event EventHandler Closed;
         event EventHandler<string> BookmarkRemoved;
         event EventHandler<string> BookmarkActivated;
     }

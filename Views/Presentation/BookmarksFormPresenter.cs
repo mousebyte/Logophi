@@ -7,7 +7,6 @@ namespace MouseNet.Logophi.Views.Presentation
     {
         private readonly Action<string> _callback;
         private readonly Thesaurus _thesaurus;
-        private IBookmarksFormView _view;
 
         public BookmarksFormPresenter
             (Thesaurus thesaurus,
@@ -20,13 +19,18 @@ namespace MouseNet.Logophi.Views.Presentation
         public void Present
             (IBookmarksFormView view)
             {
-            _view = view;
+            View = view;
             foreach (var bookmark in _thesaurus.Bookmarks)
-                _view.Items.Add(bookmark);
-            _view.BookmarkRemoved += OnBookmarkRemoved;
-            _view.BookmarkActivated += OnBookmarkActivated;
-            _view.Show();
+                View.Items.Add(bookmark);
+            View.BookmarkRemoved += OnBookmarkRemoved;
+            View.BookmarkActivated += OnBookmarkActivated;
+            View.Closed += OnClosed;
+            View.Show();
+            IsPresenting = true;
             }
+
+        public IBookmarksFormView View { get; private set; }
+        public bool IsPresenting { get; private set; }
 
         private void OnBookmarkActivated
             (object sender,
@@ -39,8 +43,15 @@ namespace MouseNet.Logophi.Views.Presentation
             (object sender,
              string e)
             {
-            _view.Items.Remove(e);
+            View.Items.Remove(e);
             _thesaurus.RemoveBookmark(e);
+            }
+
+        private void OnClosed
+            (object sender,
+             EventArgs e)
+            {
+            IsPresenting = false;
             }
     }
 }

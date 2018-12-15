@@ -19,6 +19,7 @@ namespace MouseNet.Logophi.Views
             (bool bookmarked);
 
         void Show();
+        event EventHandler Closed;
         event EventHandler<string> Search;
         event EventHandler BackClicked;
         event EventHandler ForwardClicked;
