@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -12,12 +13,16 @@ namespace MouseNet.Logophi
     public class Thesaurus
     {
         private readonly string _bookmarkPath =
-            Path.Combine(Directory.GetCurrentDirectory(),
-                         "data/bookmarks.lphi");
+            Path.Combine(
+                Environment.GetFolderPath(
+                    Environment.SpecialFolder.LocalApplicationData),
+                "data/bookmarks.lphi");
 
         private readonly string _cachePath =
-            Path.Combine(Directory.GetCurrentDirectory(),
-                         "data/cache.lphi");
+            Path.Combine(
+                Environment.GetFolderPath(
+                    Environment.SpecialFolder.LocalApplicationData),
+                "data/cache.lphi");
 
         private List<string> _bookmarks = new List<string>();
 
