@@ -122,6 +122,7 @@
     <Compile Include="SearchHistory.cs" />
     <Compile Include="TermEntry.cs" />
     <Compile Include="Thesaurus.cs" />
+    <Compile Include="Views\IPreferencesFormView.cs" />
     <Compile Include="Views\IView.cs" />
     <Compile Include="Views\Presentation\BookmarksFormPresenter.cs" />
     <Compile Include="Views\IViewPresenter.cs" />

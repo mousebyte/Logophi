@@ -91,6 +91,7 @@
             this._cDeleteCache.TabIndex = 1;
             this._cDeleteCache.Text = "&Delete Cache";
             this._cDeleteCache.UseVisualStyleBackColor = true;
+            this._cDeleteCache.Click += new System.EventHandler(this.InvokeDeleteCacheClicked);
             // 
             // _cPersistCache
             // 
@@ -124,6 +125,7 @@
             this._cClearHistory.TabIndex = 3;
             this._cClearHistory.Text = "&Clear History";
             this._cClearHistory.UseVisualStyleBackColor = true;
+            this._cClearHistory.Click += new System.EventHandler(this.InvokeDeleteHistoryClicked);
             // 
             // numericUpDown1
             // 
