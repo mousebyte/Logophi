@@ -42,11 +42,11 @@
     <UpdateAssemblyVersion>True</UpdateAssemblyVersion>
     <UpdateAssemblyFileVersion>True</UpdateAssemblyFileVersion>
     <UpdateAssemblyInfoVersion>True</UpdateAssemblyInfoVersion>
-    <AssemblyVersionSettings>None.IncrementOnDemand.DeltaDayStamp.HalfOfSecondsSinceMidnight</AssemblyVersionSettings>
+    <AssemblyVersionSettings>None.IncrementOnDemand.IncrementWithResetOnIncrease.DeltaDayStamp</AssemblyVersionSettings>
     <UpdatePackageVersion>False</UpdatePackageVersion>
     <AssemblyInfoVersionType>SemVer1</AssemblyInfoVersionType>
     <InheritWinAppVersionFrom>None</InheritWinAppVersionFrom>
-    <AssemblyFileVersionSettings>None.IncrementOnDemand.IncrementWithResetOnIncrease.None</AssemblyFileVersionSettings>
+    <AssemblyFileVersionSettings>None.IncrementOnDemand.IncrementWithResetOnIncrease.NoneWithAutoReset</AssemblyFileVersionSettings>
     <AssemblyInfoVersionSettings>None.None.None.None</AssemblyInfoVersionSettings>
     <AssemblyInfoVersionSemVerSettings>AssemblyVersion.NoneWithAutoReset.Alpha</AssemblyInfoVersionSemVerSettings>
   </PropertyGroup>
@@ -63,11 +63,11 @@
     <UpdateAssemblyVersion>True</UpdateAssemblyVersion>
     <UpdateAssemblyFileVersion>True</UpdateAssemblyFileVersion>
     <UpdateAssemblyInfoVersion>True</UpdateAssemblyInfoVersion>
-    <AssemblyVersionSettings>IncrementOnDemand.IncrementWithResetOnIncrease.DeltaDayStamp.IncrementWithResetOnIncrease</AssemblyVersionSettings>
+    <AssemblyVersionSettings>IncrementOnDemand.IncrementOnDemand.IncrementWithResetOnIncrease.None</AssemblyVersionSettings>
     <UpdatePackageVersion>False</UpdatePackageVersion>
     <AssemblyInfoVersionType>SemVer1</AssemblyInfoVersionType>
     <InheritWinAppVersionFrom>None</InheritWinAppVersionFrom>
-    <AssemblyFileVersionSettings>IncrementOnDemand.Increment.IncrementWithResetOnIncrease.None</AssemblyFileVersionSettings>
+    <AssemblyFileVersionSettings>IncrementOnDemand.IncrementOnDemand.IncrementWithResetOnIncrease.DayOfYearStamp</AssemblyFileVersionSettings>
     <AssemblyInfoVersionSettings>None.None.None.None</AssemblyInfoVersionSettings>
     <AssemblyInfoVersionSemVerSettings>AssemblyVersion.IncrementOnce.Alpha</AssemblyInfoVersionSemVerSettings>
   </PropertyGroup>

@@ -28,8 +28,10 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(PreferencesForm));
             this._cTabs = new System.Windows.Forms.TabControl();
             this._cTabGeneral = new System.Windows.Forms.TabPage();
+            this._cAutoRun = new System.Windows.Forms.CheckBox();
             this._cDeleteCache = new System.Windows.Forms.Button();
             this._cPersistCache = new System.Windows.Forms.CheckBox();
             this._cTabSearchHistory = new System.Windows.Forms.TabPage();
@@ -37,7 +39,9 @@
             this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
             this._lblMaxHistory = new System.Windows.Forms.Label();
             this._cSaveHistory = new System.Windows.Forms.CheckBox();
-            this.checkBox1 = new System.Windows.Forms.CheckBox();
+            this._cCancelBtn = new System.Windows.Forms.Button();
+            this._cAcceptBtn = new System.Windows.Forms.Button();
+            this._cAlwaysOnTop = new System.Windows.Forms.CheckBox();
             this._cTabs.SuspendLayout();
             this._cTabGeneral.SuspendLayout();
             this._cTabSearchHistory.SuspendLayout();
@@ -48,25 +52,36 @@
             // 
             this._cTabs.Controls.Add(this._cTabGeneral);
             this._cTabs.Controls.Add(this._cTabSearchHistory);
-            this._cTabs.Dock = System.Windows.Forms.DockStyle.Fill;
+            this._cTabs.Dock = System.Windows.Forms.DockStyle.Top;
             this._cTabs.Location = new System.Drawing.Point(0, 0);
             this._cTabs.Name = "_cTabs";
             this._cTabs.SelectedIndex = 0;
-            this._cTabs.Size = new System.Drawing.Size(298, 248);
+            this._cTabs.Size = new System.Drawing.Size(298, 156);
             this._cTabs.TabIndex = 0;
             // 
             // _cTabGeneral
             // 
-            this._cTabGeneral.Controls.Add(this.checkBox1);
+            this._cTabGeneral.Controls.Add(this._cAlwaysOnTop);
+            this._cTabGeneral.Controls.Add(this._cAutoRun);
             this._cTabGeneral.Controls.Add(this._cDeleteCache);
             this._cTabGeneral.Controls.Add(this._cPersistCache);
             this._cTabGeneral.Location = new System.Drawing.Point(4, 22);
             this._cTabGeneral.Name = "_cTabGeneral";
             this._cTabGeneral.Padding = new System.Windows.Forms.Padding(3);
-            this._cTabGeneral.Size = new System.Drawing.Size(290, 222);
+            this._cTabGeneral.Size = new System.Drawing.Size(290, 130);
             this._cTabGeneral.TabIndex = 0;
             this._cTabGeneral.Text = "General";
             this._cTabGeneral.UseVisualStyleBackColor = true;
+            // 
+            // _cAutoRun
+            // 
+            this._cAutoRun.AutoSize = true;
+            this._cAutoRun.Location = new System.Drawing.Point(20, 46);
+            this._cAutoRun.Name = "_cAutoRun";
+            this._cAutoRun.Size = new System.Drawing.Size(134, 17);
+            this._cAutoRun.TabIndex = 1;
+            this._cAutoRun.Text = "Run Logophi at startup";
+            this._cAutoRun.UseVisualStyleBackColor = true;
             // 
             // _cDeleteCache
             // 
@@ -96,7 +111,7 @@
             this._cTabSearchHistory.Location = new System.Drawing.Point(4, 22);
             this._cTabSearchHistory.Name = "_cTabSearchHistory";
             this._cTabSearchHistory.Padding = new System.Windows.Forms.Padding(3);
-            this._cTabSearchHistory.Size = new System.Drawing.Size(290, 222);
+            this._cTabSearchHistory.Size = new System.Drawing.Size(290, 130);
             this._cTabSearchHistory.TabIndex = 1;
             this._cTabSearchHistory.Text = "Search History";
             this._cTabSearchHistory.UseVisualStyleBackColor = true;
@@ -148,23 +163,47 @@
             this._cSaveHistory.Text = "Save history between sessions";
             this._cSaveHistory.UseVisualStyleBackColor = true;
             // 
-            // checkBox1
+            // _cCancelBtn
             // 
-            this.checkBox1.AutoSize = true;
-            this.checkBox1.Location = new System.Drawing.Point(20, 45);
-            this.checkBox1.Name = "checkBox1";
-            this.checkBox1.Size = new System.Drawing.Size(134, 17);
-            this.checkBox1.TabIndex = 1;
-            this.checkBox1.Text = "Run Logophi at startup";
-            this.checkBox1.UseVisualStyleBackColor = true;
+            this._cCancelBtn.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this._cCancelBtn.Location = new System.Drawing.Point(130, 162);
+            this._cCancelBtn.Name = "_cCancelBtn";
+            this._cCancelBtn.Size = new System.Drawing.Size(75, 23);
+            this._cCancelBtn.TabIndex = 1;
+            this._cCancelBtn.Text = "&Cancel";
+            this._cCancelBtn.UseVisualStyleBackColor = true;
+            // 
+            // _cAcceptBtn
+            // 
+            this._cAcceptBtn.Location = new System.Drawing.Point(211, 162);
+            this._cAcceptBtn.Name = "_cAcceptBtn";
+            this._cAcceptBtn.Size = new System.Drawing.Size(75, 23);
+            this._cAcceptBtn.TabIndex = 2;
+            this._cAcceptBtn.Text = "&Ok";
+            this._cAcceptBtn.UseVisualStyleBackColor = true;
+            // 
+            // _cAlwaysOnTop
+            // 
+            this._cAlwaysOnTop.AutoSize = true;
+            this._cAlwaysOnTop.Location = new System.Drawing.Point(20, 76);
+            this._cAlwaysOnTop.Name = "_cAlwaysOnTop";
+            this._cAlwaysOnTop.Size = new System.Drawing.Size(92, 17);
+            this._cAlwaysOnTop.TabIndex = 2;
+            this._cAlwaysOnTop.Text = "Always on top";
+            this._cAlwaysOnTop.UseVisualStyleBackColor = true;
             // 
             // PreferencesForm
             // 
+            this.AcceptButton = this._cAcceptBtn;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(298, 248);
+            this.CancelButton = this._cCancelBtn;
+            this.ClientSize = new System.Drawing.Size(298, 197);
+            this.Controls.Add(this._cAcceptBtn);
+            this.Controls.Add(this._cCancelBtn);
             this.Controls.Add(this._cTabs);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.Name = "PreferencesForm";
             this.ShowInTaskbar = false;
@@ -190,6 +229,9 @@
         private System.Windows.Forms.CheckBox _cSaveHistory;
         private System.Windows.Forms.CheckBox _cPersistCache;
         private System.Windows.Forms.Button _cDeleteCache;
-        private System.Windows.Forms.CheckBox checkBox1;
+        private System.Windows.Forms.CheckBox _cAutoRun;
+        private System.Windows.Forms.Button _cCancelBtn;
+        private System.Windows.Forms.Button _cAcceptBtn;
+        private System.Windows.Forms.CheckBox _cAlwaysOnTop;
     }
 }
