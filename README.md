@@ -1,4 +1,5 @@
 # Logophi
+[![](https://img.shields.io/github/release-pre/mousebyte/logophi.svg)](http://github.com/mousebyte/logophi) [![Build status](https://ci.appveyor.com/api/projects/status/bywa6ocofcjyy0e3?svg=true)](https://ci.appveyor.com/project/mousebyte/logophi)
 >**Log·o·phile**  
 >*noun*:  
 >A lover of words.  
