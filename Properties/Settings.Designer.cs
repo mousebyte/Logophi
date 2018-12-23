@@ -38,9 +38,9 @@ namespace MouseNet.Logophi.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("25")]
-        public int MaxHistory {
+        public decimal MaxHistory {
             get {
-                return ((int)(this["MaxHistory"]));
+                return ((decimal)(this["MaxHistory"]));
             }
             set {
                 this["MaxHistory"] = value;

@@ -41,12 +41,14 @@ namespace MouseNet.Logophi
                     }
                 };
             _trayIcon.DoubleClick += OnOpen;
+            PresentMainForm();
             }
 
         private void PresentMainForm()
             {
             if (_mainFormPresenter.IsPresenting) return;
             var form = new MainForm();
+            //? Possibly move these event handlers somewhere else
             form.ViewBookmarksClicked += OnViewBookmarksClicked;
             form.GithubProjectClicked += OnGithubProjectClicked;
             form.AboutClicked += OnAboutClicked;

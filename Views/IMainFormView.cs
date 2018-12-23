@@ -15,6 +15,7 @@ namespace MouseNet.Logophi.Views
         bool EnableForwardButton { get; set; }
         bool EnableBookmarkButton { get; set; }
         int SelectedDefinitionIndex { get; set; }
+        bool TopMost { get; set; }
 
         void SetBookmarkState
             (bool bookmarked);
@@ -26,5 +27,10 @@ namespace MouseNet.Logophi.Views
         event EventHandler BookmarkClicked;
         event EventHandler ViewDictionaryClicked;
         event EventHandler<int> SelectedDefinitionChanged;
+        /*TODO:
+         remove the following event after it's no longer
+         subscribed to in the presenter class
+        */
+        event EventHandler PreferencesClicked;
     }
 }

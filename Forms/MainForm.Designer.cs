@@ -39,16 +39,16 @@
             this._cSearchText = new System.Windows.Forms.ComboBox();
             this._cMenuStrip = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.searchOnDictionarycomToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this._cExitMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this._cDictionaryMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this._cBookmarksMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.addToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this._cBookmarksView = new System.Windows.Forms.ToolStripMenuItem();
+            this._cBookmarkMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this._cViewBookmarksMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this._cOptionsMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.preferencesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this._cPreferencesMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.projectGithubToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this._cAboutMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this._cGithubMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this._cToolTip = new System.Windows.Forms.ToolTip(this.components);
             this._cBookmarkBtn = new System.Windows.Forms.Button();
             this._cSearchBtn = new System.Windows.Forms.Button();
@@ -161,90 +161,92 @@
             // 
             this.fileToolStripMenuItem.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.exitToolStripMenuItem,
-            this.searchOnDictionarycomToolStripMenuItem});
+            this._cExitMenuItem,
+            this._cDictionaryMenuItem});
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
             this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
             this.fileToolStripMenuItem.Text = "&File";
             // 
-            // exitToolStripMenuItem
+            // _cExitMenuItem
             // 
-            this.exitToolStripMenuItem.Image = global::MouseNet.Logophi.Properties.Resources.exit;
-            this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(210, 22);
-            this.exitToolStripMenuItem.Text = "E&xit";
-            this.exitToolStripMenuItem.Click += new System.EventHandler(this.InvokeExitClicked);
+            this._cExitMenuItem.Image = global::MouseNet.Logophi.Properties.Resources.exit;
+            this._cExitMenuItem.Name = "_cExitMenuItem";
+            this._cExitMenuItem.Size = new System.Drawing.Size(210, 22);
+            this._cExitMenuItem.Text = "E&xit";
+            this._cExitMenuItem.Click += new System.EventHandler(this.InvokeExitClicked);
             // 
-            // searchOnDictionarycomToolStripMenuItem
+            // _cDictionaryMenuItem
             // 
-            this.searchOnDictionarycomToolStripMenuItem.Image = global::MouseNet.Logophi.Properties.Resources.dictionary;
-            this.searchOnDictionarycomToolStripMenuItem.Name = "searchOnDictionarycomToolStripMenuItem";
-            this.searchOnDictionarycomToolStripMenuItem.Size = new System.Drawing.Size(210, 22);
-            this.searchOnDictionarycomToolStripMenuItem.Text = "Search on &Dictionary.com";
-            this.searchOnDictionarycomToolStripMenuItem.Click += new System.EventHandler(this.InvokeViewDictionaryClicked);
+            this._cDictionaryMenuItem.Enabled = false;
+            this._cDictionaryMenuItem.Image = global::MouseNet.Logophi.Properties.Resources.dictionary;
+            this._cDictionaryMenuItem.Name = "_cDictionaryMenuItem";
+            this._cDictionaryMenuItem.Size = new System.Drawing.Size(210, 22);
+            this._cDictionaryMenuItem.Text = "Search on &Dictionary.com";
+            this._cDictionaryMenuItem.Click += new System.EventHandler(this.InvokeViewDictionaryClicked);
             // 
             // _cBookmarksMenuItem
             // 
             this._cBookmarksMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.addToolStripMenuItem,
-            this._cBookmarksView});
+            this._cBookmarkMenuItem,
+            this._cViewBookmarksMenuItem});
             this._cBookmarksMenuItem.Name = "_cBookmarksMenuItem";
             this._cBookmarksMenuItem.Size = new System.Drawing.Size(78, 20);
             this._cBookmarksMenuItem.Text = "&Bookmarks";
             // 
-            // addToolStripMenuItem
+            // _cBookmarkMenuItem
             // 
-            this.addToolStripMenuItem.Name = "addToolStripMenuItem";
-            this.addToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.addToolStripMenuItem.Text = "&Add";
-            this.addToolStripMenuItem.Click += new System.EventHandler(this.InvokeBookmarkClicked);
+            this._cBookmarkMenuItem.Enabled = false;
+            this._cBookmarkMenuItem.Name = "_cBookmarkMenuItem";
+            this._cBookmarkMenuItem.Size = new System.Drawing.Size(180, 22);
+            this._cBookmarkMenuItem.Text = "&Add";
+            this._cBookmarkMenuItem.Click += new System.EventHandler(this.InvokeBookmarkClicked);
             // 
-            // _cBookmarksView
+            // _cViewBookmarksMenuItem
             // 
-            this._cBookmarksView.Name = "_cBookmarksView";
-            this._cBookmarksView.Size = new System.Drawing.Size(180, 22);
-            this._cBookmarksView.Text = "&View Bookmarks";
-            this._cBookmarksView.Click += new System.EventHandler(this.OnViewBookmarksClicked);
+            this._cViewBookmarksMenuItem.Name = "_cViewBookmarksMenuItem";
+            this._cViewBookmarksMenuItem.Size = new System.Drawing.Size(180, 22);
+            this._cViewBookmarksMenuItem.Text = "&View Bookmarks";
+            this._cViewBookmarksMenuItem.Click += new System.EventHandler(this.OnViewBookmarksClicked);
             // 
             // _cOptionsMenuItem
             // 
             this._cOptionsMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.preferencesToolStripMenuItem});
+            this._cPreferencesMenuItem});
             this._cOptionsMenuItem.Name = "_cOptionsMenuItem";
             this._cOptionsMenuItem.Size = new System.Drawing.Size(61, 20);
             this._cOptionsMenuItem.Text = "&Options";
             // 
-            // preferencesToolStripMenuItem
+            // _cPreferencesMenuItem
             // 
-            this.preferencesToolStripMenuItem.Name = "preferencesToolStripMenuItem";
-            this.preferencesToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.preferencesToolStripMenuItem.Text = "&Preferences";
-            this.preferencesToolStripMenuItem.Click += new System.EventHandler(this.InvokePreferencesClicked);
+            this._cPreferencesMenuItem.Name = "_cPreferencesMenuItem";
+            this._cPreferencesMenuItem.Size = new System.Drawing.Size(180, 22);
+            this._cPreferencesMenuItem.Text = "&Preferences";
+            this._cPreferencesMenuItem.Click += new System.EventHandler(this.InvokePreferencesClicked);
             // 
             // helpToolStripMenuItem
             // 
             this.helpToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.aboutToolStripMenuItem,
-            this.projectGithubToolStripMenuItem});
+            this._cAboutMenuItem,
+            this._cGithubMenuItem});
             this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
             this.helpToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
             this.helpToolStripMenuItem.Text = "&Help";
             // 
-            // aboutToolStripMenuItem
+            // _cAboutMenuItem
             // 
-            this.aboutToolStripMenuItem.Image = global::MouseNet.Logophi.Properties.Resources.info;
-            this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
-            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.aboutToolStripMenuItem.Text = "&About";
-            this.aboutToolStripMenuItem.Click += new System.EventHandler(this.InvokeAboutClicked);
+            this._cAboutMenuItem.Image = global::MouseNet.Logophi.Properties.Resources.info;
+            this._cAboutMenuItem.Name = "_cAboutMenuItem";
+            this._cAboutMenuItem.Size = new System.Drawing.Size(180, 22);
+            this._cAboutMenuItem.Text = "&About";
+            this._cAboutMenuItem.Click += new System.EventHandler(this.InvokeAboutClicked);
             // 
-            // projectGithubToolStripMenuItem
+            // _cGithubMenuItem
             // 
-            this.projectGithubToolStripMenuItem.Image = global::MouseNet.Logophi.Properties.Resources.github;
-            this.projectGithubToolStripMenuItem.Name = "projectGithubToolStripMenuItem";
-            this.projectGithubToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.projectGithubToolStripMenuItem.Text = "Project Github";
-            this.projectGithubToolStripMenuItem.Click += new System.EventHandler(this.InvokeGithubProjectClicked);
+            this._cGithubMenuItem.Image = global::MouseNet.Logophi.Properties.Resources.github;
+            this._cGithubMenuItem.Name = "_cGithubMenuItem";
+            this._cGithubMenuItem.Size = new System.Drawing.Size(180, 22);
+            this._cGithubMenuItem.Text = "Project Github";
+            this._cGithubMenuItem.Click += new System.EventHandler(this.InvokeGithubProjectClicked);
             // 
             // _cBookmarkBtn
             // 
@@ -353,17 +355,17 @@
         private System.Windows.Forms.MenuStrip _cMenuStrip;
         private System.Windows.Forms.ToolStripMenuItem _cBookmarksMenuItem;
         private System.Windows.Forms.ToolStripMenuItem _cOptionsMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem _cBookmarksView;
+        private System.Windows.Forms.ToolStripMenuItem _cViewBookmarksMenuItem;
         private System.Windows.Forms.ToolTip _cToolTip;
-        private System.Windows.Forms.ToolStripMenuItem preferencesToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem _cPreferencesMenuItem;
         private System.Windows.Forms.Button _cBookmarkBtn;
         private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem searchOnDictionarycomToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem addToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem _cExitMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem _cDictionaryMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem _cBookmarkMenuItem;
         private System.Windows.Forms.ToolStripMenuItem helpToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem aboutToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem projectGithubToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem _cAboutMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem _cGithubMenuItem;
     }
 }
 

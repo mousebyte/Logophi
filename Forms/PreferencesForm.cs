@@ -31,6 +31,11 @@ namespace MouseNet.Logophi.Forms
             set => _cSaveHistory.Checked = value;
         }
 
+        public decimal MaxHistory {
+            get => _cMaxHistory.Value;
+            set => _cMaxHistory.Value = value;
+        }
+
         public event EventHandler DeleteCacheClicked;
         public event EventHandler DeleteHistoryClicked;
 

@@ -31,21 +31,21 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(PreferencesForm));
             this._cTabs = new System.Windows.Forms.TabControl();
             this._cTabGeneral = new System.Windows.Forms.TabPage();
-            this._cAutoRun = new System.Windows.Forms.CheckBox();
             this._cDeleteCache = new System.Windows.Forms.Button();
-            this._cPersistCache = new System.Windows.Forms.CheckBox();
             this._cTabSearchHistory = new System.Windows.Forms.TabPage();
             this._cClearHistory = new System.Windows.Forms.Button();
-            this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
+            this._cMaxHistory = new System.Windows.Forms.NumericUpDown();
             this._lblMaxHistory = new System.Windows.Forms.Label();
-            this._cSaveHistory = new System.Windows.Forms.CheckBox();
             this._cCancelBtn = new System.Windows.Forms.Button();
             this._cAcceptBtn = new System.Windows.Forms.Button();
             this._cAlwaysOnTop = new System.Windows.Forms.CheckBox();
+            this._cAutoRun = new System.Windows.Forms.CheckBox();
+            this._cPersistCache = new System.Windows.Forms.CheckBox();
+            this._cSaveHistory = new System.Windows.Forms.CheckBox();
             this._cTabs.SuspendLayout();
             this._cTabGeneral.SuspendLayout();
             this._cTabSearchHistory.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this._cMaxHistory)).BeginInit();
             this.SuspendLayout();
             // 
             // _cTabs
@@ -56,7 +56,7 @@
             this._cTabs.Location = new System.Drawing.Point(0, 0);
             this._cTabs.Name = "_cTabs";
             this._cTabs.SelectedIndex = 0;
-            this._cTabs.Size = new System.Drawing.Size(298, 156);
+            this._cTabs.Size = new System.Drawing.Size(298, 139);
             this._cTabs.TabIndex = 0;
             // 
             // _cTabGeneral
@@ -68,20 +68,10 @@
             this._cTabGeneral.Location = new System.Drawing.Point(4, 22);
             this._cTabGeneral.Name = "_cTabGeneral";
             this._cTabGeneral.Padding = new System.Windows.Forms.Padding(3);
-            this._cTabGeneral.Size = new System.Drawing.Size(290, 130);
+            this._cTabGeneral.Size = new System.Drawing.Size(290, 113);
             this._cTabGeneral.TabIndex = 0;
             this._cTabGeneral.Text = "General";
             this._cTabGeneral.UseVisualStyleBackColor = true;
-            // 
-            // _cAutoRun
-            // 
-            this._cAutoRun.AutoSize = true;
-            this._cAutoRun.Location = new System.Drawing.Point(20, 46);
-            this._cAutoRun.Name = "_cAutoRun";
-            this._cAutoRun.Size = new System.Drawing.Size(134, 17);
-            this._cAutoRun.TabIndex = 1;
-            this._cAutoRun.Text = "Run Logophi at startup";
-            this._cAutoRun.UseVisualStyleBackColor = true;
             // 
             // _cDeleteCache
             // 
@@ -93,26 +83,16 @@
             this._cDeleteCache.UseVisualStyleBackColor = true;
             this._cDeleteCache.Click += new System.EventHandler(this.InvokeDeleteCacheClicked);
             // 
-            // _cPersistCache
-            // 
-            this._cPersistCache.AutoSize = true;
-            this._cPersistCache.Location = new System.Drawing.Point(20, 16);
-            this._cPersistCache.Name = "_cPersistCache";
-            this._cPersistCache.Size = new System.Drawing.Size(140, 17);
-            this._cPersistCache.TabIndex = 0;
-            this._cPersistCache.Text = "Enable persistent cache";
-            this._cPersistCache.UseVisualStyleBackColor = true;
-            // 
             // _cTabSearchHistory
             // 
             this._cTabSearchHistory.Controls.Add(this._cClearHistory);
-            this._cTabSearchHistory.Controls.Add(this.numericUpDown1);
+            this._cTabSearchHistory.Controls.Add(this._cMaxHistory);
             this._cTabSearchHistory.Controls.Add(this._lblMaxHistory);
             this._cTabSearchHistory.Controls.Add(this._cSaveHistory);
             this._cTabSearchHistory.Location = new System.Drawing.Point(4, 22);
             this._cTabSearchHistory.Name = "_cTabSearchHistory";
             this._cTabSearchHistory.Padding = new System.Windows.Forms.Padding(3);
-            this._cTabSearchHistory.Size = new System.Drawing.Size(290, 130);
+            this._cTabSearchHistory.Size = new System.Drawing.Size(290, 113);
             this._cTabSearchHistory.TabIndex = 1;
             this._cTabSearchHistory.Text = "Search History";
             this._cTabSearchHistory.UseVisualStyleBackColor = true;
@@ -127,22 +107,19 @@
             this._cClearHistory.UseVisualStyleBackColor = true;
             this._cClearHistory.Click += new System.EventHandler(this.InvokeDeleteHistoryClicked);
             // 
-            // numericUpDown1
+            // _cMaxHistory
             // 
-            this.numericUpDown1.Location = new System.Drawing.Point(226, 41);
-            this.numericUpDown1.Minimum = new decimal(new int[] {
+            this._cMaxHistory.DataBindings.Add(new System.Windows.Forms.Binding("Value", global::MouseNet.Logophi.Properties.Settings.Default, "MaxHistory", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this._cMaxHistory.Location = new System.Drawing.Point(226, 41);
+            this._cMaxHistory.Minimum = new decimal(new int[] {
             10,
             0,
             0,
             0});
-            this.numericUpDown1.Name = "numericUpDown1";
-            this.numericUpDown1.Size = new System.Drawing.Size(45, 20);
-            this.numericUpDown1.TabIndex = 2;
-            this.numericUpDown1.Value = new decimal(new int[] {
-            25,
-            0,
-            0,
-            0});
+            this._cMaxHistory.Name = "_cMaxHistory";
+            this._cMaxHistory.Size = new System.Drawing.Size(45, 20);
+            this._cMaxHistory.TabIndex = 2;
+            this._cMaxHistory.Value = global::MouseNet.Logophi.Properties.Settings.Default.MaxHistory;
             // 
             // _lblMaxHistory
             // 
@@ -153,22 +130,10 @@
             this._lblMaxHistory.TabIndex = 1;
             this._lblMaxHistory.Text = "Maximum number of history items to keep:";
             // 
-            // _cSaveHistory
-            // 
-            this._cSaveHistory.AutoSize = true;
-            this._cSaveHistory.Checked = true;
-            this._cSaveHistory.CheckState = System.Windows.Forms.CheckState.Checked;
-            this._cSaveHistory.Location = new System.Drawing.Point(20, 16);
-            this._cSaveHistory.Name = "_cSaveHistory";
-            this._cSaveHistory.Size = new System.Drawing.Size(171, 17);
-            this._cSaveHistory.TabIndex = 0;
-            this._cSaveHistory.Text = "Save history between sessions";
-            this._cSaveHistory.UseVisualStyleBackColor = true;
-            // 
             // _cCancelBtn
             // 
             this._cCancelBtn.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this._cCancelBtn.Location = new System.Drawing.Point(130, 162);
+            this._cCancelBtn.Location = new System.Drawing.Point(130, 145);
             this._cCancelBtn.Name = "_cCancelBtn";
             this._cCancelBtn.Size = new System.Drawing.Size(75, 23);
             this._cCancelBtn.TabIndex = 1;
@@ -177,7 +142,8 @@
             // 
             // _cAcceptBtn
             // 
-            this._cAcceptBtn.Location = new System.Drawing.Point(211, 162);
+            this._cAcceptBtn.DialogResult = System.Windows.Forms.DialogResult.OK;
+            this._cAcceptBtn.Location = new System.Drawing.Point(211, 145);
             this._cAcceptBtn.Name = "_cAcceptBtn";
             this._cAcceptBtn.Size = new System.Drawing.Size(75, 23);
             this._cAcceptBtn.TabIndex = 2;
@@ -187,12 +153,51 @@
             // _cAlwaysOnTop
             // 
             this._cAlwaysOnTop.AutoSize = true;
-            this._cAlwaysOnTop.Location = new System.Drawing.Point(20, 76);
+            this._cAlwaysOnTop.Checked = global::MouseNet.Logophi.Properties.Settings.Default.AlwaysOnTop;
+            this._cAlwaysOnTop.DataBindings.Add(new System.Windows.Forms.Binding("Checked", global::MouseNet.Logophi.Properties.Settings.Default, "AlwaysOnTop", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this._cAlwaysOnTop.Location = new System.Drawing.Point(20, 82);
             this._cAlwaysOnTop.Name = "_cAlwaysOnTop";
             this._cAlwaysOnTop.Size = new System.Drawing.Size(92, 17);
             this._cAlwaysOnTop.TabIndex = 2;
             this._cAlwaysOnTop.Text = "Always on top";
             this._cAlwaysOnTop.UseVisualStyleBackColor = true;
+            // 
+            // _cAutoRun
+            // 
+            this._cAutoRun.AutoSize = true;
+            this._cAutoRun.Checked = global::MouseNet.Logophi.Properties.Settings.Default.AutoRun;
+            this._cAutoRun.DataBindings.Add(new System.Windows.Forms.Binding("Checked", global::MouseNet.Logophi.Properties.Settings.Default, "AutoRun", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this._cAutoRun.Location = new System.Drawing.Point(20, 49);
+            this._cAutoRun.Name = "_cAutoRun";
+            this._cAutoRun.Size = new System.Drawing.Size(134, 17);
+            this._cAutoRun.TabIndex = 1;
+            this._cAutoRun.Text = "Run Logophi at startup";
+            this._cAutoRun.UseVisualStyleBackColor = true;
+            // 
+            // _cPersistCache
+            // 
+            this._cPersistCache.AutoSize = true;
+            this._cPersistCache.Checked = global::MouseNet.Logophi.Properties.Settings.Default.PersistentCache;
+            this._cPersistCache.DataBindings.Add(new System.Windows.Forms.Binding("Checked", global::MouseNet.Logophi.Properties.Settings.Default, "PersistentCache", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this._cPersistCache.Location = new System.Drawing.Point(20, 16);
+            this._cPersistCache.Name = "_cPersistCache";
+            this._cPersistCache.Size = new System.Drawing.Size(140, 17);
+            this._cPersistCache.TabIndex = 0;
+            this._cPersistCache.Text = "Enable persistent cache";
+            this._cPersistCache.UseVisualStyleBackColor = true;
+            // 
+            // _cSaveHistory
+            // 
+            this._cSaveHistory.AutoSize = true;
+            this._cSaveHistory.Checked = global::MouseNet.Logophi.Properties.Settings.Default.SaveHistory;
+            this._cSaveHistory.CheckState = System.Windows.Forms.CheckState.Checked;
+            this._cSaveHistory.DataBindings.Add(new System.Windows.Forms.Binding("Checked", global::MouseNet.Logophi.Properties.Settings.Default, "SaveHistory", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this._cSaveHistory.Location = new System.Drawing.Point(20, 16);
+            this._cSaveHistory.Name = "_cSaveHistory";
+            this._cSaveHistory.Size = new System.Drawing.Size(171, 17);
+            this._cSaveHistory.TabIndex = 0;
+            this._cSaveHistory.Text = "Save history between sessions";
+            this._cSaveHistory.UseVisualStyleBackColor = true;
             // 
             // PreferencesForm
             // 
@@ -200,7 +205,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this._cCancelBtn;
-            this.ClientSize = new System.Drawing.Size(298, 197);
+            this.ClientSize = new System.Drawing.Size(298, 177);
             this.Controls.Add(this._cAcceptBtn);
             this.Controls.Add(this._cCancelBtn);
             this.Controls.Add(this._cTabs);
@@ -215,7 +220,7 @@
             this._cTabGeneral.PerformLayout();
             this._cTabSearchHistory.ResumeLayout(false);
             this._cTabSearchHistory.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this._cMaxHistory)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -226,7 +231,7 @@
         private System.Windows.Forms.TabPage _cTabGeneral;
         private System.Windows.Forms.TabPage _cTabSearchHistory;
         private System.Windows.Forms.Button _cClearHistory;
-        private System.Windows.Forms.NumericUpDown numericUpDown1;
+        private System.Windows.Forms.NumericUpDown _cMaxHistory;
         private System.Windows.Forms.Label _lblMaxHistory;
         private System.Windows.Forms.CheckBox _cSaveHistory;
         private System.Windows.Forms.CheckBox _cPersistCache;

@@ -17,13 +17,15 @@ namespace MouseNet.Logophi
             Path.Combine(
                 Environment.GetFolderPath(
                     Environment.SpecialFolder.LocalApplicationData),
-                "data/bookmarks.lphi");
+                "Logophi",
+                "bookmarks.lphi");
 
         private readonly string _cachePath =
             Path.Combine(
                 Environment.GetFolderPath(
                     Environment.SpecialFolder.LocalApplicationData),
-                "data/cache.lphi");
+                "Logophi",
+                "cache.lphi");
 
         private List<string> _bookmarks = new List<string>();
 
@@ -77,6 +79,13 @@ namespace MouseNet.Logophi
             _bookmarks.Add(value);
             SaveBookmarks();
             InvokeBookmarkAdded(this, value);
+            }
+
+        public void ClearCache()
+            {
+            _cache = new MemoryCache("ThesaurusCache");
+            if (PersistentCache)
+                File.Delete(_cachePath);
             }
 
         public void RemoveBookmark

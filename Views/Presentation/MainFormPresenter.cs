@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Drawing;
+using System.IO;
 using System.Windows.Forms;
+using Microsoft.Win32;
+using MouseNet.Logophi.Forms;
 using MouseNet.Logophi.Properties;
 
 namespace MouseNet.Logophi.Views.Presentation
@@ -30,6 +33,7 @@ namespace MouseNet.Logophi.Views.Presentation
             View.ForwardClicked += OnForwardClicked;
             View.BookmarkClicked += OnBookmarkClicked;
             View.ViewDictionaryClicked += OnViewDictionaryClicked;
+            View.PreferencesClicked += OnPreferencesClicked;
             View.Closed += OnClosed;
             View.Show();
             IsPresenting = true;
@@ -37,6 +41,50 @@ namespace MouseNet.Logophi.Views.Presentation
 
         public IMainFormView View { get; private set; }
         public bool IsPresenting { get; private set; }
+
+        private void OnPreferencesClicked
+            (object sender,
+             EventArgs e)
+            {
+            //TODO: move this the heck outa here
+            var autoRun = Settings.Default.AutoRun;
+            var form = new PreferencesForm();
+            form.DeleteHistoryClicked +=
+                (o,
+                 args) => _history.Clear();
+            form.DeleteCacheClicked +=
+                (o,
+                 args) => Thesaurus.ClearCache();
+            var result = form.ShowDialog((IWin32Window) View);
+            if (result == DialogResult.OK)
+                {
+                Thesaurus.PersistentCache =
+                    Settings.Default.PersistentCache;
+                View.TopMost = Settings.Default.AlwaysOnTop;
+                _history.PersistentHistory =
+                    Settings.Default.SaveHistory;
+                _history.MaxItems = (int) Settings.Default.MaxHistory;
+                Settings.Default.Save();
+                if (autoRun != Settings.Default.AutoRun)
+                    UpdateAutoRunSetting();
+                }
+
+            form.Dispose();
+            }
+
+        private static void UpdateAutoRunSetting()
+            {
+            var key = Registry.CurrentUser.OpenSubKey(
+                "Software\\Microsoft\\Windows\\CurrentVersion\\Run",
+                true);
+            if (key == null) return;
+            if (Settings.Default.AutoRun)
+                key.SetValue("Logophi",
+                             Path.Combine(
+                                 Environment.CurrentDirectory,
+                                 "Logophi.exe"));
+            else key.DeleteValue("Logophi");
+            }
 
         public void Search
             (string word)

@@ -42,7 +42,8 @@ namespace MouseNet.Logophi.Forms
             get => _cBookmarkBtn.Enabled;
             set {
                 _cBookmarkBtn.Enabled = value;
-                addToolStripMenuItem.Enabled = value;
+                _cBookmarkMenuItem.Enabled = value;
+                _cDictionaryMenuItem.Enabled = value;
             }
         }
 
@@ -58,11 +59,16 @@ namespace MouseNet.Logophi.Forms
             if (bookmarked)
                 {
                 _cBookmarkBtn.Image = Resources.bookmark_enabled;
+                _cBookmarkMenuItem.Image = Resources.bookmark_disabled;
+                _cBookmarkMenuItem.Text = @"Remove";
                 _cToolTip.SetToolTip(_cBookmarkBtn,
                                      "Remove Bookmark");
                 } else
                 {
                 _cBookmarkBtn.Image = Resources.bookmark_disabled;
+                _cBookmarkMenuItem.Image =
+                    Resources.bookmark_enabled;
+                _cBookmarkMenuItem.Text = @"Add";
                 _cToolTip.SetToolTip(_cBookmarkBtn, "Add Bookmark");
                 }
             }
