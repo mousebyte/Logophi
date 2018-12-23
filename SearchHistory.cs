@@ -56,6 +56,7 @@ namespace MouseNet.Logophi
         private void WriteHistory()
             {
             var formatter = new BinaryFormatter();
+            File.Delete(_filePath);
             using (var strm = File.OpenWrite(_filePath))
                 formatter.Serialize(strm, _data);
             }

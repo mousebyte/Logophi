@@ -26,10 +26,11 @@ namespace MouseNet.Logophi.Views.Presentation
             (IMainFormView view)
             {
             View = view;
-            _history.MaxItems = (int)Settings.Default.MaxHistory;
-            if(_history.Count > 0)
+            _history.MaxItems = (int) Settings.Default.MaxHistory;
+            if (_history.Count > 0)
                 foreach (var i in _history)
-                    view.DropDownItems.Add(i);
+                    if (!view.DropDownItems.Contains(i))
+                        view.DropDownItems.Add(i);
             View.Search += OnSearch;
             View.SelectedDefinitionChanged +=
                 OnSelectedDefinitionChanged;
