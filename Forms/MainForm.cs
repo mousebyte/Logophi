@@ -59,21 +59,22 @@ namespace MouseNet.Logophi.Forms
             if (bookmarked)
                 {
                 _cBookmarkBtn.Image = Resources.bookmark_enabled;
-                _cBookmarkMenuItem.Image = Resources.bookmark_disabled;
+                _cBookmarkMenuItem.Image =
+                    Resources.bookmark_disabled;
                 _cBookmarkMenuItem.Text = @"Remove";
                 _cToolTip.SetToolTip(_cBookmarkBtn,
                                      "Remove Bookmark");
                 } else
                 {
                 _cBookmarkBtn.Image = Resources.bookmark_disabled;
-                _cBookmarkMenuItem.Image =
-                    Resources.bookmark_enabled;
+                _cBookmarkMenuItem.Image = Resources.bookmark_enabled;
                 _cBookmarkMenuItem.Text = @"Add";
                 _cToolTip.SetToolTip(_cBookmarkBtn, "Add Bookmark");
                 }
             }
 
         public event EventHandler ViewDictionaryClicked;
+        public event EventHandler PreferencesClicked;
 
         private void TrySearch()
             {
@@ -194,6 +195,5 @@ namespace MouseNet.Logophi.Forms
         public event EventHandler GithubProjectClicked;
         public event EventHandler AboutClicked;
         public event EventHandler ExitClicked;
-        public event EventHandler PreferencesClicked;
     }
 }

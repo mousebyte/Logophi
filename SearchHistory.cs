@@ -10,7 +10,6 @@ namespace MouseNet.Logophi
     internal class SearchHistory : IEnumerable<string>
     {
         private readonly List<string> _data = new List<string>();
-        private int _currentIndex;
 
         private readonly string _filePath =
             Path.Combine(
@@ -19,8 +18,19 @@ namespace MouseNet.Logophi
                 Resources.AppName,
                 "history.lphi");
 
-        private bool _persistentHistory;
+        private int _currentIndex;
         private int _maxItems;
+        private bool _persistentHistory;
+
+        public SearchHistory()
+            {
+            if (!File.Exists(_filePath)) return;
+            _persistentHistory = true;
+            var formatter = new BinaryFormatter();
+            using (var strm = File.OpenRead(_filePath))
+                _data = formatter.Deserialize(strm) as List<string>;
+            }
+
         public bool CanGoForward => _currentIndex < Count - 1;
         public bool CanGoBackward => _currentIndex > 0;
         public string CurrentItem =>
@@ -37,15 +47,6 @@ namespace MouseNet.Logophi
             }
         }
 
-        public SearchHistory()
-            {
-            if (!File.Exists(_filePath)) return;
-            _persistentHistory = true;
-            var formatter = new BinaryFormatter();
-            using (var strm = File.OpenRead(_filePath))
-                _data = formatter.Deserialize(strm) as List<string>;
-            }
-
         public bool PersistentHistory {
             get => _persistentHistory;
             set {
@@ -55,18 +56,14 @@ namespace MouseNet.Logophi
             }
         }
 
-        private void WriteHistory()
+        public IEnumerator<string> GetEnumerator()
             {
-            var formatter = new BinaryFormatter();
-            File.Delete(_filePath);
-            using (var strm = File.OpenWrite(_filePath))
-                formatter.Serialize(strm, _data);
+            return _data.GetEnumerator();
             }
 
-        private void TrimHistory()
+        IEnumerator IEnumerable.GetEnumerator()
             {
-            var i = Count - MaxItems;
-            if (i > 0) _data.RemoveRange(0, i);
+            return GetEnumerator();
             }
 
         public void AddItem
@@ -79,6 +76,12 @@ namespace MouseNet.Logophi
             TrimHistory();
             _currentIndex = Count - 1;
             if (PersistentHistory) WriteHistory();
+            }
+
+        public void Clear()
+            {
+            _data.Clear();
+            File.Delete(_filePath);
             }
 
         public void GoBack()
@@ -103,20 +106,18 @@ namespace MouseNet.Logophi
             WriteHistory();
             }
 
-        public void Clear()
+        private void TrimHistory()
             {
-            _data.Clear();
+            var i = Count - MaxItems;
+            if (i > 0) _data.RemoveRange(0, i);
+            }
+
+        private void WriteHistory()
+            {
+            var formatter = new BinaryFormatter();
             File.Delete(_filePath);
-            }
-
-        public IEnumerator<string> GetEnumerator()
-            {
-            return _data.GetEnumerator();
-            }
-
-        IEnumerator IEnumerable.GetEnumerator()
-            {
-            return GetEnumerator();
+            using (var strm = File.OpenWrite(_filePath))
+                formatter.Serialize(strm, _data);
             }
     }
 }
