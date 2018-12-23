@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
+using MouseNet.Logophi.Properties;
 
 namespace MouseNet.Logophi
 {
@@ -15,7 +16,8 @@ namespace MouseNet.Logophi
             Path.Combine(
                 Environment.GetFolderPath(
                     Environment.SpecialFolder.LocalApplicationData),
-                "Logophi", "history.lphi");
+                Resources.AppName,
+                "history.lphi");
 
         private bool _persistentHistory;
         private int _maxItems;

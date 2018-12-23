@@ -17,14 +17,14 @@ namespace MouseNet.Logophi
             Path.Combine(
                 Environment.GetFolderPath(
                     Environment.SpecialFolder.LocalApplicationData),
-                "Logophi",
+                Resources.AppName,
                 "bookmarks.lphi");
 
         private readonly string _cachePath =
             Path.Combine(
                 Environment.GetFolderPath(
                     Environment.SpecialFolder.LocalApplicationData),
-                "Logophi",
+                Resources.AppName,
                 "cache.lphi");
 
         private List<string> _bookmarks = new List<string>();
@@ -45,12 +45,12 @@ namespace MouseNet.Logophi
               | SecurityProtocolType.Ssl3;
             Definitions = new List<WordDefinition>();
             PersistentCache = persistentCache;
-            var dataPath = Path.Combine(
-                Environment.GetFolderPath(
-                    Environment.SpecialFolder.LocalApplicationData),
-                "Logophi");
+            var dataPath = Path.GetDirectoryName(_cachePath);
             if (!Directory.Exists(dataPath))
-                Directory.CreateDirectory(dataPath);
+                Directory.CreateDirectory(
+                    dataPath
+                 ?? throw new DirectoryNotFoundException(
+                        "Local application data folder not found."));
             else LoadSavedData();
             }
 
