@@ -13,19 +13,9 @@ namespace MouseNet.Logophi
 {
     public class Thesaurus
     {
-        private readonly string _bookmarkPath =
-            Path.Combine(
-                Environment.GetFolderPath(
-                    Environment.SpecialFolder.LocalApplicationData),
-                Resources.AppName,
-                "bookmarks.lphi");
+        private readonly string _bookmarkPath;
 
-        private readonly string _cachePath =
-            Path.Combine(
-                Environment.GetFolderPath(
-                    Environment.SpecialFolder.LocalApplicationData),
-                Resources.AppName,
-                "cache.lphi");
+        private readonly string _cachePath;
 
         private List<string> _bookmarks = new List<string>();
 
@@ -35,7 +25,8 @@ namespace MouseNet.Logophi
         private string _searchTerm;
 
         public Thesaurus
-            (bool persistentCache)
+            (string dataDirectory,
+             bool persistentCache)
             {
             ServicePointManager.Expect100Continue = true;
             ServicePointManager.SecurityProtocol =
@@ -45,6 +36,9 @@ namespace MouseNet.Logophi
               | SecurityProtocolType.Ssl3;
             Definitions = new List<WordDefinition>();
             PersistentCache = persistentCache;
+            _bookmarkPath =
+                Path.Combine(dataDirectory, "bookmarks.lphi");
+            _cachePath = Path.Combine(dataDirectory, "cache.lphi");
             LoadSavedData();
             }
 

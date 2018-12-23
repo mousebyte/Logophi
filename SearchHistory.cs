@@ -1,31 +1,25 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
-using MouseNet.Logophi.Properties;
 
 namespace MouseNet.Logophi
 {
     internal class SearchHistory : IEnumerable<string>
     {
         private readonly List<string> _data = new List<string>();
-
-        private readonly string _filePath =
-            Path.Combine(
-                Environment.GetFolderPath(
-                    Environment.SpecialFolder.LocalApplicationData),
-                Resources.AppName,
-                "history.lphi");
-
+        private readonly string _filePath;
         private int _currentIndex;
         private int _maxItems;
         private bool _persistentHistory;
 
-        public SearchHistory()
+        public SearchHistory
+            (string dataDirectory,
+             bool persistentHistory)
             {
-            if (!File.Exists(_filePath)) return;
-            _persistentHistory = true;
+            _filePath = Path.Combine(dataDirectory, "history.lphi");
+            _persistentHistory = persistentHistory;
+            if (!persistentHistory) return;
             var formatter = new BinaryFormatter();
             using (var strm = File.OpenRead(_filePath))
                 _data = formatter.Deserialize(strm) as List<string>;

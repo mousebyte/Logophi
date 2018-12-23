@@ -11,12 +11,16 @@ namespace MouseNet.Logophi.Views.Presentation
 {
     internal class MainFormPresenter : IViewPresenter<IMainFormView>
     {
-        private readonly SearchHistory _history = new SearchHistory();
+        private readonly SearchHistory _history;
 
         public MainFormPresenter
-            (bool persistentCache)
+            (string dataDirectory,
+             bool persistentCache,
+             bool persistentHistory)
             {
-            Thesaurus = new Thesaurus(persistentCache);
+            Thesaurus = new Thesaurus(dataDirectory, persistentCache);
+            _history =
+                new SearchHistory(dataDirectory, persistentHistory);
             }
 
         private bool SearchValid => Thesaurus.Definitions != null;

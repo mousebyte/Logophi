@@ -19,15 +19,11 @@ namespace MouseNet.Logophi
         public AppContext()
             {
             Application.ApplicationExit += OnApplicationExit;
-            var dataPath = Path.Combine(
-                Environment.GetFolderPath(
-                    Environment.SpecialFolder.LocalApplicationData),
-                Resources.AppName);
-            if (!Directory.Exists(dataPath))
-                Directory.CreateDirectory(dataPath);
-            _mainFormPresenter =
-                new MainFormPresenter(
-                    Settings.Default.PersistentCache);
+            SetupDirectories();
+            _mainFormPresenter = new MainFormPresenter(
+                Settings.Default.DataDirectory,
+                Settings.Default.PersistentCache,
+                Settings.Default.SaveHistory);
             _bookmarksFormPresenter = new BookmarksFormPresenter(
                 _mainFormPresenter.Thesaurus,
                 _mainFormPresenter.Search);
@@ -49,6 +45,23 @@ namespace MouseNet.Logophi
                 };
             _trayIcon.DoubleClick += OnOpen;
             PresentMainForm();
+            }
+
+        private void SetupDirectories()
+            {
+            if (Settings.Default.DataDirectory == string.Empty)
+                {
+                Settings.Default.DataDirectory = Path.Combine(
+                    Environment.GetFolderPath(
+                        Environment
+                           .SpecialFolder.LocalApplicationData),
+                    Resources.AppName);
+                Settings.Default.Save();
+                }
+
+            if (!Directory.Exists(Settings.Default.DataDirectory))
+                Directory.CreateDirectory(
+                    Settings.Default.DataDirectory);
             }
 
         private void PresentMainForm()

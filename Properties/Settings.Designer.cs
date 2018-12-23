@@ -82,5 +82,17 @@ namespace MouseNet.Logophi.Properties {
                 this["AlwaysOnTop"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string DataDirectory {
+            get {
+                return ((string)(this["DataDirectory"]));
+            }
+            set {
+                this["DataDirectory"] = value;
+            }
+        }
     }
 }
