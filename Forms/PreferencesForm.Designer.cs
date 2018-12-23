@@ -86,8 +86,8 @@
             // _cTabSearchHistory
             // 
             this._cTabSearchHistory.Controls.Add(this._cClearHistory);
-            this._cTabSearchHistory.Controls.Add(this._cMaxHistory);
             this._cTabSearchHistory.Controls.Add(this._lblMaxHistory);
+            this._cTabSearchHistory.Controls.Add(this._cMaxHistory);
             this._cTabSearchHistory.Controls.Add(this._cSaveHistory);
             this._cTabSearchHistory.Location = new System.Drawing.Point(4, 22);
             this._cTabSearchHistory.Name = "_cTabSearchHistory";
