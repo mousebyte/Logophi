@@ -45,13 +45,7 @@ namespace MouseNet.Logophi
               | SecurityProtocolType.Ssl3;
             Definitions = new List<WordDefinition>();
             PersistentCache = persistentCache;
-            var dataPath = Path.GetDirectoryName(_cachePath);
-            if (!Directory.Exists(dataPath))
-                Directory.CreateDirectory(
-                    dataPath
-                 ?? throw new DirectoryNotFoundException(
-                        "Local application data folder not found."));
-            else LoadSavedData();
+            LoadSavedData();
             }
 
         public List<WordDefinition> Definitions { get; private set; }

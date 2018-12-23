@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.IO;
 using System.Windows.Forms;
 using MouseNet.Logophi.Forms;
 using MouseNet.Logophi.Properties;
@@ -18,6 +19,12 @@ namespace MouseNet.Logophi
         public AppContext()
             {
             Application.ApplicationExit += OnApplicationExit;
+            var dataPath = Path.Combine(
+                Environment.GetFolderPath(
+                    Environment.SpecialFolder.LocalApplicationData),
+                Resources.AppName);
+            if (!Directory.Exists(dataPath))
+                Directory.CreateDirectory(dataPath);
             _mainFormPresenter =
                 new MainFormPresenter(
                     Settings.Default.PersistentCache);
