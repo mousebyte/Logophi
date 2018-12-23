@@ -34,13 +34,13 @@
             this._cDeleteCache = new System.Windows.Forms.Button();
             this._cTabSearchHistory = new System.Windows.Forms.TabPage();
             this._cClearHistory = new System.Windows.Forms.Button();
-            this._cMaxHistory = new System.Windows.Forms.NumericUpDown();
             this._lblMaxHistory = new System.Windows.Forms.Label();
             this._cCancelBtn = new System.Windows.Forms.Button();
             this._cAcceptBtn = new System.Windows.Forms.Button();
             this._cAlwaysOnTop = new System.Windows.Forms.CheckBox();
             this._cAutoRun = new System.Windows.Forms.CheckBox();
             this._cPersistCache = new System.Windows.Forms.CheckBox();
+            this._cMaxHistory = new System.Windows.Forms.NumericUpDown();
             this._cSaveHistory = new System.Windows.Forms.CheckBox();
             this._cTabs.SuspendLayout();
             this._cTabGeneral.SuspendLayout();
@@ -107,20 +107,6 @@
             this._cClearHistory.UseVisualStyleBackColor = true;
             this._cClearHistory.Click += new System.EventHandler(this.InvokeDeleteHistoryClicked);
             // 
-            // _cMaxHistory
-            // 
-            this._cMaxHistory.DataBindings.Add(new System.Windows.Forms.Binding("Value", global::MouseNet.Logophi.Properties.Settings.Default, "MaxHistory", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this._cMaxHistory.Location = new System.Drawing.Point(226, 41);
-            this._cMaxHistory.Minimum = new decimal(new int[] {
-            10,
-            0,
-            0,
-            0});
-            this._cMaxHistory.Name = "_cMaxHistory";
-            this._cMaxHistory.Size = new System.Drawing.Size(45, 20);
-            this._cMaxHistory.TabIndex = 2;
-            this._cMaxHistory.Value = global::MouseNet.Logophi.Properties.Settings.Default.MaxHistory;
-            // 
             // _lblMaxHistory
             // 
             this._lblMaxHistory.AutoSize = true;
@@ -185,6 +171,20 @@
             this._cPersistCache.TabIndex = 0;
             this._cPersistCache.Text = "Enable persistent cache";
             this._cPersistCache.UseVisualStyleBackColor = true;
+            // 
+            // _cMaxHistory
+            // 
+            this._cMaxHistory.DataBindings.Add(new System.Windows.Forms.Binding("Value", global::MouseNet.Logophi.Properties.Settings.Default, "MaxHistory", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this._cMaxHistory.Location = new System.Drawing.Point(226, 41);
+            this._cMaxHistory.Minimum = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+            this._cMaxHistory.Name = "_cMaxHistory";
+            this._cMaxHistory.Size = new System.Drawing.Size(45, 20);
+            this._cMaxHistory.TabIndex = 2;
+            this._cMaxHistory.Value = global::MouseNet.Logophi.Properties.Settings.Default.MaxHistory;
             // 
             // _cSaveHistory
             // 

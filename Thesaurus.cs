@@ -48,7 +48,7 @@ namespace MouseNet.Logophi
             var dataPath = Path.Combine(
                 Environment.GetFolderPath(
                     Environment.SpecialFolder.LocalApplicationData),
-                "data");
+                "Logophi");
             if (!Directory.Exists(dataPath))
                 Directory.CreateDirectory(dataPath);
             else LoadSavedData();
@@ -126,7 +126,10 @@ namespace MouseNet.Logophi
                     formatter.Deserialize(strm) as List<string>;
             if (!PersistentCache || !File.Exists(_cachePath)) return;
             using (var strm = File.OpenRead(_cachePath))
-                _cache = formatter.Deserialize(strm) as MemoryCache;
+                if (formatter.Deserialize(strm) is
+                        KeyValuePair<string, object>[] items)
+                    foreach (var i in items)
+                        _cache[i.Key] = i.Value;
             }
 
         private static JObject RequestWordData
@@ -154,7 +157,7 @@ namespace MouseNet.Logophi
             if (!PersistentCache) return;
             var formatter = new BinaryFormatter();
             using (var strm = File.OpenWrite(_cachePath))
-                formatter.Serialize(strm, _cache);
+                formatter.Serialize(strm, _cache.ToArray());
             }
 
         private void InvokeBookmarkAdded

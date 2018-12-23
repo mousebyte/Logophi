@@ -139,8 +139,7 @@
             this._cSearchText.Location = new System.Drawing.Point(7, 33);
             this._cSearchText.Name = "_cSearchText";
             this._cSearchText.Size = new System.Drawing.Size(253, 21);
-            this._cSearchText.Sorted = true;
-            this._cSearchText.TabIndex = 7;
+            this._cSearchText.TabIndex = 0;
             this._cSearchText.SelectionChangeCommitted += new System.EventHandler(this.OnSearchTextSelectionChangeCommitted);
             this._cSearchText.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnSearchTextReturnPressed);
             // 

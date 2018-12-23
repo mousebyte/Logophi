@@ -26,6 +26,10 @@ namespace MouseNet.Logophi.Views.Presentation
             (IMainFormView view)
             {
             View = view;
+            _history.MaxItems = (int)Settings.Default.MaxHistory;
+            if(_history.Count > 0)
+                foreach (var i in _history)
+                    view.DropDownItems.Add(i);
             View.Search += OnSearch;
             View.SelectedDefinitionChanged +=
                 OnSelectedDefinitionChanged;
@@ -132,7 +136,7 @@ namespace MouseNet.Logophi.Views.Presentation
             if (word == _history.CurrentItem) return;
             _history.AddItem(word);
             if (!View.DropDownItems.Contains(word))
-                View.DropDownItems.Add(word);
+                View.DropDownItems.Insert(0, word);
             }
 
         private void SearchFromHistory()

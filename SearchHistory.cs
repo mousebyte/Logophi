@@ -1,11 +1,12 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 
 namespace MouseNet.Logophi
 {
-    internal class SearchHistory
+    internal class SearchHistory : IEnumerable<string>
     {
         private readonly List<string> _data = new List<string>();
         private int _currentIndex;
@@ -37,6 +38,7 @@ namespace MouseNet.Logophi
         public SearchHistory()
             {
             if (!File.Exists(_filePath)) return;
+            _persistentHistory = true;
             var formatter = new BinaryFormatter();
             using (var strm = File.OpenRead(_filePath))
                 _data = formatter.Deserialize(strm) as List<string>;
@@ -71,8 +73,8 @@ namespace MouseNet.Logophi
                 _data.RemoveRange(_currentIndex + 1,
                                   Count - _currentIndex - 1);
             _data.Add(item);
-            _currentIndex = Count - 1;
             TrimHistory();
+            _currentIndex = Count - 1;
             if (PersistentHistory) WriteHistory();
             }
 
@@ -102,6 +104,16 @@ namespace MouseNet.Logophi
             {
             _data.Clear();
             File.Delete(_filePath);
+            }
+
+        public IEnumerator<string> GetEnumerator()
+            {
+            return _data.GetEnumerator();
+            }
+
+        IEnumerator IEnumerable.GetEnumerator()
+            {
+            return GetEnumerator();
             }
     }
 }
