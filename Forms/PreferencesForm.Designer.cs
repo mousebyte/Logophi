@@ -35,8 +35,11 @@
             this._cTabSearchHistory = new System.Windows.Forms.TabPage();
             this._cClearHistory = new System.Windows.Forms.Button();
             this._lblMaxHistory = new System.Windows.Forms.Label();
+            this._cTabHotkey = new System.Windows.Forms.TabPage();
+            this._cEnableHotkey = new System.Windows.Forms.CheckBox();
             this._cCancelBtn = new System.Windows.Forms.Button();
             this._cAcceptBtn = new System.Windows.Forms.Button();
+            this._cHotkeyEdit = new MouseNet.Forms.Controls.HotkeyEdit();
             this._cAlwaysOnTop = new System.Windows.Forms.CheckBox();
             this._cAutoRun = new System.Windows.Forms.CheckBox();
             this._cPersistCache = new System.Windows.Forms.CheckBox();
@@ -45,6 +48,7 @@
             this._cTabs.SuspendLayout();
             this._cTabGeneral.SuspendLayout();
             this._cTabSearchHistory.SuspendLayout();
+            this._cTabHotkey.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this._cMaxHistory)).BeginInit();
             this.SuspendLayout();
             // 
@@ -52,6 +56,7 @@
             // 
             this._cTabs.Controls.Add(this._cTabGeneral);
             this._cTabs.Controls.Add(this._cTabSearchHistory);
+            this._cTabs.Controls.Add(this._cTabHotkey);
             this._cTabs.Dock = System.Windows.Forms.DockStyle.Top;
             this._cTabs.Location = new System.Drawing.Point(0, 0);
             this._cTabs.Name = "_cTabs";
@@ -116,6 +121,30 @@
             this._lblMaxHistory.TabIndex = 1;
             this._lblMaxHistory.Text = "Maximum number of history items to keep:";
             // 
+            // _cTabHotkey
+            // 
+            this._cTabHotkey.Controls.Add(this._cHotkeyEdit);
+            this._cTabHotkey.Controls.Add(this._cEnableHotkey);
+            this._cTabHotkey.Location = new System.Drawing.Point(4, 22);
+            this._cTabHotkey.Name = "_cTabHotkey";
+            this._cTabHotkey.Padding = new System.Windows.Forms.Padding(3);
+            this._cTabHotkey.Size = new System.Drawing.Size(290, 113);
+            this._cTabHotkey.TabIndex = 2;
+            this._cTabHotkey.Text = "Hotkey";
+            this._cTabHotkey.UseVisualStyleBackColor = true;
+            // 
+            // _cEnableHotkey
+            // 
+            this._cEnableHotkey.AutoSize = true;
+            this._cEnableHotkey.Checked = global::MouseNet.Logophi.Properties.Settings.Default.EnableHotkey;
+            this._cEnableHotkey.DataBindings.Add(new System.Windows.Forms.Binding("Checked", global::MouseNet.Logophi.Properties.Settings.Default, "EnableHotkey", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this._cEnableHotkey.Location = new System.Drawing.Point(20, 48);
+            this._cEnableHotkey.Name = "_cEnableHotkey";
+            this._cEnableHotkey.Size = new System.Drawing.Size(125, 17);
+            this._cEnableHotkey.TabIndex = 0;
+            this._cEnableHotkey.Text = "Enable global hotkey";
+            this._cEnableHotkey.UseVisualStyleBackColor = true;
+            // 
             // _cCancelBtn
             // 
             this._cCancelBtn.DialogResult = System.Windows.Forms.DialogResult.Cancel;
@@ -135,6 +164,22 @@
             this._cAcceptBtn.TabIndex = 2;
             this._cAcceptBtn.Text = "&Ok";
             this._cAcceptBtn.UseVisualStyleBackColor = true;
+            // 
+            // _cHotkeyEdit
+            // 
+            this._cHotkeyEdit.AllowCtrlOnlyHotkeys = false;
+            this._cHotkeyEdit.AllowShiftOnlyHotkeys = false;
+            this._cHotkeyEdit.DataBindings.Add(new System.Windows.Forms.Binding("Hotkey", global::MouseNet.Logophi.Properties.Settings.Default, "Hotkey", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this._cHotkeyEdit.Hotkey = global::MouseNet.Logophi.Properties.Settings.Default.Hotkey;
+            this._cHotkeyEdit.KeyCode = System.Windows.Forms.Keys.None;
+            this._cHotkeyEdit.Location = new System.Drawing.Point(151, 46);
+            this._cHotkeyEdit.Modifiers = System.Windows.Forms.Keys.None;
+            this._cHotkeyEdit.Name = "_cHotkeyEdit";
+            this._cHotkeyEdit.ReadOnly = true;
+            this._cHotkeyEdit.ShortcutsEnabled = false;
+            this._cHotkeyEdit.Size = new System.Drawing.Size(100, 20);
+            this._cHotkeyEdit.TabIndex = 1;
+            this._cHotkeyEdit.Text = "None";
             // 
             // _cAlwaysOnTop
             // 
@@ -220,6 +265,8 @@
             this._cTabGeneral.PerformLayout();
             this._cTabSearchHistory.ResumeLayout(false);
             this._cTabSearchHistory.PerformLayout();
+            this._cTabHotkey.ResumeLayout(false);
+            this._cTabHotkey.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this._cMaxHistory)).EndInit();
             this.ResumeLayout(false);
 
@@ -240,5 +287,8 @@
         private System.Windows.Forms.Button _cCancelBtn;
         private System.Windows.Forms.Button _cAcceptBtn;
         private System.Windows.Forms.CheckBox _cAlwaysOnTop;
+        private System.Windows.Forms.TabPage _cTabHotkey;
+        private System.Windows.Forms.CheckBox _cEnableHotkey;
+        private MouseNet.Forms.Controls.HotkeyEdit _cHotkeyEdit;
     }
 }

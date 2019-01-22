@@ -161,6 +161,8 @@ namespace MouseNet.Logophi.Views.Presentation
             {
             //TODO: move this the heck outa here
             var autoRun = Settings.Default.AutoRun;
+            var enableHotkey = Settings.Default.EnableHotkey;
+            var hotkey = Settings.Default.Hotkey;
             var form = new PreferencesForm();
             form.DeleteHistoryClicked +=
                 (o,
@@ -180,6 +182,7 @@ namespace MouseNet.Logophi.Views.Presentation
                 Settings.Default.Save();
                 if (autoRun != Settings.Default.AutoRun)
                     UpdateAutoRunSetting();
+                
                 }
 
             form.Dispose();

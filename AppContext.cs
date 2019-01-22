@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Windows.Forms;
@@ -15,11 +16,13 @@ namespace MouseNet.Logophi
 
         private readonly MainFormPresenter _mainFormPresenter;
         private readonly NotifyIcon _trayIcon;
+        private GlobalHotkey _hotkey = new GlobalHotkey();
 
         public AppContext()
             {
             Application.ApplicationExit += OnApplicationExit;
-            SetupDirectories();
+            Settings.Default.PropertyChanged +=
+                OnSettingsPropertyChanged;
             _mainFormPresenter = new MainFormPresenter(
                 Settings.Default.DataDirectory,
                 Settings.Default.PersistentCache,
@@ -46,6 +49,7 @@ namespace MouseNet.Logophi
             _trayIcon.DoubleClick += OnOpen;
             PresentMainForm();
             }
+        
 
         private void SetupDirectories()
             {
@@ -78,6 +82,13 @@ namespace MouseNet.Logophi
             _mainFormPresenter.Present(form);
             }
 
+        private void OnSettingsPropertyChanged
+            (object sender,
+             PropertyChangedEventArgs e)
+            {
+            
+            }
+
         private void OnAboutClicked
             (object sender,
              EventArgs e)
@@ -94,6 +105,7 @@ namespace MouseNet.Logophi
                 _mainFormPresenter.View.Close();
             _trayIcon.Visible = false;
             _trayIcon.Dispose();
+            _hotkey.Dispose();
             }
 
         private void OnGithubProjectClicked
