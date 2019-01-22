@@ -1,45 +1,29 @@
 ﻿using System;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.IO;
 using System.Windows.Forms;
 using Microsoft.Win32;
-using MouseNet.Logophi.Forms;
 using MouseNet.Logophi.Properties;
-using MouseNet.Logophi.Views.Presentation;
 
 namespace MouseNet.Logophi
 {
     internal class AppContext : ApplicationContext
     {
-        private const string RegistryKey =
-            "Software\\Microsoft\\Windows\\CurrentVersion\\Run";
-
-        private readonly Settings _settings = Settings.Default;
-        private readonly BookmarksFormPresenter _bkmarkPresenter;
-        private readonly MainFormPresenter _mainPresenter;
-        private readonly NotifyIcon _trayIcon;
-        private readonly GlobalHotkey _hotkey = new GlobalHotkey();
-        private readonly Thesaurus _thesaurus;
+        private readonly PresentationAgent _agent;
 
         private readonly string _exePath =
             Path.GetFullPath("Logophi.exe");
+
+        private readonly GlobalHotkey _hotkey = new GlobalHotkey();
+        private readonly Settings _settings = Settings.Default;
+        private readonly Thesaurus _thesaurus;
+        private readonly NotifyIcon _trayIcon;
 
         public AppContext()
             {
             Application.ApplicationExit += OnApplicationExit;
             _settings.PropertyChanged += OnSettingsPropertyChanged;
             SetupDirectories();
-            _thesaurus = new Thesaurus(_settings.DataDirectory,
-                                       _settings.PersistentCache,
-                                       _settings.SaveHistory);
-            _mainPresenter = new MainFormPresenter(
-                _settings.DataDirectory,
-                _settings.PersistentCache,
-                _settings.SaveHistory);
-            _bkmarkPresenter = new BookmarksFormPresenter(
-                _mainPresenter.TunaInterface,
-                _mainPresenter.Search);
             var openMenuItem = new ToolStripMenuItem {Text = @"Open"};
             openMenuItem.Click += OnOpen;
             var exitMenuItem = new ToolStripMenuItem {Text = @"Exit"};
@@ -57,7 +41,11 @@ namespace MouseNet.Logophi
                     }
                 };
             _trayIcon.DoubleClick += OnOpen;
-            PresentMainForm();
+            _thesaurus = new Thesaurus(_settings.DataDirectory,
+                                       _settings.PersistentCache,
+                                       _settings.SaveHistory);
+            _agent = new PresentationAgent(_thesaurus);
+            _agent.PresentMainForm();
             }
 
         private void SetupDirectories()
@@ -76,26 +64,22 @@ namespace MouseNet.Logophi
                 Directory.CreateDirectory(_settings.DataDirectory);
             }
 
-        private void PresentMainForm()
+        private void OnApplicationExit
+            (object sender,
+             EventArgs e)
             {
-            if (_mainPresenter.IsPresenting) return;
-            var form = new MainForm();
-            //? Possibly move these event handlers somewhere else
-            form.ViewBookmarksClicked += OnViewBookmarksClicked;
-            form.GithubProjectClicked += OnGithubProjectClicked;
-            form.AboutClicked += OnAboutClicked;
-            form.ExitClicked +=
-                (sender,
-                 args) => Application.Exit();
-            _mainPresenter.Present(form);
+            _agent.CloseMainForm();
+            _agent.Dispose();
+            _trayIcon.Visible = false;
+            _trayIcon.Dispose();
+            _hotkey.Dispose();
             }
 
-        private void PresentPreferencesForm()
+        private void OnOpen
+            (object sender,
+             EventArgs e)
             {
-            if (!_mainPresenter.IsPresenting) return;
-            var form = new PreferencesForm();
-            var result =
-                form.ShowDialog((IWin32Window) _mainPresenter.View);
+            _agent.PresentMainForm();
             }
 
         private void OnSettingsPropertyChanged
@@ -105,8 +89,16 @@ namespace MouseNet.Logophi
             switch (e.PropertyName)
                 {
                 case "PersistentCache":
-                    _mainPresenter.TunaInterface.PersistentCache =
+                    _thesaurus.PersistentCache =
                         _settings.PersistentCache;
+                    break;
+                case "SaveHistory":
+                    _thesaurus.History.PersistentHistory =
+                        _settings.SaveHistory;
+                    break;
+                case "MaxHistory":
+                    _thesaurus.History.MaxItems =
+                        (int) _settings.MaxHistory;
                     break;
                 case "EnableHotkey":
                     if (_hotkey.HotkeyCount > 0)
@@ -126,63 +118,9 @@ namespace MouseNet.Logophi
                 }
             }
 
-        private void OnSettingsSaving
-            (object sender,
-             CancelEventArgs args)
-            {
-            _mainPresenter.View.TopMost = _settings.AlwaysOnTop;
-            }
-
         private static RegistryKey OpenAutoRunKey() =>
-            Registry.CurrentUser.OpenSubKey(RegistryKey, true);
-
-        private void OnAboutClicked
-            (object sender,
-             EventArgs e)
-            {
-            var form = new AboutForm();
-            form.ShowDialog((IWin32Window) _mainPresenter.View);
-            }
-
-        private void OnApplicationExit
-            (object sender,
-             EventArgs e)
-            {
-            if (_mainPresenter.IsPresenting)
-                _mainPresenter.View.Close();
-            _trayIcon.Visible = false;
-            _trayIcon.Dispose();
-            _hotkey.Dispose();
-            }
-
-        private void OnGithubProjectClicked
-            (object sender,
-             EventArgs e)
-            {
-            Process.Start(Resources.GithubUrl);
-            }
-
-        private void OnOpen
-            (object sender,
-             EventArgs e)
-            {
-            PresentMainForm();
-            }
-
-        private void OnViewBookmarksClicked
-            (object sender,
-             EventArgs e)
-            {
-            if (!_mainPresenter.IsPresenting
-             || _bkmarkPresenter.IsPresenting) return;
-            var form = new BookmarksForm();
-            _mainPresenter.TunaInterface.BookmarkRemoved +=
-                (o,
-                 s) => form.Items.Remove(s);
-            _mainPresenter.TunaInterface.BookmarkAdded +=
-                (o,
-                 s) => form.Items.Add(s);
-            _bkmarkPresenter.Present(form);
-            }
+            Registry.CurrentUser.OpenSubKey(
+                Resources.AutoRunKey,
+                true);
     }
 }

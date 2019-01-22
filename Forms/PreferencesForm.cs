@@ -4,7 +4,8 @@ using MouseNet.Logophi.Views;
 
 namespace MouseNet.Logophi.Forms
 {
-    public partial class PreferencesForm : Form, IPreferencesFormView
+    public partial class PreferencesForm
+        : Form, IPreferencesDialogView
     {
         public PreferencesForm()
             {
@@ -36,21 +37,38 @@ namespace MouseNet.Logophi.Forms
             set => _cMaxHistory.Value = value;
         }
 
-        public event EventHandler DeleteCacheClicked;
-        public event EventHandler DeleteHistoryClicked;
+        public void Show
+            (object parent)
+            {
+            if (!(parent is IWin32Window window)) return;
+            base.Show(window);
+            }
+
+        public event EventHandler<ViewEventArgs> ViewEventActivated;
 
         private void InvokeDeleteCacheClicked
             (object sender,
              EventArgs args)
             {
-            DeleteCacheClicked?.Invoke(sender, args);
+            InvokeViewEventActivated(this,
+                                     new ViewEventArgs(
+                                         "DeleteCacheClicked"));
             }
 
         private void InvokeDeleteHistoryClicked
             (object sender,
              EventArgs args)
             {
-            DeleteHistoryClicked?.Invoke(sender, args);
+            InvokeViewEventActivated(this,
+                                     new ViewEventArgs(
+                                         "DeleteHistoryClicked"));
+            }
+
+        private void InvokeViewEventActivated
+            (object sender,
+             ViewEventArgs args)
+            {
+            ViewEventActivated?.Invoke(sender, args);
             }
     }
 }

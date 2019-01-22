@@ -12,9 +12,25 @@ namespace MouseNet.Logophi.Forms
             InitializeComponent();
             }
 
+        public BookmarksForm
+            (IEnumerable bookmarks)
+            {
+            InitializeComponent();
+            foreach (var bkmark in bookmarks)
+                Items.Add(bkmark);
+            }
+
         public IList Items => _cBookmarksList.Items;
         public event EventHandler<string> BookmarkRemoved;
-        public event EventHandler<string> BookmarkActivated;
+
+        public void Show
+            (object parent)
+            {
+            if (!(parent is IWin32Window window)) return;
+            base.Show(window);
+            }
+
+        public event EventHandler<ViewEventArgs> ViewEventActivated;
 
         private void InvokeBookmarkActivated
             (object sender,
@@ -22,9 +38,9 @@ namespace MouseNet.Logophi.Forms
             {
             var i = _cBookmarksList.IndexFromPoint(args.Location);
             if (i != ListBox.NoMatches)
-                BookmarkActivated?.Invoke(
+                ViewEventActivated?.Invoke(
                     this,
-                    (string) _cBookmarksList.Items[i]);
+                    new ViewEventArgs(Items[i]));
             }
 
         private void InvokeBookmarkRemoved

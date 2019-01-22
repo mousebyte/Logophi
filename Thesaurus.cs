@@ -1,16 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Collections;
 using System.Collections.Specialized;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MouseNet.Logophi
 {
-    internal class Thesaurus : TunaInterface
+    internal class Thesaurus : TunaInterface, IBookmarkManager
     {
-        public SearchHistory History { get; }
-        private readonly StringCollection _str = new StringCollection();
+        private readonly IList _bookmarks = new StringCollection();
 
         public Thesaurus
             (string dataDirectory,
@@ -22,34 +18,54 @@ namespace MouseNet.Logophi
                 new SearchHistory(dataDirectory, persistentHistory);
             }
 
-        public bool Bookmarked {
-            get => _str.Contains(SearchTerm);
+        public SearchHistory History { get; }
+        public event EventHandler<string> BookmarkRemoved;
+        public event EventHandler<string> BookmarkAdded;
+        public IEnumerable Bookmarks => _bookmarks;
+
+        public void AddBookmark
+            (object item)
+            {
+            if (_bookmarks.Contains(item)) return;
+            _bookmarks.Add(item);
+            InvokeBookmarkAdded(this, item as string);
+            }
+
+        public void RemoveBookmark
+            (object item)
+            {
+            if (!_bookmarks.Contains(item)) return;
+            _bookmarks.Remove(item);
+            InvokeBookmarkRemoved(this, item as string);
+            }
+
+        public bool IsBookmarked {
+            get => _bookmarks.Contains(SearchTerm);
             set {
-                if(value) AB(SearchTerm);
-                else RB(SearchTerm);
+                if (value) AddBookmark(SearchTerm);
+                else RemoveBookmark(SearchTerm);
             }
         }
 
-        public void AB
-            (string word)
+        private void InvokeBookmarkAdded
+            (object sender,
+             string args)
             {
-            if (_str.Contains(word)) return;
-            _str.Add(word);
-            
+            BookmarkAdded?.Invoke(sender, args);
             }
 
-        public void RB
-            (string word)
+        private void InvokeBookmarkRemoved
+            (object sender,
+             string args)
             {
-            if (!_str.Contains(word)) return;
-            _str.Remove(word);
+            BookmarkRemoved?.Invoke(sender, args);
             }
 
         protected override void InvokeWordSearched
             (object sender,
              string args)
             {
-            if(args != History.CurrentItem)
+            if (args != History.CurrentItem)
                 History.AddItem(args);
             base.InvokeWordSearched(sender, args);
             }

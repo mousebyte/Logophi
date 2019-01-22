@@ -123,13 +123,15 @@
       <DependentUpon>BookmarksForm.cs</DependentUpon>
     </Compile>
     <Compile Include="GlobalHotkey.cs" />
+    <Compile Include="IBookmarkManager.cs" />
     <Compile Include="NativeMethods.cs" />
+    <Compile Include="PresentationAgent.cs" />
     <Compile Include="Properties\LogophiSettings.cs" />
     <Compile Include="SearchHistory.cs" />
     <Compile Include="TermEntry.cs" />
     <Compile Include="Thesaurus.cs" />
     <Compile Include="TunaInterface.cs" />
-    <Compile Include="Views\IPreferencesFormView.cs" />
+    <Compile Include="Views\IPreferencesDialogView.cs" />
     <Compile Include="Views\IView.cs" />
     <Compile Include="Views\Presentation\BookmarksFormPresenter.cs" />
     <Compile Include="Views\IViewPresenter.cs" />
@@ -149,7 +151,7 @@
       <DependentUpon>PreferencesForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
-    <Compile Include="Views\Presentation\PreferencesFormPresenter.cs" />
+    <Compile Include="Views\Presentation\PreferencesDialogPresenter.cs" />
     <Compile Include="WordDefinition.cs" />
     <EmbeddedResource Include="Forms\AboutForm.resx">
       <DependentUpon>AboutForm.cs</DependentUpon>

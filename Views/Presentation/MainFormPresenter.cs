@@ -1,54 +1,88 @@
 ﻿using System;
 using System.Diagnostics;
-using System.Drawing;
-using System.IO;
 using System.Windows.Forms;
-using Microsoft.Win32;
-using MouseNet.Logophi.Forms;
 using MouseNet.Logophi.Properties;
 
 namespace MouseNet.Logophi.Views.Presentation
 {
     internal class MainFormPresenter : IViewPresenter<IMainFormView>
     {
-        private readonly SearchHistory _history;
+        private readonly Thesaurus _thesaurus;
+        private IMainFormView _view;
+        private bool SearchValid => _thesaurus.Definitions != null;
 
         public MainFormPresenter
-            (string dataDirectory,
-             bool persistentCache,
-             bool persistentHistory)
+            (Thesaurus thesaurus)
             {
-            TunaInterface = new TunaInterface(dataDirectory, persistentCache);
-            _history =
-                new SearchHistory(dataDirectory, persistentHistory);
+            _thesaurus = thesaurus;
             }
-
-        private bool SearchValid => TunaInterface.Definitions != null;
-        public TunaInterface TunaInterface { get; }
 
         public void Present
             (IMainFormView view)
             {
-            View = view;
-            _history.MaxItems = (int) Settings.Default.MaxHistory;
-            if (_history.Count > 0)
-                foreach (var i in _history)
-                    if (!view.DropDownItems.Contains(i))
-                        view.DropDownItems.Add(i);
-            View.Search += OnSearch;
-            View.SelectedDefinitionChanged +=
+            Present(view, null);
+            }
+
+        public void Present
+            (IMainFormView view,
+             object parent)
+            {
+            _view = view;
+            PopulateDropDownItems();
+            _view.ViewEventActivated += OnViewEventActivated;
+            _view.Search += OnSearch;
+            _view.SelectedDefinitionChanged +=
                 OnSelectedDefinitionChanged;
-            View.BackClicked += OnBackClicked;
-            View.ForwardClicked += OnForwardClicked;
-            View.BookmarkClicked += OnBookmarkClicked;
-            View.ViewDictionaryClicked += OnViewDictionaryClicked;
-            View.PreferencesClicked += OnPreferencesClicked;
-            View.Closed += OnClosed;
-            View.Show();
+            _view.BackClicked += OnBackClicked;
+            _view.ForwardClicked += OnForwardClicked;
+            _view.BookmarkClicked += OnBookmarkClicked;
+            _view.OpenDictionaryClicked += OnOpenDictionaryClicked;
+            _view.OpenGithubClicked += OnOpenGithubClicked;
+            _view.Closed += OnClosed;
+            
+            if (parent == null) _view.Show();
+            else _view.Show(parent);
             IsPresenting = true;
             }
 
-        public IMainFormView View { get; private set; }
+        public event EventHandler ShowBookmarksClicked;
+        public event EventHandler ShowPreferencesClicked;
+        public event EventHandler ShowAboutClicked;
+
+        private void PopulateDropDownItems()
+            {
+            if (_thesaurus.History.Count <= 0) return;
+            foreach (var i in _thesaurus.History)
+                if (!_view.DropDownItems.Contains(i))
+                    _view.DropDownItems.Add(i);
+            }
+
+        private void OnViewEventActivated
+            (object sender,
+             ViewEventArgs e)
+            {
+            switch (e.Tag)
+                {
+                case "ShowBookmarksClicked":
+                    ShowBookmarksClicked?.Invoke(
+                        this,
+                        EventArgs.Empty);
+                    break;
+                case "ShowPreferencesClicked":
+                    ShowPreferencesClicked?.Invoke(
+                        this,
+                        EventArgs.Empty);
+                    break;
+                case "ShowAboutClicked":
+                    ShowAboutClicked?.Invoke(this, EventArgs.Empty);
+                    break;
+                case "ExitClicked":
+                    Application.Exit();
+                    break;
+                }
+            }
+
+        public IView View => _view;
         public bool IsPresenting { get; private set; }
 
         public void Search
@@ -59,75 +93,51 @@ namespace MouseNet.Logophi.Views.Presentation
 
         private void HandleInvalidSearch()
             {
-            View.Definitions.Add(Resources.InvalidSearch);
-            View.EnableBookmarkButton = false;
-            }
-
-        private static ListViewItem MakeListViewItem
-            (TermEntry term)
-            {
-            var item = new ListViewItem(term.Value);
-            switch (Math.Abs(term.Similarity))
-                {
-                case 100:
-                    item.Font = new Font(item.Font, FontStyle.Bold);
-                    break;
-                case 50:
-                    item.ForeColor = Color.DimGray;
-                    break;
-                case 10:
-                    item.ForeColor = Color.DarkGray;
-                    break;
-                default:
-                    item.ForeColor = Color.LightGray;
-                    break;
-                }
-
-            return item;
+            _view.Definitions.Add(Resources.InvalidSearch);
+            _view.EnableBookmarkButton = false;
             }
 
         private void PopulateDefinitions
             (string word)
             {
-            foreach (var def in TunaInterface.Definitions)
-                View.Definitions.Add(
+            foreach (var def in _thesaurus.Definitions)
+                _view.Definitions.Add(
                     $"{def.PartOfSpeech}: {def.Definition}");
-            View.EnableBookmarkButton = true;
-            View.SelectedDefinitionIndex = 0;
-            if (word == _history.CurrentItem) return;
-            _history.AddItem(word);
-            if (!View.DropDownItems.Contains(word))
-                View.DropDownItems.Insert(0, word);
+            _view.EnableBookmarkButton = true;
+            _view.SelectedDefinitionIndex = 0;
+            /*if (word == _history.CurrentItem) return;
+            _history.AddItem(word);*/
+            if (!_view.DropDownItems.Contains(word))
+                _view.DropDownItems.Insert(0, word);
             }
 
         private void SearchFromHistory()
             {
-            OnSearch(this, _history.CurrentItem);
-            View.SearchText = _history.CurrentItem;
+            OnSearch(this, _thesaurus.History.CurrentItem);
+            _view.SearchText = _thesaurus.History.CurrentItem;
             }
 
-        private static void UpdateAutoRunSetting()
+        private void OnOpenGithubClicked
+            (object sender,
+             EventArgs e)
             {
-            var key = Registry.CurrentUser.OpenSubKey(
-                "Software\\Microsoft\\Windows\\CurrentVersion\\Run",
-                true);
-            if (key == null) return;
-            if (Settings.Default.AutoRun)
-                key.SetValue("Logophi",
-                             Path.Combine(
-                                 Environment.CurrentDirectory,
-                                 "Logophi.exe"));
-            else key.DeleteValue("Logophi");
+            Process.Start(Resources.GithubUrl);
             }
 
         private void OnBackClicked
             (object sender,
              EventArgs e)
             {
-            if (!_history.CanGoBackward) return;
+            if (!_thesaurus.History.CanGoBackward) return;
             if (SearchValid)
-                _history.GoBack();
+                _thesaurus.History.GoBack();
             SearchFromHistory();
+            }
+
+        private void UpdateBookmarkButtonState()
+            {
+            if (_thesaurus.IsBookmarked) _view.BookmarkOn();
+            else _view.BookmarkOff();
             }
 
         private void OnBookmarkClicked
@@ -135,8 +145,8 @@ namespace MouseNet.Logophi.Views.Presentation
              EventArgs e)
             {
             if (!SearchValid) return;
-            TunaInterface.IsBookmarked = !TunaInterface.IsBookmarked;
-            View.SetBookmarkState(TunaInterface.IsBookmarked);
+            _thesaurus.IsBookmarked = !_thesaurus.IsBookmarked;
+            UpdateBookmarkButtonState();
             }
 
         private void OnClosed
@@ -150,81 +160,55 @@ namespace MouseNet.Logophi.Views.Presentation
             (object sender,
              EventArgs e)
             {
-            if (!_history.CanGoForward) return;
-            _history.GoForward();
+            if (!_thesaurus.History.CanGoForward) return;
+            _thesaurus.History.GoForward();
             SearchFromHistory();
-            }
-
-        private void OnPreferencesClicked
-            (object sender,
-             EventArgs e)
-            {
-            //TODO: move this the heck outa here
-            var autoRun = Settings.Default.AutoRun;
-            var enableHotkey = Settings.Default.EnableHotkey;
-            var hotkey = Settings.Default.Hotkey;
-            var form = new PreferencesForm();
-            form.DeleteHistoryClicked +=
-                (o,
-                 args) => _history.Clear();
-            form.DeleteCacheClicked +=
-                (o,
-                 args) => TunaInterface.ClearCache();
-            var result = form.ShowDialog((IWin32Window) View);
-            if (result == DialogResult.OK)
-                {
-                TunaInterface.PersistentCache =
-                    Settings.Default.PersistentCache;
-                View.TopMost = Settings.Default.AlwaysOnTop;
-                _history.PersistentHistory =
-                    Settings.Default.SaveHistory;
-                _history.MaxItems = (int) Settings.Default.MaxHistory;
-                Settings.Default.Save();
-                if (autoRun != Settings.Default.AutoRun)
-                    UpdateAutoRunSetting();
-                
-                }
-
-            form.Dispose();
             }
 
         private void OnSearch
             (object sender,
              string word)
             {
-            if (View.SearchText != word) View.SearchText = word;
-            View.Definitions.Clear();
-            TunaInterface.SearchWord(word);
+            if (_view.SearchText != word) _view.SearchText = word;
+            _view.Definitions.Clear();
+            _thesaurus.SearchWord(word);
 
-            if (!SearchValid || TunaInterface.Definitions.Count == 0)
+            if (!SearchValid || _thesaurus.Definitions.Count == 0)
                 HandleInvalidSearch();
             else PopulateDefinitions(word);
 
-            View.EnableBackButton = _history.CanGoBackward;
-            View.EnableForwardButton = _history.CanGoForward;
-            View.SetBookmarkState(TunaInterface.IsBookmarked);
+            _view.EnableBackButton = _thesaurus.History.CanGoBackward;
+            _view.EnableForwardButton =
+                _thesaurus.History.CanGoForward;
+            UpdateBookmarkButtonState();
             }
 
         private void OnSelectedDefinitionChanged
             (object sender,
              int e)
             {
-            View.Synonyms.Clear();
-            View.Antonyms.Clear();
+            _view.ClearSynonyms();
+            _view.ClearAntonyms();
             if (!SearchValid) return;
-            var def = TunaInterface.Definitions[e];
+            var def = _thesaurus.Definitions[e];
             foreach (var syn in def.Synonyms)
-                View.Synonyms.Add(MakeListViewItem(syn));
+                _view.AddSynonym(syn.Value, syn.Similarity);
             foreach (var ant in def.Antonyms)
-                View.Antonyms.Add(MakeListViewItem(ant));
+                _view.AddAntonym(ant.Value, ant.Similarity);
             }
 
-        private void OnViewDictionaryClicked
+        private void OnOpenDictionaryClicked
             (object sender,
              EventArgs e)
             {
             if (!SearchValid) return;
-            Process.Start(Resources.DictionaryUrl + View.SearchText);
+            Process.Start(Resources.DictionaryUrl + _view.SearchText);
+            }
+        
+
+        public void Dispose()
+            {
+            _view?.Dispose();
             }
     }
 }

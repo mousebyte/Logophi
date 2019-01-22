@@ -79,6 +79,15 @@ namespace MouseNet.Logophi.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Software\\Microsoft\\Windows\\CurrentVersion\\Run.
+        /// </summary>
+        internal static string AutoRunKey {
+            get {
+                return ResourceManager.GetString("AutoRunKey", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         internal static System.Drawing.Bitmap bookmark_disabled {

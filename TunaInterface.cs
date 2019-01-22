@@ -14,17 +14,14 @@ namespace MouseNet.Logophi
     public class TunaInterface
     {
         private readonly string _bookmarkPath;
-
         private readonly string _cachePath;
-
-        private List<string> _bookmarks = new List<string>();
 
         private ObjectCache
             _cache = new MemoryCache("ThesaurusCache");
 
         private string _searchTerm;
 
-        public TunaInterface
+        protected TunaInterface
             (string dataDirectory,
              bool persistentCache)
             {
@@ -43,16 +40,6 @@ namespace MouseNet.Logophi
             }
 
         public List<WordDefinition> Definitions { get; private set; }
-        public IEnumerable<string> Bookmarks => _bookmarks;
-
-        public bool IsBookmarked {
-            get => Bookmarks.Contains(SearchTerm);
-            set {
-                if (value) AddBookmark(SearchTerm);
-                else RemoveBookmark(SearchTerm);
-            }
-        }
-
         public bool PersistentCache { get; set; }
 
         public string SearchTerm {
@@ -60,29 +47,11 @@ namespace MouseNet.Logophi
             set => SearchWord(value);
         }
 
-        public void AddBookmark
-            (string value)
-            {
-            if (_bookmarks.Contains(value)) return;
-            _bookmarks.Add(value);
-            SaveBookmarks();
-            InvokeBookmarkAdded(this, value);
-            }
-
         public void ClearCache()
             {
             _cache = new MemoryCache("ThesaurusCache");
             if (PersistentCache)
                 File.Delete(_cachePath);
-            }
-
-        public void RemoveBookmark
-            (string value)
-            {
-            if (!_bookmarks.Contains(value)) return;
-            _bookmarks.Remove(value);
-            SaveBookmarks();
-            InvokeBookmarkRemoved(this, value);
             }
 
         public void SearchWord
@@ -110,9 +79,6 @@ namespace MouseNet.Logophi
             {
             if (!File.Exists(_bookmarkPath)) return;
             var formatter = new BinaryFormatter();
-            using (var strm = File.OpenRead(_bookmarkPath))
-                _bookmarks =
-                    formatter.Deserialize(strm) as List<string>;
             if (!PersistentCache || !File.Exists(_cachePath)) return;
             using (var strm = File.OpenRead(_cachePath))
                 if (formatter.Deserialize(strm) is
@@ -131,13 +97,6 @@ namespace MouseNet.Logophi
                         return JObject.Load(jr);
             }
 
-        private void SaveBookmarks()
-            {
-            var formatter = new BinaryFormatter();
-            using (var strm = File.OpenWrite(_bookmarkPath))
-                formatter.Serialize(strm, _bookmarks);
-            }
-
         private void UpdateCache()
             {
             if (Definitions == null || _cache.Contains(SearchTerm))
@@ -149,29 +108,13 @@ namespace MouseNet.Logophi
                 formatter.Serialize(strm, _cache.ToArray());
             }
 
-        private void InvokeBookmarkAdded
-            (object sender,
-             string args)
-            {
-            BookmarkAdded?.Invoke(sender, args);
-            }
-
-        private void InvokeBookmarkRemoved
-            (object sender,
-             string args)
-            {
-            BookmarkRemoved?.Invoke(sender, args);
-            }
-
-        public event EventHandler<string> WordSearched;
-
         protected virtual void InvokeWordSearched
             (object sender,
              string args)
             {
             WordSearched?.Invoke(sender, args);
             }
-        public event EventHandler<string> BookmarkRemoved;
-        public event EventHandler<string> BookmarkAdded;
+
+        public event EventHandler<string> WordSearched;
     }
 }

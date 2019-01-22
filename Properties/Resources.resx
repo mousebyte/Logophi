@@ -174,4 +174,8 @@
     <value>https://tuna.thesaurus.com/pageData/</value>
     <comment>The Thesaurus.com URL.</comment>
   </data>
+  <data name="AutoRunKey" xml:space="preserve">
+    <value>Software\\Microsoft\\Windows\\CurrentVersion\\Run</value>
+    <comment>The path to the autorun registry key.</comment>
+  </data>
 </root>
