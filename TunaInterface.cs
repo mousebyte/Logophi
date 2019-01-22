@@ -92,6 +92,7 @@ namespace MouseNet.Logophi
             if (_cache.Contains(word))
                 Definitions = _cache[word] as List<WordDefinition>;
             else LoadFromWeb(word);
+            InvokeWordSearched(this, word);
             }
 
         private void LoadFromWeb
@@ -162,6 +163,14 @@ namespace MouseNet.Logophi
             BookmarkRemoved?.Invoke(sender, args);
             }
 
+        public event EventHandler<string> WordSearched;
+
+        protected virtual void InvokeWordSearched
+            (object sender,
+             string args)
+            {
+            WordSearched?.Invoke(sender, args);
+            }
         public event EventHandler<string> BookmarkRemoved;
         public event EventHandler<string> BookmarkAdded;
     }

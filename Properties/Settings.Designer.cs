@@ -118,5 +118,16 @@ namespace MouseNet.Logophi.Properties {
                 this["Hotkey"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        public global::System.Collections.Specialized.StringCollection Bookmarks {
+            get {
+                return ((global::System.Collections.Specialized.StringCollection)(this["Bookmarks"]));
+            }
+            set {
+                this["Bookmarks"] = value;
+            }
+        }
     }
 }

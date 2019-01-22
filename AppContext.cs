@@ -16,12 +16,11 @@ namespace MouseNet.Logophi
             "Software\\Microsoft\\Windows\\CurrentVersion\\Run";
 
         private readonly Settings _settings = Settings.Default;
-
         private readonly BookmarksFormPresenter _bkmarkPresenter;
-
         private readonly MainFormPresenter _mainPresenter;
         private readonly NotifyIcon _trayIcon;
         private readonly GlobalHotkey _hotkey = new GlobalHotkey();
+        private readonly Thesaurus _thesaurus;
 
         private readonly string _exePath =
             Path.GetFullPath("Logophi.exe");
@@ -30,6 +29,10 @@ namespace MouseNet.Logophi
             {
             Application.ApplicationExit += OnApplicationExit;
             _settings.PropertyChanged += OnSettingsPropertyChanged;
+            SetupDirectories();
+            _thesaurus = new Thesaurus(_settings.DataDirectory,
+                                       _settings.PersistentCache,
+                                       _settings.SaveHistory);
             _mainPresenter = new MainFormPresenter(
                 _settings.DataDirectory,
                 _settings.PersistentCache,
@@ -92,8 +95,7 @@ namespace MouseNet.Logophi
             if (!_mainPresenter.IsPresenting) return;
             var form = new PreferencesForm();
             var result =
-                form.ShowDialog(
-                    (IWin32Window) _mainPresenter.View);
+                form.ShowDialog((IWin32Window) _mainPresenter.View);
             }
 
         private void OnSettingsPropertyChanged

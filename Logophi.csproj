@@ -127,6 +127,7 @@
     <Compile Include="Properties\LogophiSettings.cs" />
     <Compile Include="SearchHistory.cs" />
     <Compile Include="TermEntry.cs" />
+    <Compile Include="Thesaurus.cs" />
     <Compile Include="TunaInterface.cs" />
     <Compile Include="Views\IPreferencesFormView.cs" />
     <Compile Include="Views\IView.cs" />
