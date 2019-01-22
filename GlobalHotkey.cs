@@ -18,6 +18,7 @@ namespace MouseNet.Logophi
             }
 
         public IEnumerable<Keys> Hotkeys => _hotkeys;
+        public int HotkeyCount => _currentId;
 
         public void Dispose()
             {
