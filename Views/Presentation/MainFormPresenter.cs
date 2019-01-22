@@ -18,13 +18,13 @@ namespace MouseNet.Logophi.Views.Presentation
              bool persistentCache,
              bool persistentHistory)
             {
-            Thesaurus = new Thesaurus(dataDirectory, persistentCache);
+            TunaInterface = new TunaInterface(dataDirectory, persistentCache);
             _history =
                 new SearchHistory(dataDirectory, persistentHistory);
             }
 
-        private bool SearchValid => Thesaurus.Definitions != null;
-        public Thesaurus Thesaurus { get; }
+        private bool SearchValid => TunaInterface.Definitions != null;
+        public TunaInterface TunaInterface { get; }
 
         public void Present
             (IMainFormView view)
@@ -89,7 +89,7 @@ namespace MouseNet.Logophi.Views.Presentation
         private void PopulateDefinitions
             (string word)
             {
-            foreach (var def in Thesaurus.Definitions)
+            foreach (var def in TunaInterface.Definitions)
                 View.Definitions.Add(
                     $"{def.PartOfSpeech}: {def.Definition}");
             View.EnableBookmarkButton = true;
@@ -135,8 +135,8 @@ namespace MouseNet.Logophi.Views.Presentation
              EventArgs e)
             {
             if (!SearchValid) return;
-            Thesaurus.IsBookmarked = !Thesaurus.IsBookmarked;
-            View.SetBookmarkState(Thesaurus.IsBookmarked);
+            TunaInterface.IsBookmarked = !TunaInterface.IsBookmarked;
+            View.SetBookmarkState(TunaInterface.IsBookmarked);
             }
 
         private void OnClosed
@@ -169,11 +169,11 @@ namespace MouseNet.Logophi.Views.Presentation
                  args) => _history.Clear();
             form.DeleteCacheClicked +=
                 (o,
-                 args) => Thesaurus.ClearCache();
+                 args) => TunaInterface.ClearCache();
             var result = form.ShowDialog((IWin32Window) View);
             if (result == DialogResult.OK)
                 {
-                Thesaurus.PersistentCache =
+                TunaInterface.PersistentCache =
                     Settings.Default.PersistentCache;
                 View.TopMost = Settings.Default.AlwaysOnTop;
                 _history.PersistentHistory =
@@ -194,15 +194,15 @@ namespace MouseNet.Logophi.Views.Presentation
             {
             if (View.SearchText != word) View.SearchText = word;
             View.Definitions.Clear();
-            Thesaurus.SearchWord(word);
+            TunaInterface.SearchWord(word);
 
-            if (!SearchValid || Thesaurus.Definitions.Count == 0)
+            if (!SearchValid || TunaInterface.Definitions.Count == 0)
                 HandleInvalidSearch();
             else PopulateDefinitions(word);
 
             View.EnableBackButton = _history.CanGoBackward;
             View.EnableForwardButton = _history.CanGoForward;
-            View.SetBookmarkState(Thesaurus.IsBookmarked);
+            View.SetBookmarkState(TunaInterface.IsBookmarked);
             }
 
         private void OnSelectedDefinitionChanged
@@ -212,7 +212,7 @@ namespace MouseNet.Logophi.Views.Presentation
             View.Synonyms.Clear();
             View.Antonyms.Clear();
             if (!SearchValid) return;
-            var def = Thesaurus.Definitions[e];
+            var def = TunaInterface.Definitions[e];
             foreach (var syn in def.Synonyms)
                 View.Synonyms.Add(MakeListViewItem(syn));
             foreach (var ant in def.Antonyms)

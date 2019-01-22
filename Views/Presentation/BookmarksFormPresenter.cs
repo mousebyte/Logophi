@@ -6,13 +6,13 @@ namespace MouseNet.Logophi.Views.Presentation
         : IViewPresenter<IBookmarksFormView>
     {
         private readonly Action<string> _callback;
-        private readonly Thesaurus _thesaurus;
+        private readonly TunaInterface _tunaInterface;
 
         public BookmarksFormPresenter
-            (Thesaurus thesaurus,
+            (TunaInterface tunaInterface,
              Action<string> callback)
             {
-            _thesaurus = thesaurus;
+            _tunaInterface = tunaInterface;
             _callback = callback;
             }
 
@@ -20,7 +20,7 @@ namespace MouseNet.Logophi.Views.Presentation
             (IBookmarksFormView view)
             {
             View = view;
-            foreach (var bookmark in _thesaurus.Bookmarks)
+            foreach (var bookmark in _tunaInterface.Bookmarks)
                 View.Items.Add(bookmark);
             View.BookmarkRemoved += OnBookmarkRemoved;
             View.BookmarkActivated += OnBookmarkActivated;
@@ -44,7 +44,7 @@ namespace MouseNet.Logophi.Views.Presentation
              string e)
             {
             View.Items.Remove(e);
-            _thesaurus.RemoveBookmark(e);
+            _tunaInterface.RemoveBookmark(e);
             }
 
         private void OnClosed

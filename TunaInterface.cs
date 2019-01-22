@@ -11,7 +11,7 @@ using Newtonsoft.Json.Linq;
 
 namespace MouseNet.Logophi
 {
-    public class Thesaurus
+    public class TunaInterface
     {
         private readonly string _bookmarkPath;
 
@@ -24,7 +24,7 @@ namespace MouseNet.Logophi
 
         private string _searchTerm;
 
-        public Thesaurus
+        public TunaInterface
             (string dataDirectory,
              bool persistentCache)
             {

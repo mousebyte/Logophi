@@ -16,7 +16,9 @@ namespace MouseNet.Logophi
             "Software\\Microsoft\\Windows\\CurrentVersion\\Run";
 
         private readonly Settings _settings = Settings.Default;
+
         private readonly BookmarksFormPresenter _bkmarkPresenter;
+
         private readonly MainFormPresenter _mainPresenter;
         private readonly NotifyIcon _trayIcon;
         private readonly GlobalHotkey _hotkey = new GlobalHotkey();
@@ -33,7 +35,7 @@ namespace MouseNet.Logophi
                 _settings.PersistentCache,
                 _settings.SaveHistory);
             _bkmarkPresenter = new BookmarksFormPresenter(
-                _mainPresenter.Thesaurus,
+                _mainPresenter.TunaInterface,
                 _mainPresenter.Search);
             var openMenuItem = new ToolStripMenuItem {Text = @"Open"};
             openMenuItem.Click += OnOpen;
@@ -90,7 +92,8 @@ namespace MouseNet.Logophi
             if (!_mainPresenter.IsPresenting) return;
             var form = new PreferencesForm();
             var result =
-                form.ShowDialog((IWin32Window) _mainPresenter.View);
+                form.ShowDialog(
+                    (IWin32Window) _mainPresenter.View);
             }
 
         private void OnSettingsPropertyChanged
@@ -100,7 +103,7 @@ namespace MouseNet.Logophi
             switch (e.PropertyName)
                 {
                 case "PersistentCache":
-                    _mainPresenter.Thesaurus.PersistentCache =
+                    _mainPresenter.TunaInterface.PersistentCache =
                         _settings.PersistentCache;
                     break;
                 case "EnableHotkey":
@@ -171,10 +174,10 @@ namespace MouseNet.Logophi
             if (!_mainPresenter.IsPresenting
              || _bkmarkPresenter.IsPresenting) return;
             var form = new BookmarksForm();
-            _mainPresenter.Thesaurus.BookmarkRemoved +=
+            _mainPresenter.TunaInterface.BookmarkRemoved +=
                 (o,
                  s) => form.Items.Remove(s);
-            _mainPresenter.Thesaurus.BookmarkAdded +=
+            _mainPresenter.TunaInterface.BookmarkAdded +=
                 (o,
                  s) => form.Items.Add(s);
             _bkmarkPresenter.Present(form);
