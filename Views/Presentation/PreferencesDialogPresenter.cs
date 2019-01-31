@@ -22,6 +22,7 @@ namespace MouseNet.Logophi.Views.Presentation
              object parent)
             {
             _view = view;
+            view.ViewEventActivated += OnViewEventActivated;
             IsPresenting = true;
             var result = view.ShowDialog((IWin32Window) parent);
             if (result != DialogResult.OK) Settings.Default.Reload();

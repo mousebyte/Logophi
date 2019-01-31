@@ -12,7 +12,6 @@ namespace MouseNet.Logophi.Views
         bool EnableForwardButton { get; set; }
         bool EnableBookmarkButton { get; set; }
         int SelectedDefinitionIndex { get; set; }
-        bool TopMost { get; set; }
 
         void AddSynonym
             (string term,
