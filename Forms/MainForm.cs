@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Drawing;
 using System.Windows.Forms;
 using MouseNet.Logophi.Properties;
 using MouseNet.Logophi.Views;
@@ -18,9 +19,10 @@ namespace MouseNet.Logophi.Forms
         public event EventHandler ForwardClicked;
         public event EventHandler BookmarkClicked;
         public event EventHandler<int> SelectedDefinitionChanged;
+        public event EventHandler OpenDictionaryClicked;
+        public event EventHandler OpenGithubClicked;
+        public event EventHandler<ViewEventArgs> ViewEventActivated;
         public IList Definitions => _cDefList.Items;
-        public IList Synonyms => _cSynonymList.Items;
-        public IList Antonyms => _cAntonymList.Items;
         public IList DropDownItems => _cSearchText.Items;
 
         public string SearchText {
@@ -52,33 +54,98 @@ namespace MouseNet.Logophi.Forms
             set => _cDefList.SelectedIndex = value;
         }
 
-        public void SetBookmarkState
-            (bool bookmarked)
+        public void BookmarkOn()
             {
             if (!EnableBookmarkButton) return;
-            if (bookmarked)
-                {
-                _cBookmarkBtn.Image = Resources.bookmark_enabled;
-                _cBookmarkMenuItem.Image =
-                    Resources.bookmark_disabled;
-                _cBookmarkMenuItem.Text = @"Remove";
-                _cToolTip.SetToolTip(_cBookmarkBtn,
-                                     "Remove Bookmark");
-                } else
-                {
-                _cBookmarkBtn.Image = Resources.bookmark_disabled;
-                _cBookmarkMenuItem.Image = Resources.bookmark_enabled;
-                _cBookmarkMenuItem.Text = @"Add";
-                _cToolTip.SetToolTip(_cBookmarkBtn, "Add Bookmark");
-                }
+            _cBookmarkBtn.Image = Resources.bookmark_enabled;
+            _cBookmarkMenuItem.Image = Resources.bookmark_disabled;
+            _cBookmarkMenuItem.Text = @"Remove";
+            _cToolTip.SetToolTip(_cBookmarkBtn, "Remove Bookmark");
             }
 
-        public event EventHandler ViewDictionaryClicked;
-        public event EventHandler PreferencesClicked;
+        public void BookmarkOff()
+            {
+            if (!EnableBookmarkButton) return;
+            _cBookmarkBtn.Image = Resources.bookmark_disabled;
+            _cBookmarkMenuItem.Image = Resources.bookmark_enabled;
+            _cBookmarkMenuItem.Text = @"Add";
+            _cToolTip.SetToolTip(_cBookmarkBtn, "Add Bookmark");
+            }
+
+        public void ClearSynonyms()
+            {
+            _cSynonymList.Clear();
+            }
+
+        public void ClearAntonyms()
+            {
+            _cAntonymList.Clear();
+            }
+
+        public void ToFront()
+            {
+            Activate();
+            WindowState = FormWindowState.Normal;
+            BringToFront();
+            }
+
+        public void AddSynonym
+            (string term,
+             int similarity)
+            {
+            _cSynonymList.Items.Add(MakeItem(term, similarity));
+            }
+
+        public void AddAntonym
+            (string term,
+             int similarity)
+            {
+            _cAntonymList.Items.Add(MakeItem(term, similarity));
+            }
+
+        public void Show
+            (object parent)
+            {
+            if (!(parent is IWin32Window window)) return;
+            base.Show(window);
+            }
+
+        private static ListViewItem MakeItem
+            (string term,
+             int similarity)
+            {
+            var item = new ListViewItem(term);
+            switch (Math.Abs(similarity))
+                {
+                case 100:
+                    item.Font = new Font(item.Font, FontStyle.Bold);
+                    break;
+                case 50:
+                    item.ForeColor = Color.DimGray;
+                    break;
+                case 10:
+                    item.ForeColor = Color.DarkGray;
+                    break;
+                default:
+                    item.ForeColor = Color.LightGray;
+                    break;
+                }
+
+            return item;
+            }
 
         private void TrySearch()
             {
             InvokeSearch(this, _cSearchText.Text);
+            }
+
+        private void OnExitClicked
+            (object sender,
+             EventArgs args)
+            {
+            InvokeViewEventActivated(this,
+                                     new ViewEventArgs(
+                                         "ExitClicked"));
             }
 
         private void OnSearchClicked
@@ -104,19 +171,39 @@ namespace MouseNet.Logophi.Forms
             InvokeSearch(this, _cSearchText.SelectedItem.ToString());
             }
 
+        private void OnShowAboutClicked
+            (object sender,
+             EventArgs args)
+            {
+            InvokeViewEventActivated(this,
+                                     new ViewEventArgs(
+                                         "ShowAboutClicked"));
+            }
+
+        private void OnShowBookmarksClicked
+            (object sender,
+             EventArgs args)
+            {
+            InvokeViewEventActivated(sender,
+                                     new ViewEventArgs(
+                                         "ShowBookmarksClicked"));
+            }
+
+        private void OnShowPreferencesClicked
+            (object sender,
+             EventArgs args)
+            {
+            InvokeViewEventActivated(this,
+                                     new ViewEventArgs(
+                                         "ShowPreferencesClicked"));
+            }
+
         private void OnTermEntryDoubleClick
             (object sender,
              EventArgs e)
             {
             if (!(sender is ListView view)) return;
             InvokeSearch(this, view.SelectedItems[0].Text);
-            }
-
-        private void OnViewBookmarksClicked
-            (object sender,
-             EventArgs args)
-            {
-            ViewBookmarksClicked?.Invoke(sender, args);
             }
 
         private void InvokeSearch
@@ -160,40 +247,21 @@ namespace MouseNet.Logophi.Forms
             (object sender,
              EventArgs args)
             {
-            ViewDictionaryClicked?.Invoke(sender, args);
-            }
-
-        private void InvokePreferencesClicked
-            (object sender,
-             EventArgs args)
-            {
-            PreferencesClicked?.Invoke(sender, args);
-            }
-
-        private void InvokeExitClicked
-            (object sender,
-             EventArgs args)
-            {
-            ExitClicked?.Invoke(sender, args);
-            }
-
-        private void InvokeAboutClicked
-            (object sender,
-             EventArgs args)
-            {
-            AboutClicked?.Invoke(sender, args);
+            OpenDictionaryClicked?.Invoke(sender, args);
             }
 
         private void InvokeGithubProjectClicked
             (object sender,
              EventArgs args)
             {
-            GithubProjectClicked?.Invoke(sender, args);
+            OpenGithubClicked?.Invoke(sender, args);
             }
 
-        public event EventHandler ViewBookmarksClicked;
-        public event EventHandler GithubProjectClicked;
-        public event EventHandler AboutClicked;
-        public event EventHandler ExitClicked;
+        private void InvokeViewEventActivated
+            (object sender,
+             ViewEventArgs args)
+            {
+            ViewEventActivated?.Invoke(sender, args);
+            }
     }
 }

@@ -172,7 +172,7 @@
             this._cExitMenuItem.Name = "_cExitMenuItem";
             this._cExitMenuItem.Size = new System.Drawing.Size(210, 22);
             this._cExitMenuItem.Text = "E&xit";
-            this._cExitMenuItem.Click += new System.EventHandler(this.InvokeExitClicked);
+            this._cExitMenuItem.Click += new System.EventHandler(this.OnExitClicked);
             // 
             // _cDictionaryMenuItem
             // 
@@ -196,16 +196,16 @@
             // 
             this._cBookmarkMenuItem.Enabled = false;
             this._cBookmarkMenuItem.Name = "_cBookmarkMenuItem";
-            this._cBookmarkMenuItem.Size = new System.Drawing.Size(180, 22);
+            this._cBookmarkMenuItem.Size = new System.Drawing.Size(161, 22);
             this._cBookmarkMenuItem.Text = "&Add";
             this._cBookmarkMenuItem.Click += new System.EventHandler(this.InvokeBookmarkClicked);
             // 
             // _cViewBookmarksMenuItem
             // 
             this._cViewBookmarksMenuItem.Name = "_cViewBookmarksMenuItem";
-            this._cViewBookmarksMenuItem.Size = new System.Drawing.Size(180, 22);
+            this._cViewBookmarksMenuItem.Size = new System.Drawing.Size(161, 22);
             this._cViewBookmarksMenuItem.Text = "&View Bookmarks";
-            this._cViewBookmarksMenuItem.Click += new System.EventHandler(this.OnViewBookmarksClicked);
+            this._cViewBookmarksMenuItem.Click += new System.EventHandler(this.OnShowBookmarksClicked);
             // 
             // _cOptionsMenuItem
             // 
@@ -218,9 +218,9 @@
             // _cPreferencesMenuItem
             // 
             this._cPreferencesMenuItem.Name = "_cPreferencesMenuItem";
-            this._cPreferencesMenuItem.Size = new System.Drawing.Size(180, 22);
+            this._cPreferencesMenuItem.Size = new System.Drawing.Size(135, 22);
             this._cPreferencesMenuItem.Text = "&Preferences";
-            this._cPreferencesMenuItem.Click += new System.EventHandler(this.InvokePreferencesClicked);
+            this._cPreferencesMenuItem.Click += new System.EventHandler(this.OnShowPreferencesClicked);
             // 
             // helpToolStripMenuItem
             // 
@@ -235,15 +235,16 @@
             // 
             this._cAboutMenuItem.Image = global::MouseNet.Logophi.Properties.Resources.info;
             this._cAboutMenuItem.Name = "_cAboutMenuItem";
-            this._cAboutMenuItem.Size = new System.Drawing.Size(180, 22);
+            this._cAboutMenuItem.Size = new System.Drawing.Size(150, 22);
+            this._cAboutMenuItem.Tag = "";
             this._cAboutMenuItem.Text = "&About";
-            this._cAboutMenuItem.Click += new System.EventHandler(this.InvokeAboutClicked);
+            this._cAboutMenuItem.Click += new System.EventHandler(this.OnShowAboutClicked);
             // 
             // _cGithubMenuItem
             // 
             this._cGithubMenuItem.Image = global::MouseNet.Logophi.Properties.Resources.github;
             this._cGithubMenuItem.Name = "_cGithubMenuItem";
-            this._cGithubMenuItem.Size = new System.Drawing.Size(180, 22);
+            this._cGithubMenuItem.Size = new System.Drawing.Size(150, 22);
             this._cGithubMenuItem.Text = "Project Github";
             this._cGithubMenuItem.Click += new System.EventHandler(this.InvokeGithubProjectClicked);
             // 
@@ -326,10 +327,12 @@
             this.Controls.Add(this._cTabs);
             this.Controls.Add(this._cDefList);
             this.Controls.Add(this._cMenuStrip);
+            this.DataBindings.Add(new System.Windows.Forms.Binding("TopMost", global::MouseNet.Logophi.Properties.Settings.Default, "AlwaysOnTop", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this._cMenuStrip;
             this.Name = "MainForm";
             this.Text = "Logophi";
+            this.TopMost = global::MouseNet.Logophi.Properties.Settings.Default.AlwaysOnTop;
             this._cTabs.ResumeLayout(false);
             this._cTabSynonyms.ResumeLayout(false);
             this._cTabAntonyms.ResumeLayout(false);

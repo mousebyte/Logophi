@@ -49,6 +49,7 @@
     <AssemblyFileVersionSettings>None.IncrementOnDemand.IncrementWithResetOnIncrease.NoneWithAutoReset</AssemblyFileVersionSettings>
     <AssemblyInfoVersionSettings>None.None.None.None</AssemblyInfoVersionSettings>
     <AssemblyInfoVersionSemVerSettings>AssemblyVersion.NoneWithAutoReset.Alpha</AssemblyInfoVersionSemVerSettings>
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -70,6 +71,7 @@
     <AssemblyFileVersionSettings>IncrementOnDemand.IncrementOnDemand.IncrementWithResetOnIncrease.DayOfYearStamp</AssemblyFileVersionSettings>
     <AssemblyInfoVersionSettings>None.None.None.None</AssemblyInfoVersionSettings>
     <AssemblyInfoVersionSemVerSettings>AssemblyVersion.NoneWithAutoReset.Alpha</AssemblyInfoVersionSemVerSettings>
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationIcon>Resources\logophi.ico</ApplicationIcon>
@@ -87,14 +89,20 @@
     <AssemblyInfoVersionSemVerSettings>AssemblyVersion.IncrementOnce.Alpha</AssemblyInfoVersionSemVerSettings>
     <AssemblyVersionSettings>None.IncrementOnDemand.DeltaDayStamp.IncrementWithResetOnIncrease</AssemblyVersionSettings>
     <AssemblyFileVersionSettings>None.IncrementWithResetOnIncrease.Increment.None</AssemblyFileVersionSettings>
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="MouseNet.Forms, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>.\MouseNet.Forms.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>packages\Newtonsoft.Json.12.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Design" />
     <Reference Include="System.Runtime.Caching" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
@@ -102,6 +110,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AppContext.cs" />
+    <Compile Include="Utilities\Extensions.cs" />
     <Compile Include="Forms\AboutForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -114,13 +123,17 @@
     <Compile Include="Forms\BookmarksForm.Designer.cs">
       <DependentUpon>BookmarksForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\WrappingLabel.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="SearchHistory.cs" />
-    <Compile Include="TermEntry.cs" />
-    <Compile Include="Thesaurus.cs" />
-    <Compile Include="Views\IPreferencesFormView.cs" />
+    <Compile Include="Utilities\GlobalHotkey.cs" />
+    <Compile Include="Utilities\HotkeyEventArgs.cs" />
+    <Compile Include="Thesaurus\IBookmarkManager.cs" />
+    <Compile Include="Utilities\MessageReceiver.cs" />
+    <Compile Include="Utilities\NativeMethods.cs" />
+    <Compile Include="PresentationAgent.cs" />
+    <Compile Include="Thesaurus\SearchHistory.cs" />
+    <Compile Include="Thesaurus\TermEntry.cs" />
+    <Compile Include="Thesaurus\Browser.cs" />
+    <Compile Include="Thesaurus\TunaInterface.cs" />
+    <Compile Include="Views\IPreferencesDialogView.cs" />
     <Compile Include="Views\IView.cs" />
     <Compile Include="Views\Presentation\BookmarksFormPresenter.cs" />
     <Compile Include="Views\IViewPresenter.cs" />
@@ -140,7 +153,8 @@
       <DependentUpon>PreferencesForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
-    <Compile Include="WordDefinition.cs" />
+    <Compile Include="Views\Presentation\PreferencesDialogPresenter.cs" />
+    <Compile Include="Thesaurus\WordDefinition.cs" />
     <EmbeddedResource Include="Forms\AboutForm.resx">
       <DependentUpon>AboutForm.cs</DependentUpon>
     </EmbeddedResource>

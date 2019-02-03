@@ -94,5 +94,40 @@ namespace MouseNet.Logophi.Properties {
                 this["DataDirectory"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool EnableHotkey {
+            get {
+                return ((bool)(this["EnableHotkey"]));
+            }
+            set {
+                this["EnableHotkey"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("None")]
+        public global::System.Windows.Forms.Keys Hotkey {
+            get {
+                return ((global::System.Windows.Forms.Keys)(this["Hotkey"]));
+            }
+            set {
+                this["Hotkey"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        public global::System.Collections.Specialized.StringCollection Bookmarks {
+            get {
+                return ((global::System.Collections.Specialized.StringCollection)(this["Bookmarks"]));
+            }
+            set {
+                this["Bookmarks"] = value;
+            }
+        }
     }
 }

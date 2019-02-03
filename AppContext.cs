@@ -1,32 +1,28 @@
 ﻿using System;
-using System.Diagnostics;
+using System.ComponentModel;
 using System.IO;
 using System.Windows.Forms;
-using MouseNet.Logophi.Forms;
+using Microsoft.Win32;
 using MouseNet.Logophi.Properties;
-using MouseNet.Logophi.Views.Presentation;
+using MouseNet.Logophi.Thesaurus;
+using MouseNet.Logophi.Utilities;
 
 namespace MouseNet.Logophi
 {
     internal class AppContext : ApplicationContext
     {
-        private readonly BookmarksFormPresenter
-            _bookmarksFormPresenter;
-
-        private readonly MainFormPresenter _mainFormPresenter;
+        private readonly PresentationAgent _agent;
+        private readonly GlobalHotkey _hotkey = new GlobalHotkey();
+        private readonly Settings _settings = Settings.Default;
+        private readonly Browser _thesaurus;
         private readonly NotifyIcon _trayIcon;
+        private Keys _registeredHotkey = Keys.None;
 
         public AppContext()
             {
             Application.ApplicationExit += OnApplicationExit;
+            _settings.PropertyChanged += OnSettingsPropertyChanged;
             SetupDirectories();
-            _mainFormPresenter = new MainFormPresenter(
-                Settings.Default.DataDirectory,
-                Settings.Default.PersistentCache,
-                Settings.Default.SaveHistory);
-            _bookmarksFormPresenter = new BookmarksFormPresenter(
-                _mainFormPresenter.Thesaurus,
-                _mainFormPresenter.Search);
             var openMenuItem = new ToolStripMenuItem {Text = @"Open"};
             openMenuItem.Click += OnOpen;
             var exitMenuItem = new ToolStripMenuItem {Text = @"Exit"};
@@ -44,86 +40,124 @@ namespace MouseNet.Logophi
                     }
                 };
             _trayIcon.DoubleClick += OnOpen;
-            PresentMainForm();
+            _hotkey.HotkeyPressed += OnHotkeyPressed;
+            RegisterHotkey();
+            _thesaurus = new Browser(_settings.DataDirectory,
+                                       _settings.PersistentCache,
+                                       _settings.SaveHistory);
+            _thesaurus.History.MaxItems = (int) _settings.MaxHistory;
+            _agent = new PresentationAgent(_thesaurus);
+            Activate();
+            }
+
+        public void Activate()
+            {
+            _agent.PresentMainForm();
+            }
+
+        private void OnHotkeyPressed
+            (object sender,
+             HotkeyEventArgs e)
+            {
+            Activate();
             }
 
         private void SetupDirectories()
             {
-            if (Settings.Default.DataDirectory == string.Empty)
+            if (_settings.DataDirectory == string.Empty)
                 {
-                Settings.Default.DataDirectory = Path.Combine(
+                _settings.DataDirectory = Path.Combine(
                     Environment.GetFolderPath(
                         Environment
                            .SpecialFolder.LocalApplicationData),
                     Resources.AppName);
-                Settings.Default.Save();
+                _settings.Save();
                 }
 
-            if (!Directory.Exists(Settings.Default.DataDirectory))
-                Directory.CreateDirectory(
-                    Settings.Default.DataDirectory);
-            }
-
-        private void PresentMainForm()
-            {
-            if (_mainFormPresenter.IsPresenting) return;
-            var form = new MainForm();
-            //? Possibly move these event handlers somewhere else
-            form.ViewBookmarksClicked += OnViewBookmarksClicked;
-            form.GithubProjectClicked += OnGithubProjectClicked;
-            form.AboutClicked += OnAboutClicked;
-            form.ExitClicked +=
-                (sender,
-                 args) => Application.Exit();
-            _mainFormPresenter.Present(form);
-            }
-
-        private void OnAboutClicked
-            (object sender,
-             EventArgs e)
-            {
-            var form = new AboutForm();
-            form.ShowDialog((IWin32Window) _mainFormPresenter.View);
+            if (!Directory.Exists(_settings.DataDirectory))
+                Directory.CreateDirectory(_settings.DataDirectory);
             }
 
         private void OnApplicationExit
             (object sender,
              EventArgs e)
             {
-            if (_mainFormPresenter.IsPresenting)
-                _mainFormPresenter.View.Close();
-            _trayIcon.Visible = false;
-            _trayIcon.Dispose();
-            }
-
-        private void OnGithubProjectClicked
-            (object sender,
-             EventArgs e)
-            {
-            Process.Start(Resources.GithubUrl);
+            _agent.CloseMainForm();
             }
 
         private void OnOpen
             (object sender,
              EventArgs e)
             {
-            PresentMainForm();
+            Activate();
             }
 
-        private void OnViewBookmarksClicked
-            (object sender,
-             EventArgs e)
+        private void RegisterHotkey()
             {
-            if (!_mainFormPresenter.IsPresenting
-             || _bookmarksFormPresenter.IsPresenting) return;
-            var form = new BookmarksForm();
-            _mainFormPresenter.Thesaurus.BookmarkRemoved +=
-                (o,
-                 s) => form.Items.Remove(s);
-            _mainFormPresenter.Thesaurus.BookmarkAdded +=
-                (o,
-                 s) => form.Items.Add(s);
-            _bookmarksFormPresenter.Present(form);
+            if (_settings.Hotkey == Keys.None
+             || _settings.Hotkey == _registeredHotkey)
+                return;
+            if (_registeredHotkey != Keys.None)
+                _hotkey.UnregisterHotkey(0);
+            _hotkey.RegisterHotkey(_settings.Hotkey);
+            _registeredHotkey = _settings.Hotkey;
             }
+
+        private void UnregisterHotkey()
+            {
+            if (_registeredHotkey == Keys.None) return;
+            _hotkey.UnregisterHotkey(0);
+            _registeredHotkey = Keys.None;
+            }
+
+        private void OnSettingsPropertyChanged
+            (object sender,
+             PropertyChangedEventArgs e)
+            {
+            switch (e.PropertyName)
+                {
+                case "PersistentCache":
+                    _thesaurus.PersistentCache =
+                        _settings.PersistentCache;
+                    break;
+                case "SaveHistory":
+                    _thesaurus.History.PersistentHistory =
+                        _settings.SaveHistory;
+                    break;
+                case "MaxHistory":
+                    _thesaurus.History.MaxItems =
+                        (int) _settings.MaxHistory;
+                    break;
+                case "EnableHotkey":
+                    if (_settings.EnableHotkey)
+                        RegisterHotkey();
+                    else UnregisterHotkey();
+                    break;
+                case "AutoRun":
+                    var key = OpenAutoRunKey();
+                    if (key == null) return;
+                    if (_settings.AutoRun)
+                        key.SetValue(Resources.AppName, Application.ExecutablePath);
+                    else if (key.GetValue(Resources.AppName) != null)
+                        key.DeleteValue(Resources.AppName);
+                    break;
+                }
+            }
+
+        private static RegistryKey OpenAutoRunKey() =>
+            Registry.CurrentUser.OpenSubKey(
+                Resources.AutoRunKey,
+                true);
+
+        protected override void Dispose
+            (bool disposing)
+            {
+            base.Dispose(disposing);
+            if (!disposing) return;
+            _agent?.Dispose();
+            _trayIcon.Visible = false;
+            _trayIcon?.Dispose();
+            _hotkey?.Dispose();
+        }
     }
 }

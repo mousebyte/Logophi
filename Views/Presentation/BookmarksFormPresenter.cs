@@ -1,50 +1,66 @@
 ﻿using System;
+using MouseNet.Logophi.Thesaurus;
 
 namespace MouseNet.Logophi.Views.Presentation
 {
     internal class BookmarksFormPresenter
         : IViewPresenter<IBookmarksFormView>
     {
-        private readonly Action<string> _callback;
-        private readonly Thesaurus _thesaurus;
+        private readonly IBookmarkManager _bookmarkManager;
+        private IBookmarksFormView _view;
 
         public BookmarksFormPresenter
-            (Thesaurus thesaurus,
-             Action<string> callback)
+            (IBookmarkManager bookmarkManager)
             {
-            _thesaurus = thesaurus;
-            _callback = callback;
+            _bookmarkManager = bookmarkManager;
+            _bookmarkManager.BookmarkAdded += OnBookmarkAdded;
+            _bookmarkManager.BookmarkRemoved += OnBookmarkRemoved;
             }
 
         public void Present
             (IBookmarksFormView view)
             {
-            View = view;
-            foreach (var bookmark in _thesaurus.Bookmarks)
-                View.Items.Add(bookmark);
-            View.BookmarkRemoved += OnBookmarkRemoved;
-            View.BookmarkActivated += OnBookmarkActivated;
-            View.Closed += OnClosed;
-            View.Show();
+            Present(view, null);
+            }
+
+        public void Present
+            (IBookmarksFormView view,
+             object parent)
+            {
+            _view = view;
+            foreach (var bookmark in _bookmarkManager.Bookmarks)
+                _view.Items.Add(bookmark);
+            _view.ViewEventActivated += OnViewEventActivated;
+            _view.BookmarkRemoved += OnBookmarkRemoved;
+            _view.Closed += OnClosed;
+            if (parent == null) _view.Show();
+            else _view.Show(parent);
             IsPresenting = true;
             }
 
-        public IBookmarksFormView View { get; private set; }
+        public IBookmarksFormView View => _view;
         public bool IsPresenting { get; private set; }
 
-        private void OnBookmarkActivated
+        public void Dispose()
+            {
+            _view?.Dispose();
+            }
+
+        private void OnBookmarkAdded
             (object sender,
              string e)
             {
-            _callback(e);
+            if (!IsPresenting) return;
+            _view.Items.Add(e);
             }
 
         private void OnBookmarkRemoved
             (object sender,
              string e)
             {
-            View.Items.Remove(e);
-            _thesaurus.RemoveBookmark(e);
+            if (!IsPresenting) return;
+            _view.Items.Remove(e);
+            _bookmarkManager.RemoveBookmark(e);
             }
 
         private void OnClosed
@@ -52,6 +68,16 @@ namespace MouseNet.Logophi.Views.Presentation
              EventArgs e)
             {
             IsPresenting = false;
+            _view.Dispose();
             }
+
+        private void OnViewEventActivated
+            (object sender,
+             ViewEventArgs e)
+            {
+            BookmarkActivated?.Invoke(sender, e.Tag as string);
+            }
+
+        public event EventHandler<string> BookmarkActivated;
     }
 }

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 
-namespace MouseNet.Logophi
+namespace MouseNet.Logophi.Thesaurus
 {
     internal class SearchHistory : IEnumerable<string>
     {
@@ -19,7 +19,7 @@ namespace MouseNet.Logophi
             {
             _filePath = Path.Combine(dataDirectory, "history.lphi");
             _persistentHistory = persistentHistory;
-            if (!persistentHistory) return;
+            if (!persistentHistory || !File.Exists(_filePath)) return;
             var formatter = new BinaryFormatter();
             using (var strm = File.OpenRead(_filePath))
                 _data = formatter.Deserialize(strm) as List<string>;
