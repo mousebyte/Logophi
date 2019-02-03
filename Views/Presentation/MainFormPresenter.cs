@@ -2,17 +2,18 @@
 using System.Diagnostics;
 using System.Windows.Forms;
 using MouseNet.Logophi.Properties;
+using MouseNet.Logophi.Thesaurus;
 
 namespace MouseNet.Logophi.Views.Presentation
 {
     internal class MainFormPresenter : IViewPresenter<IMainFormView>
     {
-        private readonly Thesaurus _thesaurus;
+        private readonly Browser _thesaurus;
         private IMainFormView _view;
         private bool SearchValid => _thesaurus.Definitions != null;
 
         public MainFormPresenter
-            (Thesaurus thesaurus)
+            (Browser thesaurus)
             {
             _thesaurus = thesaurus;
             }

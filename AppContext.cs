@@ -5,6 +5,7 @@ using System.Linq;
 using System.Windows.Forms;
 using Microsoft.Win32;
 using MouseNet.Logophi.Properties;
+using MouseNet.Logophi.Thesaurus;
 
 namespace MouseNet.Logophi
 {
@@ -17,7 +18,7 @@ namespace MouseNet.Logophi
 
         private readonly GlobalHotkey _hotkey = new GlobalHotkey();
         private readonly Settings _settings = Settings.Default;
-        private readonly Thesaurus _thesaurus;
+        private readonly Browser _thesaurus;
         private readonly NotifyIcon _trayIcon;
         private Keys _registeredHotkey = Keys.None;
 
@@ -45,7 +46,7 @@ namespace MouseNet.Logophi
             _trayIcon.DoubleClick += OnOpen;
             _hotkey.HotkeyPressed += OnHotkeyPressed;
             RegisterHotkey();
-            _thesaurus = new Thesaurus(_settings.DataDirectory,
+            _thesaurus = new Browser(_settings.DataDirectory,
                                        _settings.PersistentCache,
                                        _settings.SaveHistory);
             _thesaurus.History.MaxItems = (int) _settings.MaxHistory;

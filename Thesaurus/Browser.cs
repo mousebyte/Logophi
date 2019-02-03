@@ -2,13 +2,13 @@
 using System.Collections;
 using System.Collections.Specialized;
 
-namespace MouseNet.Logophi
+namespace MouseNet.Logophi.Thesaurus
 {
-    internal class Thesaurus : TunaInterface, IBookmarkManager
+    internal class Browser : TunaInterface, IBookmarkManager
     {
         private readonly IList _bookmarks = new StringCollection();
 
-        public Thesaurus
+        public Browser
             (string dataDirectory,
              bool persistentCache,
              bool persistentHistory)

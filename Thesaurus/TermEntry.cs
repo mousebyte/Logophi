@@ -1,7 +1,7 @@
 ﻿using System;
 using Newtonsoft.Json;
 
-namespace MouseNet.Logophi
+namespace MouseNet.Logophi.Thesaurus
 {
     [JsonObject(MemberSerialization.OptIn), Serializable]
     public class TermEntry

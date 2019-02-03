@@ -16,7 +16,7 @@ namespace MouseNet.Logophi
             _preferencesDialogPresenter;
 
         public PresentationAgent
-            (Thesaurus thesaurus)
+            (Thesaurus.Browser thesaurus)
             {
             _mainFormPresenter = new MainFormPresenter(thesaurus);
             _mainFormPresenter.ShowAboutClicked += OnShowAboutClicked;

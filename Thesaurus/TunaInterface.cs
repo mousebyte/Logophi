@@ -9,7 +9,7 @@ using MouseNet.Logophi.Properties;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
-namespace MouseNet.Logophi
+namespace MouseNet.Logophi.Thesaurus
 {
     public class TunaInterface
     {
