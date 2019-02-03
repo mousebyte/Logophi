@@ -83,10 +83,6 @@ namespace MouseNet.Logophi
              EventArgs e)
             {
             _agent.CloseMainForm();
-            _agent.Dispose();
-            _trayIcon.Visible = false;
-            _trayIcon.Dispose();
-            _hotkey.Dispose();
             }
 
         private void OnOpen
@@ -152,5 +148,16 @@ namespace MouseNet.Logophi
             Registry.CurrentUser.OpenSubKey(
                 Resources.AutoRunKey,
                 true);
+
+        protected override void Dispose
+            (bool disposing)
+            {
+            base.Dispose(disposing);
+            if (!disposing) return;
+            _agent?.Dispose();
+            _trayIcon.Visible = false;
+            _trayIcon?.Dispose();
+            _hotkey?.Dispose();
+        }
     }
 }
