@@ -50,6 +50,11 @@ namespace MouseNet.Logophi
                                        _settings.SaveHistory);
             _thesaurus.History.MaxItems = (int) _settings.MaxHistory;
             _agent = new PresentationAgent(_thesaurus);
+            Activate();
+            }
+
+        public void Activate()
+            {
             _agent.PresentMainForm();
             }
 
@@ -57,7 +62,7 @@ namespace MouseNet.Logophi
             (object sender,
              HotkeyEventArgs e)
             {
-            _agent.PresentMainForm();
+            Activate();
             }
 
         private void SetupDirectories()
@@ -91,7 +96,7 @@ namespace MouseNet.Logophi
             (object sender,
              EventArgs e)
             {
-            _agent.PresentMainForm();
+            Activate();
             }
 
         private void RegisterHotkey()

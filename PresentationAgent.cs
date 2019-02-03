@@ -54,23 +54,16 @@ namespace MouseNet.Logophi
 
         public void PresentBookmarksForm()
             {
-            var form = new BookmarksForm();
             _bookmarksFormPresenter.Present(
-                form,
+                new BookmarksForm(),
                 _mainFormPresenter.View);
             }
 
         public void PresentMainForm()
             {
-            if (!_mainFormPresenter.IsPresenting)
-                {
-                var form = new MainForm();
-                _mainFormPresenter.Present(form);
-                } else
-                {
+            if (_mainFormPresenter.IsPresenting)
                 _mainFormPresenter.View.ToFront();
-                
-                }
+            else _mainFormPresenter.Present(new MainForm());
             }
 
         public void PresentPreferencesForm()

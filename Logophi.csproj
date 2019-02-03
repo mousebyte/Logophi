@@ -125,6 +125,7 @@
     <Compile Include="GlobalHotkey.cs" />
     <Compile Include="HotkeyEventArgs.cs" />
     <Compile Include="IBookmarkManager.cs" />
+    <Compile Include="MessageReceiver.cs" />
     <Compile Include="NativeMethods.cs" />
     <Compile Include="PresentationAgent.cs" />
     <Compile Include="SearchHistory.cs" />
