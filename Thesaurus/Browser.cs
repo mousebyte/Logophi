@@ -1,12 +1,15 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Specialized;
+using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
 
 namespace MouseNet.Logophi.Thesaurus
 {
     internal class Browser : TunaInterface, IBookmarkManager
     {
         private readonly IList _bookmarks = new StringCollection();
+        private readonly string _bookmarkPath;
 
         public Browser
             (string dataDirectory,
@@ -16,6 +19,13 @@ namespace MouseNet.Logophi.Thesaurus
             {
             History =
                 new SearchHistory(dataDirectory, persistentHistory);
+            _bookmarkPath =
+                Path.Combine(dataDirectory, "bookmarks.lphi");
+            if(!File.Exists(_bookmarkPath)) return;
+            var formatter = new BinaryFormatter();
+            using (var strm = File.OpenRead(_bookmarkPath))
+                _bookmarks =
+                    formatter.Deserialize(strm) as StringCollection;
             }
 
         public SearchHistory History { get; }
@@ -23,11 +33,19 @@ namespace MouseNet.Logophi.Thesaurus
         public event EventHandler<string> BookmarkAdded;
         public IEnumerable Bookmarks => _bookmarks;
 
+        private void SaveBookmarks()
+            {
+            var formatter = new BinaryFormatter();
+            using(var strm = File.OpenWrite(_bookmarkPath))
+                formatter.Serialize(strm, _bookmarks);
+            }
+
         public void AddBookmark
             (object item)
             {
             if (_bookmarks.Contains(item)) return;
             _bookmarks.Add(item);
+            SaveBookmarks();
             InvokeBookmarkAdded(this, item as string);
             }
 
@@ -36,6 +54,7 @@ namespace MouseNet.Logophi.Thesaurus
             {
             if (!_bookmarks.Contains(item)) return;
             _bookmarks.Remove(item);
+            SaveBookmarks();
             InvokeBookmarkRemoved(this, item as string);
             }
 
