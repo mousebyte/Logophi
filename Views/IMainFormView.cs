@@ -12,7 +12,6 @@ namespace MouseNet.Logophi.Views
         bool EnableForwardButton { get; set; }
         bool EnableBookmarkButton { get; set; }
         int SelectedDefinitionIndex { get; set; }
-        bool TopMost { get; set; }
 
         void AddSynonym
             (string term,
@@ -26,6 +25,7 @@ namespace MouseNet.Logophi.Views
         void BookmarkOff();
         void ClearSynonyms();
         void ClearAntonyms();
+        void ToFront();
 
         event EventHandler Closed;
         event EventHandler<string> Search;

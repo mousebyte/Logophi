@@ -2,14 +2,11 @@
 
 namespace MouseNet.Logophi.Views
 {
-    public interface IViewPresenter : IDisposable
-    {
-        IView View { get; }
-        bool IsPresenting { get; }
-    }
     
-    public interface IViewPresenter<in TView> : IViewPresenter
+    
+    public interface IViewPresenter<TView> : IDisposable
     {
+        TView View { get; }
         void Present
             (TView view);
 

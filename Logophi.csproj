@@ -92,9 +92,8 @@
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="MouseNet.Forms, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>bin\Release\MouseNet.Forms.dll</HintPath>
+    <Reference Include="MouseNet.Forms">
+      <HintPath>packages\MouseNet.Forms.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>packages\Newtonsoft.Json.12.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
@@ -110,6 +109,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AppContext.cs" />
+    <Compile Include="Utilities\Extensions.cs" />
     <Compile Include="Forms\AboutForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -122,15 +122,16 @@
     <Compile Include="Forms\BookmarksForm.Designer.cs">
       <DependentUpon>BookmarksForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="GlobalHotkey.cs" />
-    <Compile Include="IBookmarkManager.cs" />
-    <Compile Include="NativeMethods.cs" />
+    <Compile Include="Utilities\GlobalHotkey.cs" />
+    <Compile Include="Utilities\HotkeyEventArgs.cs" />
+    <Compile Include="Thesaurus\IBookmarkManager.cs" />
+    <Compile Include="Utilities\MessageReceiver.cs" />
+    <Compile Include="Utilities\NativeMethods.cs" />
     <Compile Include="PresentationAgent.cs" />
-    <Compile Include="Properties\LogophiSettings.cs" />
-    <Compile Include="SearchHistory.cs" />
-    <Compile Include="TermEntry.cs" />
-    <Compile Include="Thesaurus.cs" />
-    <Compile Include="TunaInterface.cs" />
+    <Compile Include="Thesaurus\SearchHistory.cs" />
+    <Compile Include="Thesaurus\TermEntry.cs" />
+    <Compile Include="Thesaurus\Browser.cs" />
+    <Compile Include="Thesaurus\TunaInterface.cs" />
     <Compile Include="Views\IPreferencesDialogView.cs" />
     <Compile Include="Views\IView.cs" />
     <Compile Include="Views\Presentation\BookmarksFormPresenter.cs" />
@@ -152,7 +153,7 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Views\Presentation\PreferencesDialogPresenter.cs" />
-    <Compile Include="WordDefinition.cs" />
+    <Compile Include="Thesaurus\WordDefinition.cs" />
     <EmbeddedResource Include="Forms\AboutForm.resx">
       <DependentUpon>AboutForm.cs</DependentUpon>
     </EmbeddedResource>

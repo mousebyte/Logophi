@@ -2,20 +2,23 @@
 using System.Diagnostics;
 using System.Windows.Forms;
 using MouseNet.Logophi.Properties;
+using MouseNet.Logophi.Thesaurus;
 
 namespace MouseNet.Logophi.Views.Presentation
 {
     internal class MainFormPresenter : IViewPresenter<IMainFormView>
     {
-        private readonly Thesaurus _thesaurus;
+        private readonly Browser _thesaurus;
         private IMainFormView _view;
         private bool SearchValid => _thesaurus.Definitions != null;
 
         public MainFormPresenter
-            (Thesaurus thesaurus)
+            (Browser thesaurus)
             {
             _thesaurus = thesaurus;
-            }
+            thesaurus.BookmarkRemoved += OnBookmarkRemoved;
+            thesaurus.BookmarkAdded += OnBookmarkAdded;
+        }
 
         public void Present
             (IMainFormView view)
@@ -39,7 +42,6 @@ namespace MouseNet.Logophi.Views.Presentation
             _view.OpenDictionaryClicked += OnOpenDictionaryClicked;
             _view.OpenGithubClicked += OnOpenGithubClicked;
             _view.Closed += OnClosed;
-            
             if (parent == null) _view.Show();
             else _view.Show(parent);
             IsPresenting = true;
@@ -48,6 +50,22 @@ namespace MouseNet.Logophi.Views.Presentation
         public event EventHandler ShowBookmarksClicked;
         public event EventHandler ShowPreferencesClicked;
         public event EventHandler ShowAboutClicked;
+
+        private void OnBookmarkAdded
+            (object sender,
+             string e)
+            {
+            if (IsPresenting && e == _thesaurus.SearchTerm)
+                _view.BookmarkOn();
+            }
+
+        private void OnBookmarkRemoved
+            (object sender,
+             string e)
+            {
+            if (IsPresenting && e == _thesaurus.SearchTerm)
+                _view.BookmarkOff();
+            }
 
         private void PopulateDropDownItems()
             {
@@ -82,7 +100,7 @@ namespace MouseNet.Logophi.Views.Presentation
                 }
             }
 
-        public IView View => _view;
+        public IMainFormView View => _view;
         public bool IsPresenting { get; private set; }
 
         public void Search
@@ -105,8 +123,6 @@ namespace MouseNet.Logophi.Views.Presentation
                     $"{def.PartOfSpeech}: {def.Definition}");
             _view.EnableBookmarkButton = true;
             _view.SelectedDefinitionIndex = 0;
-            /*if (word == _history.CurrentItem) return;
-            _history.AddItem(word);*/
             if (!_view.DropDownItems.Contains(word))
                 _view.DropDownItems.Insert(0, word);
             }
@@ -204,7 +220,6 @@ namespace MouseNet.Logophi.Views.Presentation
             if (!SearchValid) return;
             Process.Start(Resources.DictionaryUrl + _view.SearchText);
             }
-        
 
         public void Dispose()
             {

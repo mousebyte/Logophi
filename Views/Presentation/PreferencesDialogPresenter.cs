@@ -8,7 +8,7 @@ namespace MouseNet.Logophi.Views.Presentation
         : IViewPresenter<IPreferencesDialogView>
     {
         private IPreferencesDialogView _view;
-        public IView View => _view;
+        public IPreferencesDialogView View => _view;
         public bool IsPresenting { get; private set; }
 
         public void Present
@@ -22,7 +22,7 @@ namespace MouseNet.Logophi.Views.Presentation
              object parent)
             {
             _view = view;
-            _view.ViewEventActivated += OnViewEventActivated;
+            view.ViewEventActivated += OnViewEventActivated;
             IsPresenting = true;
             var result = view.ShowDialog((IWin32Window) parent);
             if (result != DialogResult.OK) Settings.Default.Reload();

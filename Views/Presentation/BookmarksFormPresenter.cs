@@ -1,4 +1,5 @@
 ﻿using System;
+using MouseNet.Logophi.Thesaurus;
 
 namespace MouseNet.Logophi.Views.Presentation
 {
@@ -37,7 +38,7 @@ namespace MouseNet.Logophi.Views.Presentation
             IsPresenting = true;
             }
 
-        public IView View => _view;
+        public IBookmarksFormView View => _view;
         public bool IsPresenting { get; private set; }
 
         public void Dispose()
@@ -49,6 +50,7 @@ namespace MouseNet.Logophi.Views.Presentation
             (object sender,
              string e)
             {
+            if (!IsPresenting) return;
             _view.Items.Add(e);
             }
 
@@ -56,6 +58,7 @@ namespace MouseNet.Logophi.Views.Presentation
             (object sender,
              string e)
             {
+            if (!IsPresenting) return;
             _view.Items.Remove(e);
             _bookmarkManager.RemoveBookmark(e);
             }
@@ -65,6 +68,7 @@ namespace MouseNet.Logophi.Views.Presentation
              EventArgs e)
             {
             IsPresenting = false;
+            _view.Dispose();
             }
 
         private void OnViewEventActivated

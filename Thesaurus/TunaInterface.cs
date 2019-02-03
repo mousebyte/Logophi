@@ -9,11 +9,10 @@ using MouseNet.Logophi.Properties;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
-namespace MouseNet.Logophi
+namespace MouseNet.Logophi.Thesaurus
 {
     public class TunaInterface
     {
-        private readonly string _bookmarkPath;
         private readonly string _cachePath;
 
         private ObjectCache
@@ -33,8 +32,6 @@ namespace MouseNet.Logophi
               | SecurityProtocolType.Ssl3;
             Definitions = new List<WordDefinition>();
             PersistentCache = persistentCache;
-            _bookmarkPath =
-                Path.Combine(dataDirectory, "bookmarks.lphi");
             _cachePath = Path.Combine(dataDirectory, "cache.lphi");
             LoadSavedData();
             }
@@ -77,7 +74,6 @@ namespace MouseNet.Logophi
 
         private void LoadSavedData()
             {
-            if (!File.Exists(_bookmarkPath)) return;
             var formatter = new BinaryFormatter();
             if (!PersistentCache || !File.Exists(_cachePath)) return;
             using (var strm = File.OpenRead(_cachePath))

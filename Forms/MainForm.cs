@@ -82,6 +82,13 @@ namespace MouseNet.Logophi.Forms
             _cAntonymList.Clear();
             }
 
+        public void ToFront()
+            {
+            Activate();
+            WindowState = FormWindowState.Normal;
+            BringToFront();
+            }
+
         public void AddSynonym
             (string term,
              int similarity)

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections;
 
-namespace MouseNet.Logophi
+namespace MouseNet.Logophi.Thesaurus
 {
     internal interface IBookmarkManager
     {

@@ -2,6 +2,7 @@
 using System.Windows.Forms;
 using MouseNet.Logophi.Forms;
 using MouseNet.Logophi.Views.Presentation;
+using MouseNet.Logophi.Thesaurus;
 
 namespace MouseNet.Logophi
 {
@@ -15,10 +16,10 @@ namespace MouseNet.Logophi
         private readonly PreferencesDialogPresenter
             _preferencesDialogPresenter;
 
-        private readonly Thesaurus _thesaurus;
+        private readonly Browser _thesaurus;
 
         public PresentationAgent
-            (Thesaurus thesaurus)
+            (Browser thesaurus)
             {
             _thesaurus = thesaurus;
             _mainFormPresenter = new MainFormPresenter(thesaurus);
@@ -61,17 +62,16 @@ namespace MouseNet.Logophi
 
         public void PresentBookmarksForm()
             {
-            var form = new BookmarksForm();
             _bookmarksFormPresenter.Present(
-                form,
+                new BookmarksForm(),
                 _mainFormPresenter.View);
-            form.Dispose();
             }
 
         public void PresentMainForm()
             {
-            var form = new MainForm();
-            _mainFormPresenter.Present(form);
+            if (_mainFormPresenter.IsPresenting)
+                _mainFormPresenter.View.ToFront();
+            else _mainFormPresenter.Present(new MainForm());
             }
 
         public void PresentPreferencesForm()
