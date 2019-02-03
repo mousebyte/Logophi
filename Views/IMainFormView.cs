@@ -25,6 +25,7 @@ namespace MouseNet.Logophi.Views
         void BookmarkOff();
         void ClearSynonyms();
         void ClearAntonyms();
+        void ToFront();
 
         event EventHandler Closed;
         event EventHandler<string> Search;

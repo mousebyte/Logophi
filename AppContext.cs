@@ -43,6 +43,8 @@ namespace MouseNet.Logophi
                     }
                 };
             _trayIcon.DoubleClick += OnOpen;
+            _hotkey.HotkeyPressed += OnHotkeyPressed;
+            RegisterHotkey();
             _thesaurus = new Thesaurus(_settings.DataDirectory,
                                        _settings.PersistentCache,
                                        _settings.SaveHistory);
@@ -55,6 +57,7 @@ namespace MouseNet.Logophi
             (object sender,
              HotkeyEventArgs e)
             {
+            _agent.PresentMainForm();
             }
 
         private void SetupDirectories()

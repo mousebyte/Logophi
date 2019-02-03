@@ -59,11 +59,18 @@ namespace MouseNet.Logophi
                 form,
                 _mainFormPresenter.View);
             }
-        
+
         public void PresentMainForm()
             {
-            var form = new MainForm();
-            _mainFormPresenter.Present(form);
+            if (!_mainFormPresenter.IsPresenting)
+                {
+                var form = new MainForm();
+                _mainFormPresenter.Present(form);
+                } else
+                {
+                _mainFormPresenter.View.ToFront();
+                
+                }
             }
 
         public void PresentPreferencesForm()

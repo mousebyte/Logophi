@@ -37,7 +37,7 @@ namespace MouseNet.Logophi.Views.Presentation
             IsPresenting = true;
             }
 
-        public IView View => _view;
+        public IBookmarksFormView View => _view;
         public bool IsPresenting { get; private set; }
 
         public void Dispose()

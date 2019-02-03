@@ -82,8 +82,9 @@ namespace MouseNet.Logophi.Views.Presentation
                 }
             }
 
-        public IView View => _view;
+        public IMainFormView View => _view;
         public bool IsPresenting { get; private set; }
+        
 
         public void Search
             (string word)

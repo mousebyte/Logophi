@@ -8,7 +8,7 @@ namespace MouseNet.Logophi.Views.Presentation
         : IViewPresenter<IPreferencesDialogView>
     {
         private IPreferencesDialogView _view;
-        public IView View => _view;
+        public IPreferencesDialogView View => _view;
         public bool IsPresenting { get; private set; }
 
         public void Present
