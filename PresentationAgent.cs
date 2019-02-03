@@ -2,6 +2,7 @@
 using System.Windows.Forms;
 using MouseNet.Logophi.Forms;
 using MouseNet.Logophi.Views.Presentation;
+using MouseNet.Logophi.Thesaurus;
 
 namespace MouseNet.Logophi
 {
@@ -16,7 +17,7 @@ namespace MouseNet.Logophi
             _preferencesDialogPresenter;
 
         public PresentationAgent
-            (Thesaurus.Browser thesaurus)
+            (Browser thesaurus)
             {
             _mainFormPresenter = new MainFormPresenter(thesaurus);
             _mainFormPresenter.ShowAboutClicked += OnShowAboutClicked;

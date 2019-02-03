@@ -1,7 +1,7 @@
 ﻿using System.Windows.Forms;
 using System.Windows.Input;
 
-namespace MouseNet.Logophi
+namespace MouseNet.Logophi.Utilities
 {
     public static class Extensions
     {

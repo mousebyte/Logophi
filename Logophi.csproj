@@ -109,7 +109,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AppContext.cs" />
-    <Compile Include="Extensions.cs" />
+    <Compile Include="Utilities\Extensions.cs" />
     <Compile Include="Forms\AboutForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -122,11 +122,11 @@
     <Compile Include="Forms\BookmarksForm.Designer.cs">
       <DependentUpon>BookmarksForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="GlobalHotkey.cs" />
-    <Compile Include="HotkeyEventArgs.cs" />
+    <Compile Include="Utilities\GlobalHotkey.cs" />
+    <Compile Include="Utilities\HotkeyEventArgs.cs" />
     <Compile Include="Thesaurus\IBookmarkManager.cs" />
-    <Compile Include="MessageReceiver.cs" />
-    <Compile Include="NativeMethods.cs" />
+    <Compile Include="Utilities\MessageReceiver.cs" />
+    <Compile Include="Utilities\NativeMethods.cs" />
     <Compile Include="PresentationAgent.cs" />
     <Compile Include="Thesaurus\SearchHistory.cs" />
     <Compile Include="Thesaurus\TermEntry.cs" />

@@ -6,6 +6,7 @@ using System.Windows.Forms;
 using Microsoft.Win32;
 using MouseNet.Logophi.Properties;
 using MouseNet.Logophi.Thesaurus;
+using MouseNet.Logophi.Utilities;
 
 namespace MouseNet.Logophi
 {

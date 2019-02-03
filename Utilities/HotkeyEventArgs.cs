@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
 
-namespace MouseNet.Logophi
+namespace MouseNet.Logophi.Utilities
 {
     public class HotkeyEventArgs : EventArgs
     {

@@ -4,7 +4,7 @@ using System.IO.Pipes;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace MouseNet.Logophi
+namespace MouseNet.Logophi.Utilities
 {
     internal class MessageReceiver : IDisposable
     {

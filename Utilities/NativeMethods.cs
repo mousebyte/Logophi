@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 
-namespace MouseNet.Logophi
+namespace MouseNet.Logophi.Utilities
 {
     internal static class NativeMethods
     {

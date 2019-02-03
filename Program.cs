@@ -2,6 +2,7 @@
 using System.IO.Pipes;
 using System.Threading;
 using System.Windows.Forms;
+using MouseNet.Logophi.Utilities;
 
 namespace MouseNet.Logophi
 {
