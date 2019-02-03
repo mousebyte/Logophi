@@ -19,7 +19,7 @@ namespace MouseNet.Logophi
             {
             _filePath = Path.Combine(dataDirectory, "history.lphi");
             _persistentHistory = persistentHistory;
-            if (!persistentHistory) return;
+            if (!persistentHistory || !File.Exists(_filePath)) return;
             var formatter = new BinaryFormatter();
             using (var strm = File.OpenRead(_filePath))
                 _data = formatter.Deserialize(strm) as List<string>;

@@ -17,11 +17,10 @@ namespace MouseNet.Logophi
             }
 
         public IEnumerable<Keys> Hotkeys => _hotkeys;
-        public int HotkeyCount { get; private set; }
 
         public void Dispose()
             {
-            for (var i = 0; i < HotkeyCount; i++)
+            for (var i = 0; i < _hotkeys.Count; i++)
                 UnregisterHotkey(i);
             _form?.Dispose();
             }
@@ -33,13 +32,13 @@ namespace MouseNet.Logophi
                 (int) hotkey.GetModifiers().ToModifierKeys();
             var keycode = (int) hotkey.GetKeyCode();
             if (!NativeMethods.RegisterHotKey(_form.Handle,
-                                              HotkeyCount++,
+                                              _hotkeys.Count + 1,
                                               modifiers,
                                               keycode))
                 throw new InvalidOperationException(
                     "Failed to register hotkey.");
             _hotkeys.Add(hotkey);
-            return HotkeyCount;
+            return _hotkeys.Count;
             }
 
         public void UnregisterHotkey

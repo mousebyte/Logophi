@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using System.IO;
+using System.Linq;
 using System.Windows.Forms;
 using Microsoft.Win32;
 using MouseNet.Logophi.Properties;
@@ -18,6 +19,7 @@ namespace MouseNet.Logophi
         private readonly Settings _settings = Settings.Default;
         private readonly Thesaurus _thesaurus;
         private readonly NotifyIcon _trayIcon;
+        private Keys _registeredHotkey = Keys.None;
 
         public AppContext()
             {
@@ -44,8 +46,15 @@ namespace MouseNet.Logophi
             _thesaurus = new Thesaurus(_settings.DataDirectory,
                                        _settings.PersistentCache,
                                        _settings.SaveHistory);
+            _thesaurus.History.MaxItems = (int) _settings.MaxHistory;
             _agent = new PresentationAgent(_thesaurus);
             _agent.PresentMainForm();
+            }
+
+        private void OnHotkeyPressed
+            (object sender,
+             HotkeyEventArgs e)
+            {
             }
 
         private void SetupDirectories()
@@ -82,6 +91,24 @@ namespace MouseNet.Logophi
             _agent.PresentMainForm();
             }
 
+        private void RegisterHotkey()
+            {
+            if (_settings.Hotkey == Keys.None
+             || _settings.Hotkey == _registeredHotkey)
+                return;
+            if (_registeredHotkey != Keys.None)
+                _hotkey.UnregisterHotkey(0);
+            _hotkey.RegisterHotkey(_settings.Hotkey);
+            _registeredHotkey = _settings.Hotkey;
+            }
+
+        private void UnregisterHotkey()
+            {
+            if (_registeredHotkey == Keys.None) return;
+            _hotkey.UnregisterHotkey(0);
+            _registeredHotkey = Keys.None;
+            }
+
         private void OnSettingsPropertyChanged
             (object sender,
              PropertyChangedEventArgs e)
@@ -101,12 +128,10 @@ namespace MouseNet.Logophi
                         (int) _settings.MaxHistory;
                     break;
                 case "EnableHotkey":
-                    if (_hotkey.HotkeyCount > 0)
-                        _hotkey.UnregisterHotkey(0);
-                    if (_settings.EnableHotkey
-                     && _settings.Hotkey != Keys.None)
-                        _hotkey.RegisterHotkey(_settings.Hotkey);
-                    return;
+                    if (_settings.EnableHotkey)
+                        RegisterHotkey();
+                    else UnregisterHotkey();
+                    break;
                 case "AutoRun":
                     var key = OpenAutoRunKey();
                     if (key == null) return;

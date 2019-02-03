@@ -58,9 +58,8 @@ namespace MouseNet.Logophi
             _bookmarksFormPresenter.Present(
                 form,
                 _mainFormPresenter.View);
-            form.Dispose();
             }
-
+        
         public void PresentMainForm()
             {
             var form = new MainForm();

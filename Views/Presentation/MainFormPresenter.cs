@@ -105,8 +105,6 @@ namespace MouseNet.Logophi.Views.Presentation
                     $"{def.PartOfSpeech}: {def.Definition}");
             _view.EnableBookmarkButton = true;
             _view.SelectedDefinitionIndex = 0;
-            /*if (word == _history.CurrentItem) return;
-            _history.AddItem(word);*/
             if (!_view.DropDownItems.Contains(word))
                 _view.DropDownItems.Insert(0, word);
             }
