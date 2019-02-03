@@ -1,7 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
 using System.IO;
-using System.Linq;
 using System.Windows.Forms;
 using Microsoft.Win32;
 using MouseNet.Logophi.Properties;
@@ -13,10 +12,6 @@ namespace MouseNet.Logophi
     internal class AppContext : ApplicationContext
     {
         private readonly PresentationAgent _agent;
-
-        private readonly string _exePath =
-            Path.GetFullPath("Logophi.exe");
-
         private readonly GlobalHotkey _hotkey = new GlobalHotkey();
         private readonly Settings _settings = Settings.Default;
         private readonly Browser _thesaurus;
@@ -146,7 +141,7 @@ namespace MouseNet.Logophi
                     var key = OpenAutoRunKey();
                     if (key == null) return;
                     if (_settings.AutoRun)
-                        key.SetValue(Resources.AppName, _exePath);
+                        key.SetValue(Resources.AppName, Application.ExecutablePath);
                     else if (key.GetValue(Resources.AppName) != null)
                         key.DeleteValue(Resources.AppName);
                     break;
