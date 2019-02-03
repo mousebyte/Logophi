@@ -15,9 +15,12 @@ namespace MouseNet.Logophi
         private readonly PreferencesDialogPresenter
             _preferencesDialogPresenter;
 
+        private readonly Thesaurus _thesaurus;
+
         public PresentationAgent
             (Thesaurus thesaurus)
             {
+            _thesaurus = thesaurus;
             _mainFormPresenter = new MainFormPresenter(thesaurus);
             _mainFormPresenter.ShowAboutClicked += OnShowAboutClicked;
             _mainFormPresenter.ShowBookmarksClicked +=
@@ -30,6 +33,10 @@ namespace MouseNet.Logophi
                 OnBookmarkActivated;
             _preferencesDialogPresenter =
                 new PreferencesDialogPresenter();
+            _preferencesDialogPresenter.DeleteCacheClicked +=
+                OnDeleteCacheClicked;
+            _preferencesDialogPresenter.DeleteHistoryClicked +=
+                OnDeleteHistoryClicked;
             }
 
         public void Dispose()
@@ -82,6 +89,20 @@ namespace MouseNet.Logophi
              string e)
             {
             _mainFormPresenter.Search(e);
+            }
+
+        private void OnDeleteCacheClicked
+            (object sender,
+             EventArgs e)
+            {
+            _thesaurus.ClearCache();
+            }
+
+        private void OnDeleteHistoryClicked
+            (object sender,
+             EventArgs e)
+            {
+            _thesaurus.History.Clear();
             }
 
         private void OnShowAboutClicked
