@@ -16,7 +16,9 @@ namespace MouseNet.Logophi.Views.Presentation
             (Browser thesaurus)
             {
             _thesaurus = thesaurus;
-            }
+            thesaurus.BookmarkRemoved += OnBookmarkRemoved;
+            thesaurus.BookmarkAdded += OnBookmarkAdded;
+        }
 
         public void Present
             (IMainFormView view)
@@ -40,7 +42,6 @@ namespace MouseNet.Logophi.Views.Presentation
             _view.OpenDictionaryClicked += OnOpenDictionaryClicked;
             _view.OpenGithubClicked += OnOpenGithubClicked;
             _view.Closed += OnClosed;
-            
             if (parent == null) _view.Show();
             else _view.Show(parent);
             IsPresenting = true;
@@ -49,6 +50,22 @@ namespace MouseNet.Logophi.Views.Presentation
         public event EventHandler ShowBookmarksClicked;
         public event EventHandler ShowPreferencesClicked;
         public event EventHandler ShowAboutClicked;
+
+        private void OnBookmarkAdded
+            (object sender,
+             string e)
+            {
+            if (IsPresenting && e == _thesaurus.SearchTerm)
+                _view.BookmarkOn();
+            }
+
+        private void OnBookmarkRemoved
+            (object sender,
+             string e)
+            {
+            if (IsPresenting && e == _thesaurus.SearchTerm)
+                _view.BookmarkOff();
+            }
 
         private void PopulateDropDownItems()
             {
@@ -85,7 +102,6 @@ namespace MouseNet.Logophi.Views.Presentation
 
         public IMainFormView View => _view;
         public bool IsPresenting { get; private set; }
-        
 
         public void Search
             (string word)
@@ -204,7 +220,6 @@ namespace MouseNet.Logophi.Views.Presentation
             if (!SearchValid) return;
             Process.Start(Resources.DictionaryUrl + _view.SearchText);
             }
-        
 
         public void Dispose()
             {
