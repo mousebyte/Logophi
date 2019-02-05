@@ -43,8 +43,8 @@ namespace MouseNet.Logophi
             _hotkey.HotkeyPressed += OnHotkeyPressed;
             RegisterHotkey();
             _thesaurus = new Browser(_settings.DataDirectory,
-                                       _settings.PersistentCache,
-                                       _settings.SaveHistory);
+                                     _settings.PersistentCache,
+                                     _settings.SaveHistory);
             _thesaurus.History.MaxItems = (int) _settings.MaxHistory;
             _agent = new PresentationAgent(_thesaurus);
             Activate();
@@ -137,7 +137,8 @@ namespace MouseNet.Logophi
                     var key = OpenAutoRunKey();
                     if (key == null) return;
                     if (_settings.AutoRun)
-                        key.SetValue(Resources.AppName, Application.ExecutablePath);
+                        key.SetValue(Resources.AppName,
+                                     Application.ExecutablePath);
                     else if (key.GetValue(Resources.AppName) != null)
                         key.DeleteValue(Resources.AppName);
                     break;
@@ -158,6 +159,6 @@ namespace MouseNet.Logophi
             _trayIcon.Visible = false;
             _trayIcon?.Dispose();
             _hotkey?.Dispose();
-        }
+            }
     }
 }
