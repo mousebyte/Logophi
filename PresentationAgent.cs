@@ -40,6 +40,15 @@ namespace MouseNet.Logophi
                 OnDeleteHistoryClicked;
             }
 
+        public event EventHandler PreferencesSaved;
+
+        private void InvokePreferencesSaved
+            (object sender,
+             EventArgs args)
+            {
+            PreferencesSaved?.Invoke(sender, args);
+            }
+
         public void Dispose()
             {
             _mainFormPresenter?.Dispose();
@@ -82,6 +91,7 @@ namespace MouseNet.Logophi
                 dialog,
                 _mainFormPresenter.View);
             dialog.Dispose();
+            InvokePreferencesSaved(this, EventArgs.Empty);
             }
 
         private void OnBookmarkActivated

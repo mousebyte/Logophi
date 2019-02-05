@@ -47,6 +47,7 @@ namespace MouseNet.Logophi
                                      _settings.SaveHistory);
             _thesaurus.History.MaxItems = (int) _settings.MaxHistory;
             _agent = new PresentationAgent(_thesaurus);
+            _agent.PreferencesSaved += OnPreferencesSaved;
             Activate();
             }
 
@@ -55,11 +56,26 @@ namespace MouseNet.Logophi
             _agent.PresentMainForm();
             }
 
-        private void OnHotkeyPressed
-            (object sender,
-             HotkeyEventArgs e)
+        protected override void Dispose
+            (bool disposing)
             {
-            Activate();
+            base.Dispose(disposing);
+            if (!disposing) return;
+            _agent?.Dispose();
+            _trayIcon.Visible = false;
+            _trayIcon?.Dispose();
+            _hotkey?.Dispose();
+            }
+
+        private void RegisterHotkey()
+            {
+            if (_settings.Hotkey == Keys.None
+             || _settings.Hotkey == _registeredHotkey)
+                return;
+            if (_registeredHotkey != Keys.None)
+                _hotkey.UnregisterHotkey(0);
+            _hotkey.RegisterHotkey(_settings.Hotkey);
+            _registeredHotkey = _settings.Hotkey;
             }
 
         private void SetupDirectories()
@@ -78,11 +94,25 @@ namespace MouseNet.Logophi
                 Directory.CreateDirectory(_settings.DataDirectory);
             }
 
+        private void UnregisterHotkey()
+            {
+            if (_registeredHotkey == Keys.None) return;
+            _hotkey.UnregisterHotkey(0);
+            _registeredHotkey = Keys.None;
+            }
+
         private void OnApplicationExit
             (object sender,
              EventArgs e)
             {
             _agent.CloseMainForm();
+            }
+
+        private void OnHotkeyPressed
+            (object sender,
+             HotkeyEventArgs e)
+            {
+            Activate();
             }
 
         private void OnOpen
@@ -92,22 +122,20 @@ namespace MouseNet.Logophi
             Activate();
             }
 
-        private void RegisterHotkey()
+        private void OnPreferencesSaved
+            (object sender,
+             EventArgs e)
             {
-            if (_settings.Hotkey == Keys.None
-             || _settings.Hotkey == _registeredHotkey)
-                return;
-            if (_registeredHotkey != Keys.None)
-                _hotkey.UnregisterHotkey(0);
-            _hotkey.RegisterHotkey(_settings.Hotkey);
-            _registeredHotkey = _settings.Hotkey;
-            }
-
-        private void UnregisterHotkey()
-            {
-            if (_registeredHotkey == Keys.None) return;
-            _hotkey.UnregisterHotkey(0);
-            _registeredHotkey = Keys.None;
+            if (_settings.EnableHotkey)
+                RegisterHotkey();
+            else UnregisterHotkey();
+            var key = OpenAutoRunKey();
+            if (key == null) return;
+            if (_settings.AutoRun)
+                key.SetValue(Resources.AppName,
+                             Application.ExecutablePath);
+            else if (key.GetValue(Resources.AppName) != null)
+                key.DeleteValue(Resources.AppName);
             }
 
         private void OnSettingsPropertyChanged
@@ -128,37 +156,14 @@ namespace MouseNet.Logophi
                     _thesaurus.History.MaxItems =
                         (int) _settings.MaxHistory;
                     break;
-                case "EnableHotkey":
-                    if (_settings.EnableHotkey)
-                        RegisterHotkey();
-                    else UnregisterHotkey();
-                    break;
-                case "AutoRun":
-                    var key = OpenAutoRunKey();
-                    if (key == null) return;
-                    if (_settings.AutoRun)
-                        key.SetValue(Resources.AppName,
-                                     Application.ExecutablePath);
-                    else if (key.GetValue(Resources.AppName) != null)
-                        key.DeleteValue(Resources.AppName);
-                    break;
                 }
             }
 
-        private static RegistryKey OpenAutoRunKey() =>
-            Registry.CurrentUser.OpenSubKey(
+        private static RegistryKey OpenAutoRunKey()
+            {
+            return Registry.CurrentUser.OpenSubKey(
                 Resources.AutoRunKey,
                 true);
-
-        protected override void Dispose
-            (bool disposing)
-            {
-            base.Dispose(disposing);
-            if (!disposing) return;
-            _agent?.Dispose();
-            _trayIcon.Visible = false;
-            _trayIcon?.Dispose();
-            _hotkey?.Dispose();
             }
     }
 }
