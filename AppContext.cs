@@ -9,6 +9,11 @@ using MouseNet.Logophi.Utilities;
 
 namespace MouseNet.Logophi
 {
+    /// <inheritdoc />
+    /// <summary>
+    /// The Logophi application context. Sets up the application environment
+    /// and handles various application-wide tasks.
+    /// </summary>
     internal class AppContext : ApplicationContext
     {
         private readonly PresentationAgent _agent;
@@ -23,6 +28,8 @@ namespace MouseNet.Logophi
             Application.ApplicationExit += OnApplicationExit;
             _settings.PropertyChanged += OnSettingsPropertyChanged;
             SetupDirectories();
+            
+            //set up the tray icon
             var openMenuItem = new ToolStripMenuItem {Text = @"Open"};
             openMenuItem.Click += OnOpen;
             var exitMenuItem = new ToolStripMenuItem {Text = @"Exit"};
@@ -40,8 +47,11 @@ namespace MouseNet.Logophi
                     }
                 };
             _trayIcon.DoubleClick += OnOpen;
+            
+            //initialize the hotkey feature
             _hotkey.HotkeyPressed += OnHotkeyPressed;
             RegisterHotkey();
+            
             _thesaurus = new Browser(_settings.DataDirectory,
                                      _settings.PersistentCache,
                                      _settings.SaveHistory);
@@ -50,12 +60,16 @@ namespace MouseNet.Logophi
             _agent.PreferencesSaved += OnPreferencesSaved;
             Activate();
             }
-
+        
+        /// <summary>
+        /// Shows the main form.
+        /// </summary>
         public void Activate()
             {
             _agent.PresentMainForm();
             }
 
+        /// <inheritdoc />
         protected override void Dispose
             (bool disposing)
             {
@@ -67,8 +81,15 @@ namespace MouseNet.Logophi
             _hotkey?.Dispose();
             }
 
+        /// <summary>
+        /// Registers the hotkey stored in settings, or updates
+        /// the currently registered hotkey if it is different than
+        /// the one stored in settings.
+        /// </summary>
         private void RegisterHotkey()
             {
+            //return if no hotkey is set, or if the value in settings
+            //is the same as the hotkey already registered
             if (_settings.Hotkey == Keys.None
              || _settings.Hotkey == _registeredHotkey)
                 return;
@@ -78,8 +99,13 @@ namespace MouseNet.Logophi
             _registeredHotkey = _settings.Hotkey;
             }
 
+        /// <summary>
+        /// If necessary, creates the Logophi directory in local appdata
+        /// and stores the path in settings.
+        /// </summary>
         private void SetupDirectories()
             {
+            //make sure the DataDirectory setting is set
             if (_settings.DataDirectory == string.Empty)
                 {
                 _settings.DataDirectory = Path.Combine(
@@ -90,10 +116,14 @@ namespace MouseNet.Logophi
                 _settings.Save();
                 }
 
+            //create the data directory if necessary
             if (!Directory.Exists(_settings.DataDirectory))
                 Directory.CreateDirectory(_settings.DataDirectory);
             }
 
+        /// <summary>
+        /// Unregisters the global hotkey if one is set.
+        /// </summary>
         private void UnregisterHotkey()
             {
             if (_registeredHotkey == Keys.None) return;
@@ -126,9 +156,12 @@ namespace MouseNet.Logophi
             (object sender,
              EventArgs e)
             {
+            //update hotkey registration
             if (_settings.EnableHotkey)
                 RegisterHotkey();
             else UnregisterHotkey();
+            
+            //update autorun registry entry
             var key = OpenAutoRunKey();
             if (key == null) return;
             if (_settings.AutoRun)
@@ -142,6 +175,8 @@ namespace MouseNet.Logophi
             (object sender,
              PropertyChangedEventArgs e)
             {
+            //update browser property values when corresponding
+            //settings values are changed.
             switch (e.PropertyName)
                 {
                 case "PersistentCache":
@@ -159,6 +194,11 @@ namespace MouseNet.Logophi
                 }
             }
 
+        /// <summary>
+        /// Opens the Logophi autorun registry key.
+        /// </summary>
+        /// <returns>The <see cref="RegistryKey"/> that allows
+        /// logophi to be run at logon.</returns>
         private static RegistryKey OpenAutoRunKey()
             {
             return Registry.CurrentUser.OpenSubKey(

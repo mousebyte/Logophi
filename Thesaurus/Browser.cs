@@ -6,11 +6,25 @@ using System.Runtime.Serialization.Formatters.Binary;
 
 namespace MouseNet.Logophi.Thesaurus
 {
+    /// <inheritdoc cref="TunaInterface" />
+    /// <summary>
+    /// Represents a <see cref="TunaInterface" /> that supports browser-like
+    /// navigation and features.
+    /// </summary>
     internal class Browser : TunaInterface, IBookmarkManager
     {
         private readonly IList _bookmarks = new StringCollection();
         private readonly string _bookmarkPath;
 
+        /// <inheritdoc />
+        /// <summary>
+        /// Creates a new <see cref="T:MouseNet.Logophi.Thesaurus.Browser" /> object.
+        /// </summary>
+        /// <param name="dataDirectory">The location to use for persistent storage.</param>
+        /// <param name="persistentCache">A value indicating whether or not a persistent cache
+        /// should be used.</param>
+        /// <param name="persistentHistory">A value indicating whether or not a persistent
+        /// history file should be used.</param>
         public Browser
             (string dataDirectory,
              bool persistentCache,
@@ -21,6 +35,8 @@ namespace MouseNet.Logophi.Thesaurus
                 new SearchHistory(dataDirectory, persistentHistory);
             _bookmarkPath =
                 Path.Combine(dataDirectory, "bookmarks.lphi");
+            
+            //if a bookmarks file exists, load it
             if(!File.Exists(_bookmarkPath)) return;
             var formatter = new BinaryFormatter();
             using (var strm = File.OpenRead(_bookmarkPath))
@@ -28,11 +44,20 @@ namespace MouseNet.Logophi.Thesaurus
                     formatter.Deserialize(strm) as StringCollection;
             }
 
+        /// <summary>
+        /// Gets the <see cref="SearchHistory"/> associated with the browser.
+        /// </summary>
         public SearchHistory History { get; }
+        /// <inheritdoc />
         public event EventHandler<string> BookmarkRemoved;
+        /// <inheritdoc />
         public event EventHandler<string> BookmarkAdded;
+        /// <inheritdoc />
         public IEnumerable Bookmarks => _bookmarks;
 
+        /// <summary>
+        /// Saves the bookmarks to a file.
+        /// </summary>
         private void SaveBookmarks()
             {
             var formatter = new BinaryFormatter();
@@ -40,6 +65,7 @@ namespace MouseNet.Logophi.Thesaurus
                 formatter.Serialize(strm, _bookmarks);
             }
 
+        /// <inheritdoc />
         public void AddBookmark
             (object item)
             {
@@ -49,6 +75,7 @@ namespace MouseNet.Logophi.Thesaurus
             InvokeBookmarkAdded(this, item as string);
             }
 
+        /// <inheritdoc />
         public void RemoveBookmark
             (object item)
             {
@@ -58,6 +85,10 @@ namespace MouseNet.Logophi.Thesaurus
             InvokeBookmarkRemoved(this, item as string);
             }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether or not the current
+        /// search term is bookmarked.
+        /// </summary>
         public bool IsBookmarked {
             get => _bookmarks.Contains(SearchTerm);
             set {
