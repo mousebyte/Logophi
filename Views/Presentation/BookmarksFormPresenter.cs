@@ -3,6 +3,10 @@ using MouseNet.Logophi.Thesaurus;
 
 namespace MouseNet.Logophi.Views.Presentation
 {
+    /// <inheritdoc />
+    /// <summary>
+    /// Presents an <see cref="T:MouseNet.Logophi.Views.IBookmarksFormView" />.
+    /// </summary>
     internal class BookmarksFormPresenter
         : IViewPresenter<IBookmarksFormView>
     {
@@ -17,12 +21,14 @@ namespace MouseNet.Logophi.Views.Presentation
             _bookmarkManager.BookmarkRemoved += OnBookmarkRemoved;
             }
 
+        /// <inheritdoc />
         public void Present
             (IBookmarksFormView view)
             {
             Present(view, null);
             }
 
+        /// <inheritdoc />
         public void Present
             (IBookmarksFormView view,
              object parent)
@@ -38,7 +44,11 @@ namespace MouseNet.Logophi.Views.Presentation
             IsPresenting = true;
             }
 
+        /// <inheritdoc />
         public IBookmarksFormView View => _view;
+        /// <summary>
+        /// Gets a value indicating whether or not the view is being presented to the user.
+        /// </summary>
         public bool IsPresenting { get; private set; }
 
         public void Dispose()
@@ -78,6 +88,9 @@ namespace MouseNet.Logophi.Views.Presentation
             BookmarkActivated?.Invoke(sender, e.Tag as string);
             }
 
+        /// <summary>
+        /// Occurs when an item in the bookmarks list is activated.
+        /// </summary>
         public event EventHandler<string> BookmarkActivated;
     }
 }
