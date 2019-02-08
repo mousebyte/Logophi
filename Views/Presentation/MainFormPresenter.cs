@@ -6,6 +6,11 @@ using MouseNet.Logophi.Thesaurus;
 
 namespace MouseNet.Logophi.Views.Presentation
 {
+    //TODO: Refactor this class, needs functions redesigned and inline comments
+    /// <inheritdoc />
+    /// <summary>
+    /// Presents an <see cref="T:MouseNet.Logophi.Views.IMainFormView" />.
+    /// </summary>
     internal class MainFormPresenter : IViewPresenter<IMainFormView>
     {
         private readonly Browser _thesaurus;
@@ -20,12 +25,14 @@ namespace MouseNet.Logophi.Views.Presentation
             thesaurus.BookmarkAdded += OnBookmarkAdded;
         }
 
+        /// <inheritdoc />
         public void Present
             (IMainFormView view)
             {
             Present(view, null);
             }
 
+        /// <inheritdoc />
         public void Present
             (IMainFormView view,
              object parent)
@@ -46,9 +53,17 @@ namespace MouseNet.Logophi.Views.Presentation
             else _view.Show(parent);
             IsPresenting = true;
             }
-
+        /// <summary>
+        /// Occurs when the show bookmarks button is clicked.
+        /// </summary>
         public event EventHandler ShowBookmarksClicked;
+        /// <summary>
+        /// Occurs when the show preferences button is clicked.
+        /// </summary>
         public event EventHandler ShowPreferencesClicked;
+        /// <summary>
+        /// Occurs when the show about button is clicked.
+        /// </summary>
         public event EventHandler ShowAboutClicked;
 
         private void OnBookmarkAdded
@@ -67,6 +82,10 @@ namespace MouseNet.Logophi.Views.Presentation
                 _view.BookmarkOff();
             }
 
+        /// <summary>
+        /// Populates the drop down items of the view's search box
+        /// with values from the browser's history.
+        /// </summary>
         private void PopulateDropDownItems()
             {
             if (_thesaurus.History.Count <= 0) return;
@@ -100,21 +119,36 @@ namespace MouseNet.Logophi.Views.Presentation
                 }
             }
 
+        /// <inheritdoc />
         public IMainFormView View => _view;
+        /// <summary>
+        /// Gets a value indicating whether or not the view is being shown to the user.
+        /// </summary>
         public bool IsPresenting { get; private set; }
 
+        /// <summary>
+        /// Searches for a word.
+        /// </summary>
+        /// <param name="word">The word to search for.</param>
         public void Search
             (string word)
             {
             OnSearch(this, word);
             }
 
+        /// <summary>
+        /// Performs actions necessary to handle an invalid search.
+        /// </summary>
         private void HandleInvalidSearch()
             {
             _view.Definitions.Add(Resources.InvalidSearch);
             _view.EnableBookmarkButton = false;
             }
 
+        /// <summary>
+        /// Populates the definitions box with values from the browser.
+        /// </summary>
+        /// <param name="word">The word that the definitions belong to.</param>
         private void PopulateDefinitions
             (string word)
             {
@@ -127,6 +161,9 @@ namespace MouseNet.Logophi.Views.Presentation
                 _view.DropDownItems.Insert(0, word);
             }
 
+        /// <summary>
+        /// Searches for the current history item.
+        /// </summary>
         private void SearchFromHistory()
             {
             OnSearch(this, _thesaurus.History.CurrentItem);
@@ -150,6 +187,10 @@ namespace MouseNet.Logophi.Views.Presentation
             SearchFromHistory();
             }
 
+        //TODO: Depricate this
+        /// <summary>
+        /// Updates the states of the bookmark buttons.
+        /// </summary>
         private void UpdateBookmarkButtonState()
             {
             if (_thesaurus.IsBookmarked) _view.BookmarkOn();
