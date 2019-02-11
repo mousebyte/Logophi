@@ -91,7 +91,7 @@ namespace MouseNet.Logophi.Thesaurus
                 Definitions = _cache[word] as List<WordDefinition>;
             else LoadFromWeb(word);
             
-            InvokeWordSearched(this, word);
+            InvokeWordSearched(this, new SearchEventArgs(word, Definitions != null));
             }
 
         /// <summary>
@@ -175,14 +175,14 @@ namespace MouseNet.Logophi.Thesaurus
 
         protected virtual void InvokeWordSearched
             (object sender,
-             string args)
+             SearchEventArgs args)
             {
-            WordSearched?.Invoke(sender, args);
+            SearchCompleted?.Invoke(sender, args);
             }
 
         /// <summary>
         /// Occurs when a word search has completed.
         /// </summary>
-        public event EventHandler<string> WordSearched;
+        public event EventHandler<SearchEventArgs> SearchCompleted;
     }
 }

@@ -113,10 +113,10 @@ namespace MouseNet.Logophi.Thesaurus
 
         protected override void InvokeWordSearched
             (object sender,
-             string args)
+             SearchEventArgs args)
             {
-            if (args != History.CurrentItem)
-                History.AddItem(args);
+            if (args.Word != History.CurrentItem)
+                History.AddItem(args.Word);
             base.InvokeWordSearched(sender, args);
             }
     }

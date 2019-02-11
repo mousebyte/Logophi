@@ -111,6 +111,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AppContext.cs" />
+    <Compile Include="Thesaurus\SearchEventArgs.cs" />
     <Compile Include="Utilities\Extensions.cs" />
     <Compile Include="Forms\AboutForm.cs">
       <SubType>Form</SubType>
