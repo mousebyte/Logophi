@@ -12,14 +12,6 @@ namespace MouseNet.Logophi.Forms
             InitializeComponent();
             }
 
-        public BookmarksForm
-            (IEnumerable bookmarks)
-            {
-            InitializeComponent();
-            foreach (var bkmark in bookmarks)
-                Items.Add(bkmark);
-            }
-
         public IList Items => _cBookmarksList.Items;
         public event EventHandler<string> BookmarkRemoved;
 

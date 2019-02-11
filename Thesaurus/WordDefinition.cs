@@ -6,9 +6,10 @@ using Newtonsoft.Json;
 namespace MouseNet.Logophi.Thesaurus
 {
     /// <summary>
-    /// Contains data related to a specific definition of a word.
+    ///     Contains data related to a specific definition of a word.
     /// </summary>
-    [JsonObject(MemberSerialization.OptIn), Serializable]
+    [JsonObject(MemberSerialization.OptIn)]
+    [Serializable]
     public class WordDefinition
     {
         public WordDefinition
@@ -32,25 +33,22 @@ namespace MouseNet.Logophi.Thesaurus
             }
 
         /// <summary>
-        /// A list of the word's antonyms.
+        ///     A list of the word's antonyms.
         /// </summary>
         [JsonProperty("antonyms")]
         public List<TermEntry> Antonyms { get; }
-        
         /// <summary>
-        /// The definition of the word.
+        ///     The definition of the word.
         /// </summary>
         [JsonProperty("definition")]
         public string Definition { get; }
-        
         /// <summary>
-        /// The word's part of speech.
+        ///     The word's part of speech.
         /// </summary>
         [JsonProperty("pos")]
         public string PartOfSpeech { get; }
-        
         /// <summary>
-        /// A list of the word's synonyms.
+        ///     A list of the word's synonyms.
         /// </summary>
         [JsonProperty("synonyms")]
         public List<TermEntry> Synonyms { get; }

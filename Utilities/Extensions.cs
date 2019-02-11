@@ -4,15 +4,15 @@ using System.Windows.Input;
 namespace MouseNet.Logophi.Utilities
 {
     /// <summary>
-    /// Contains extension methods used by Logophi.
+    ///     Contains extension methods used by Logophi.
     /// </summary>
     public static class Extensions
     {
         /// <summary>
-        /// Removes modifiers from a <see cref="Keys"/> value.
+        ///     Removes modifiers from a <see cref="Keys" /> value.
         /// </summary>
-        /// <param name="keys">The <see cref="Keys"/> to extract a keycode from.</param>
-        /// <returns>The keycode value of the specified <see cref="Keys"/>.</returns>
+        /// <param name="keys">The <see cref="Keys" /> to extract a keycode from.</param>
+        /// <returns>The keycode value of the specified <see cref="Keys" />.</returns>
         public static Keys GetKeyCode
             (this Keys keys)
             {
@@ -20,10 +20,10 @@ namespace MouseNet.Logophi.Utilities
             }
 
         /// <summary>
-        /// Removes the keycodes from a <see cref="Keys"/> value.
+        ///     Removes the keycodes from a <see cref="Keys" /> value.
         /// </summary>
-        /// <param name="keys">The <see cref="Keys"/> to extract modifiers from.</param>
-        /// <returns>The modifiers of the specified <see cref="Keys"/>.</returns>
+        /// <param name="keys">The <see cref="Keys" /> to extract modifiers from.</param>
+        /// <returns>The modifiers of the specified <see cref="Keys" />.</returns>
         public static Keys GetModifiers
             (this Keys keys)
             {
@@ -31,10 +31,12 @@ namespace MouseNet.Logophi.Utilities
             }
 
         /// <summary>
-        /// Converts a <see cref="ModifierKeys"/> value to <see cref="Keys"/>.
+        ///     Converts a <see cref="ModifierKeys" /> value to <see cref="Keys" />.
         /// </summary>
-        /// <param name="modifierKeys">The <see cref="ModifierKeys"/> to convert.</param>
-        /// <returns>The specified <see cref="ModifierKeys"/> as a <see cref="Keys"/> value.</returns>
+        /// <param name="modifierKeys">The <see cref="ModifierKeys" /> to convert.</param>
+        /// <returns>
+        ///     The specified <see cref="ModifierKeys" /> as a <see cref="Keys" /> value.
+        /// </returns>
         public static Keys ToKeys
             (this ModifierKeys modifierKeys)
             {
@@ -49,12 +51,14 @@ namespace MouseNet.Logophi.Utilities
                 key |= Keys.LWin;
             return key;
             }
-        
+
         /// <summary>
-        /// Converts a <see cref="Keys"/> value to <see cref="ModifierKeys"/>.
+        ///     Converts a <see cref="Keys" /> value to <see cref="ModifierKeys" />.
         /// </summary>
-        /// <param name="keys">The <see cref="Keys"/> to convert.</param>
-        /// <returns>The specified <see cref="Keys"/> as a <see cref="ModifierKeys"/> value.</returns>
+        /// <param name="keys">The <see cref="Keys" /> to convert.</param>
+        /// <returns>
+        ///     The specified <see cref="Keys" /> as a <see cref="ModifierKeys" /> value.
+        /// </returns>
         public static ModifierKeys ToModifierKeys
             (this Keys keys)
             {

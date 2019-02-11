@@ -7,9 +7,9 @@ namespace MouseNet.Logophi.Thesaurus
 {
     /// <inheritdoc />
     /// <summary>
-    /// Represents a collection of strings that track the history
-    /// of a browser or similar application. The collection can be
-    /// traversed and modified similarly to traditional browser history.
+    ///     Represents a collection of strings that track the history
+    ///     of a browser or similar application. The collection can be
+    ///     traversed and modified similarly to traditional browser history.
     /// </summary>
     internal class SearchHistory : IEnumerable<string>
     {
@@ -20,18 +20,20 @@ namespace MouseNet.Logophi.Thesaurus
         private bool _persistentHistory;
 
         /// <summary>
-        /// Creates a new instance of the <see cref="SearchHistory"/> class.
+        ///     Creates a new instance of the <see cref="SearchHistory" /> class.
         /// </summary>
         /// <param name="dataDirectory">The location of the persistent cache on the filesystem.</param>
-        /// <param name="persistentHistory">A value indicating whether or not a persistent history
-        /// file should be used.</param>
+        /// <param name="persistentHistory">
+        ///     A value indicating whether or not a persistent history
+        ///     file should be used.
+        /// </param>
         public SearchHistory
             (string dataDirectory,
              bool persistentHistory)
             {
             _filePath = Path.Combine(dataDirectory, "history.lphi");
             _persistentHistory = persistentHistory;
-            
+
             //if persistent history is enabled and a history file exists, attempt to load it
             if (!persistentHistory || !File.Exists(_filePath)) return;
             var formatter = new BinaryFormatter();
@@ -40,32 +42,29 @@ namespace MouseNet.Logophi.Thesaurus
             }
 
         /// <summary>
-        /// Gets a value indicating whether or not the history can be traversed
-        /// backwards from the current item.
+        ///     Gets a value indicating whether or not the history can be traversed
+        ///     backwards from the current item.
         /// </summary>
         public bool CanGoForward => _currentIndex < Count - 1;
-        
         /// <summary>
-        /// Gets a value indicating whether or not the history can be traversed
-        /// forwards from the current item.
+        ///     Gets a value indicating whether or not the history can be traversed
+        ///     forwards from the current item.
         /// </summary>
         public bool CanGoBackward => _currentIndex > 0;
-        
         /// <summary>
-        /// Gets the item at the current position in the history.
+        ///     Gets the item at the current position in the history.
         /// </summary>
         public string CurrentItem =>
             _currentIndex < Count
                 ? _data[_currentIndex]
                 : string.Empty;
-        
         /// <summary>
-        /// Gets the number of items in the history.
+        ///     Gets the number of items in the history.
         /// </summary>
         public int Count => _data.Count;
 
         /// <summary>
-        /// Gets or sets the maximum number of items to keep in history.
+        ///     Gets or sets the maximum number of items to keep in history.
         /// </summary>
         public int MaxItems {
             get => _maxItems;
@@ -74,10 +73,10 @@ namespace MouseNet.Logophi.Thesaurus
                 TrimHistory();
             }
         }
-        
+
         /// <summary>
-        /// Gets or sets a value indicating whether or not a persistent
-        /// history file should be used.
+        ///     Gets or sets a value indicating whether or not a persistent
+        ///     history file should be used.
         /// </summary>
         public bool PersistentHistory {
             get => _persistentHistory;
@@ -101,9 +100,9 @@ namespace MouseNet.Logophi.Thesaurus
             }
 
         /// <summary>
-        /// Deletes all items in front of the current position and
-        /// adds the given value as the most recent item. The current
-        /// position will be set to that of the newly added item.
+        ///     Deletes all items in front of the current position and
+        ///     adds the given value as the most recent item. The current
+        ///     position will be set to that of the newly added item.
         /// </summary>
         /// <param name="item">The item to add to the history.</param>
         public void AddItem
@@ -113,12 +112,12 @@ namespace MouseNet.Logophi.Thesaurus
             if (Count > 1)
                 _data.RemoveRange(_currentIndex + 1,
                                   Count - _currentIndex - 1);
-            
+
             //add the item and trim the history to ensure MaxItems
             //hasn't been exceeded
             _data.Add(item);
             TrimHistory();
-            
+
             //set the current index to the index of the added item
             //and write the history to the disk if persistent history is
             //enabled.
@@ -127,7 +126,7 @@ namespace MouseNet.Logophi.Thesaurus
             }
 
         /// <summary>
-        /// Clears all items from the history.
+        ///     Clears all items from the history.
         /// </summary>
         public void Clear()
             {
@@ -136,7 +135,7 @@ namespace MouseNet.Logophi.Thesaurus
             }
 
         /// <summary>
-        /// If possible, traverses the history in the backwards direction.
+        ///     If possible, traverses the history in the backwards direction.
         /// </summary>
         public void GoBack()
             {
@@ -145,7 +144,7 @@ namespace MouseNet.Logophi.Thesaurus
             }
 
         /// <summary>
-        /// If possible, traverses the history in the forwards direction.
+        ///     If possible, traverses the history in the forwards direction.
         /// </summary>
         public void GoForward()
             {
@@ -154,7 +153,7 @@ namespace MouseNet.Logophi.Thesaurus
             }
 
         /// <summary>
-        /// Removes the item at the given index from the history.
+        ///     Removes the item at the given index from the history.
         /// </summary>
         /// <param name="index">The index of the item to remove.</param>
         public void RemoveItem
@@ -169,8 +168,8 @@ namespace MouseNet.Logophi.Thesaurus
             }
 
         /// <summary>
-        /// Trims the back of the history to ensure that a count
-        /// of <see cref="MaxItems"/> is not exceeded.
+        ///     Trims the back of the history to ensure that a count
+        ///     of <see cref="MaxItems" /> is not exceeded.
         /// </summary>
         private void TrimHistory()
             {
@@ -179,7 +178,7 @@ namespace MouseNet.Logophi.Thesaurus
             }
 
         /// <summary>
-        /// Writes the history to a file.
+        ///     Writes the history to a file.
         /// </summary>
         private void WriteHistory()
             {

@@ -11,8 +11,8 @@ namespace MouseNet.Logophi
 {
     /// <inheritdoc />
     /// <summary>
-    /// The Logophi application context. Sets up the application environment
-    /// and handles various application-wide tasks.
+    ///     The Logophi application context. Sets up the application environment
+    ///     and handles various application-wide tasks.
     /// </summary>
     internal class AppContext : ApplicationContext
     {
@@ -28,7 +28,7 @@ namespace MouseNet.Logophi
             Application.ApplicationExit += OnApplicationExit;
             _settings.PropertyChanged += OnSettingsPropertyChanged;
             SetupDirectories();
-            
+
             //set up the tray icon
             var openMenuItem = new ToolStripMenuItem {Text = @"Open"};
             openMenuItem.Click += OnOpen;
@@ -47,11 +47,11 @@ namespace MouseNet.Logophi
                     }
                 };
             _trayIcon.DoubleClick += OnOpen;
-            
+
             //initialize the hotkey feature
             _hotkey.HotkeyPressed += OnHotkeyPressed;
             RegisterHotkey();
-            
+
             _thesaurus = new Browser(_settings.DataDirectory,
                                      _settings.PersistentCache,
                                      _settings.SaveHistory);
@@ -60,9 +60,9 @@ namespace MouseNet.Logophi
             _agent.PreferencesSaved += OnPreferencesSaved;
             Activate();
             }
-        
+
         /// <summary>
-        /// Shows the main form.
+        ///     Shows the main form.
         /// </summary>
         public void Activate()
             {
@@ -82,9 +82,9 @@ namespace MouseNet.Logophi
             }
 
         /// <summary>
-        /// Registers the hotkey stored in settings, or updates
-        /// the currently registered hotkey if it is different than
-        /// the one stored in settings.
+        ///     Registers the hotkey stored in settings, or updates
+        ///     the currently registered hotkey if it is different than
+        ///     the one stored in settings.
         /// </summary>
         private void RegisterHotkey()
             {
@@ -100,8 +100,8 @@ namespace MouseNet.Logophi
             }
 
         /// <summary>
-        /// If necessary, creates the Logophi directory in local appdata
-        /// and stores the path in settings.
+        ///     If necessary, creates the Logophi directory in local appdata
+        ///     and stores the path in settings.
         /// </summary>
         private void SetupDirectories()
             {
@@ -122,7 +122,7 @@ namespace MouseNet.Logophi
             }
 
         /// <summary>
-        /// Unregisters the global hotkey if one is set.
+        ///     Unregisters the global hotkey if one is set.
         /// </summary>
         private void UnregisterHotkey()
             {
@@ -160,7 +160,7 @@ namespace MouseNet.Logophi
             if (_settings.EnableHotkey)
                 RegisterHotkey();
             else UnregisterHotkey();
-            
+
             //update autorun registry entry
             var key = OpenAutoRunKey();
             if (key == null) return;
@@ -195,10 +195,12 @@ namespace MouseNet.Logophi
             }
 
         /// <summary>
-        /// Opens the Logophi autorun registry key.
+        ///     Opens the Logophi autorun registry key.
         /// </summary>
-        /// <returns>The <see cref="RegistryKey"/> that allows
-        /// logophi to be run at logon.</returns>
+        /// <returns>
+        ///     The <see cref="RegistryKey" /> that allows
+        ///     logophi to be run at logon.
+        /// </returns>
         private static RegistryKey OpenAutoRunKey()
             {
             return Registry.CurrentUser.OpenSubKey(

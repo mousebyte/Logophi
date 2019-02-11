@@ -12,8 +12,8 @@ using Newtonsoft.Json.Linq;
 namespace MouseNet.Logophi.Thesaurus
 {
     /// <summary>
-    /// Consumes the http://thesaurus.com/ Tuna API and exposes
-    /// functions to retrieve information about words from the web.
+    ///     Consumes the http://thesaurus.com/ Tuna API and exposes
+    ///     functions to retrieve information about words from the web.
     /// </summary>
     public class TunaInterface
     {
@@ -25,11 +25,13 @@ namespace MouseNet.Logophi.Thesaurus
         private string _searchTerm;
 
         /// <summary>
-        /// Creates a new instance of the <see cref="TunaInterface"/> class.
+        ///     Creates a new instance of the <see cref="TunaInterface" /> class.
         /// </summary>
         /// <param name="dataDirectory">The location of the persistent cache on the filesystem.</param>
-        /// <param name="persistentCache">A value indicating whether or not a persistent cache
-        /// should be used.</param>
+        /// <param name="persistentCache">
+        ///     A value indicating whether or not a persistent cache
+        ///     should be used.
+        /// </param>
         protected TunaInterface
             (string dataDirectory,
              bool persistentCache)
@@ -41,7 +43,7 @@ namespace MouseNet.Logophi.Thesaurus
               | SecurityProtocolType.Tls11
               | SecurityProtocolType.Tls12
               | SecurityProtocolType.Ssl3;
-            
+
             Definitions = new List<WordDefinition>();
             PersistentCache = persistentCache;
             _cachePath = Path.Combine(dataDirectory, "cache.lphi");
@@ -49,17 +51,16 @@ namespace MouseNet.Logophi.Thesaurus
             }
 
         /// <summary>
-        /// Gets a list of definitions returned by the last search.
+        ///     Gets a list of definitions returned by the last search.
         /// </summary>
         public List<WordDefinition> Definitions { get; private set; }
-        
         /// <summary>
-        /// Gets or sets a value indicating whether or not a persistent cache should be used.
+        ///     Gets or sets a value indicating whether or not a persistent cache should be used.
         /// </summary>
         public bool PersistentCache { get; set; }
 
         /// <summary>
-        /// Gets or sets the value of the search term.
+        ///     Gets or sets the value of the search term.
         /// </summary>
         public string SearchTerm {
             get => _searchTerm;
@@ -67,8 +68,8 @@ namespace MouseNet.Logophi.Thesaurus
         }
 
         /// <summary>
-        /// Clears the cache in memory, and from the filesystem if a persistent cache
-        /// is being used.
+        ///     Clears the cache in memory, and from the filesystem if a persistent cache
+        ///     is being used.
         /// </summary>
         public void ClearCache()
             {
@@ -78,7 +79,7 @@ namespace MouseNet.Logophi.Thesaurus
             }
 
         /// <summary>
-        /// Retrieves word data from the web, or from the cache if possible.
+        ///     Retrieves word data from the web, or from the cache if possible.
         /// </summary>
         /// <param name="word">The word to search for.</param>
         public void SearchWord
@@ -90,12 +91,15 @@ namespace MouseNet.Logophi.Thesaurus
             if (_cache.Contains(word))
                 Definitions = _cache[word] as List<WordDefinition>;
             else LoadFromWeb(word);
-            
-            InvokeWordSearched(this, new SearchEventArgs(word, Definitions != null));
+
+            InvokeWordSearched(this,
+                               new SearchEventArgs(
+                                   word,
+                                   Definitions != null));
             }
 
         /// <summary>
-        /// Loads word data from the web using the Tuna API.
+        ///     Loads word data from the web using the Tuna API.
         /// </summary>
         /// <param name="term">The word to search for.</param>
         private void LoadFromWeb
@@ -104,12 +108,12 @@ namespace MouseNet.Logophi.Thesaurus
             //create a new request to the Tuna API
             var request = WebRequest.CreateHttp(
                 Resources.ThesaurusUrl + term.Trim().ToLower());
-            
+
             //request the word data, and select the JToken
             //containing the definition data
             var data = RequestWordData(request)
                .SelectToken("data.definitionData.definitions");
-            
+
             //deserialize the token into a list of WordDefinition objects
             //then update the cache
             Definitions = data?.ToObject<List<WordDefinition>>();
@@ -117,13 +121,13 @@ namespace MouseNet.Logophi.Thesaurus
             }
 
         /// <summary>
-        /// Attempts to load the persistent cache file into memory.
+        ///     Attempts to load the persistent cache file into memory.
         /// </summary>
         private void LoadSavedData()
             {
             var formatter = new BinaryFormatter();
             if (!PersistentCache || !File.Exists(_cachePath)) return;
-            
+
             //open the file and deserialize its contents
             //if it can be successfully cast into an array of key-value pairs,
             //then iterate through the array to load it into the cache
@@ -135,11 +139,13 @@ namespace MouseNet.Logophi.Thesaurus
             }
 
         /// <summary>
-        /// Gets the JSON response from the given Tuna API request and loads it into
-        /// a <see cref="JObject"/>.
+        ///     Gets the JSON response from the given Tuna API request and loads it into
+        ///     a <see cref="JObject" />.
         /// </summary>
-        /// <param name="request">The <see cref="WebRequest"/> representing a request to
-        /// the Tuna API.</param>
+        /// <param name="request">
+        ///     The <see cref="WebRequest" /> representing a request to
+        ///     the Tuna API.
+        /// </param>
         /// <returns></returns>
         private static JObject RequestWordData
             (WebRequest request)
@@ -154,8 +160,8 @@ namespace MouseNet.Logophi.Thesaurus
             }
 
         /// <summary>
-        /// Caches the current search, and serializes the cache
-        /// to a file if persistent caching is enabled.
+        ///     Caches the current search, and serializes the cache
+        ///     to a file if persistent caching is enabled.
         /// </summary>
         private void UpdateCache()
             {
@@ -165,7 +171,7 @@ namespace MouseNet.Logophi.Thesaurus
                 return;
             _cache[SearchTerm] = Definitions;
             if (!PersistentCache) return;
-            
+
             //if persistent caching is enabled, convert the cache to an array
             //and serialize it to a file
             var formatter = new BinaryFormatter();
@@ -181,7 +187,7 @@ namespace MouseNet.Logophi.Thesaurus
             }
 
         /// <summary>
-        /// Occurs when a word search has completed.
+        ///     Occurs when a word search has completed.
         /// </summary>
         public event EventHandler<SearchEventArgs> SearchCompleted;
     }

@@ -7,8 +7,8 @@ namespace MouseNet.Logophi.Utilities
 {
     /// <inheritdoc />
     /// <summary>
-    /// Allows for the registration and removal of global hotkeys,
-    /// and notifies listeners when they are activated.
+    ///     Allows for the registration and removal of global hotkeys,
+    ///     and notifies listeners when they are activated.
     /// </summary>
     public class GlobalHotkey : IDisposable
     {
@@ -23,7 +23,7 @@ namespace MouseNet.Logophi.Utilities
             }
 
         /// <summary>
-        /// Returns the hotkeys registered in the <see cref="GlobalHotkey"/> object.
+        ///     Returns the hotkeys registered in the <see cref="GlobalHotkey" /> object.
         /// </summary>
         public IEnumerable<Keys> Hotkeys => _hotkeys;
 
@@ -36,11 +36,13 @@ namespace MouseNet.Logophi.Utilities
             }
 
         /// <summary>
-        /// Registers a global hotkey.
+        ///     Registers a global hotkey.
         /// </summary>
         /// <param name="hotkey">The hotkey to register.</param>
-        /// <returns>An integer identifier that must be used when
-        /// unregistering the hotkey.</returns>
+        /// <returns>
+        ///     An integer identifier that must be used when
+        ///     unregistering the hotkey.
+        /// </returns>
         public int RegisterHotkey
             (Keys hotkey)
             {
@@ -48,7 +50,7 @@ namespace MouseNet.Logophi.Utilities
             var modifiers =
                 (int) hotkey.GetModifiers().ToModifierKeys();
             var keycode = (int) hotkey.GetKeyCode();
-            
+
             //register the hotkey to the dummy form and add it to the list
             if (!NativeMethods.RegisterHotKey(_form.Handle,
                                               _hotkeys.Count + 1,
@@ -61,10 +63,12 @@ namespace MouseNet.Logophi.Utilities
             }
 
         /// <summary>
-        /// Unregisters the hotkey indicated by the given identifier.
+        ///     Unregisters the hotkey indicated by the given identifier.
         /// </summary>
-        /// <param name="id">The identifier of the hotkey to unregister.
-        /// This value is returned by <see cref="RegisterHotkey"/>.</param>
+        /// <param name="id">
+        ///     The identifier of the hotkey to unregister.
+        ///     This value is returned by <see cref="RegisterHotkey" />.
+        /// </param>
         public void UnregisterHotkey
             (int id)
             {
@@ -83,7 +87,7 @@ namespace MouseNet.Logophi.Utilities
 
         /// <inheritdoc />
         /// <summary>
-        /// A dummy form to which hotkeys are registered.
+        ///     A dummy form to which hotkeys are registered.
         /// </summary>
         private class DummyForm : Form
         {

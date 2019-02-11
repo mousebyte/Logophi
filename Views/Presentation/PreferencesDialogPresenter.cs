@@ -6,17 +6,16 @@ namespace MouseNet.Logophi.Views.Presentation
 {
     /// <inheritdoc />
     /// <summary>
-    /// Presents an <see cref="T:MouseNet.Logophi.Views.IPreferencesDialogView" />.
+    ///     Presents an <see cref="IPreferencesDialogView" />.
     /// </summary>
     internal class PreferencesDialogPresenter
         : IViewPresenter<IPreferencesDialogView>
     {
-        private IPreferencesDialogView _view;
-        public IPreferencesDialogView View => _view;
         /// <summary>
-        /// Gets a value indicating whether or not the view is being presented to the user.
+        ///     Gets a value indicating whether or not the view is being presented to the user.
         /// </summary>
         public bool IsPresenting { get; private set; }
+        public IPreferencesDialogView View { get; private set; }
 
         /// <inheritdoc />
         public void Present
@@ -30,7 +29,7 @@ namespace MouseNet.Logophi.Views.Presentation
             (IPreferencesDialogView view,
              object parent)
             {
-            _view = view;
+            View = view;
             view.ViewEventActivated += OnViewEventActivated;
             IsPresenting = true;
             var result = view.ShowDialog((IWin32Window) parent);
@@ -40,7 +39,7 @@ namespace MouseNet.Logophi.Views.Presentation
 
         public void Dispose()
             {
-            _view?.Dispose();
+            View?.Dispose();
             }
 
         private void OnViewEventActivated
@@ -61,11 +60,11 @@ namespace MouseNet.Logophi.Views.Presentation
             }
 
         /// <summary>
-        /// Occurs when the delete cache button is clicked.
+        ///     Occurs when the delete cache button is clicked.
         /// </summary>
         public event EventHandler DeleteCacheClicked;
         /// <summary>
-        /// Occurs when the delete history button is clicked.
+        ///     Occurs when the delete history button is clicked.
         /// </summary>
         public event EventHandler DeleteHistoryClicked;
     }

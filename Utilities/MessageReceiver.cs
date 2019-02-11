@@ -8,8 +8,8 @@ namespace MouseNet.Logophi.Utilities
 {
     /// <inheritdoc />
     /// <summary>
-    /// Hosts a <see cref="NamedPipeServerStream" /> and notifies listeners
-    /// when a connection is made or a message is recieved.
+    ///     Hosts a <see cref="NamedPipeServerStream" /> and notifies listeners
+    ///     when a connection is made or a message is recieved.
     /// </summary>
     internal class MessageReceiver : IDisposable
     {
@@ -20,10 +20,12 @@ namespace MouseNet.Logophi.Utilities
         private readonly SynchronizationContext _sync;
 
         /// <summary>
-        /// Creates a new <see cref="MessageReceiver"/> object.
+        ///     Creates a new <see cref="MessageReceiver" /> object.
         /// </summary>
-        /// <param name="name">The name to use for the <see cref="NamedPipeServerStream"/>
-        /// hosted by the <see cref="MessageReceiver"/>.</param>
+        /// <param name="name">
+        ///     The name to use for the <see cref="NamedPipeServerStream" />
+        ///     hosted by the <see cref="MessageReceiver" />.
+        /// </param>
         public MessageReceiver
             (string name)
             {
@@ -32,18 +34,10 @@ namespace MouseNet.Logophi.Utilities
             }
 
         /// <summary>
-        /// Gets a value indicating whether or not the pipe server is connected
-        /// to a client.
+        ///     Gets a value indicating whether or not the pipe server is connected
+        ///     to a client.
         /// </summary>
         public bool IsConnected => _pipeServer.IsConnected;
-
-        /// <summary>
-        /// Disconnects the pipe server from the clients.
-        /// </summary>
-        public void Disconnect()
-            {
-            _pipeServer.Disconnect();
-            }
 
         /// <inheritdoc />
         public void Dispose()
@@ -53,7 +47,7 @@ namespace MouseNet.Logophi.Utilities
             }
 
         /// <summary>
-        /// Signals for the pipe server to stop listening for connections.
+        ///     Signals for the pipe server to stop listening for connections.
         /// </summary>
         public void CancelListening()
             {
@@ -61,7 +55,15 @@ namespace MouseNet.Logophi.Utilities
             }
 
         /// <summary>
-        /// Signals for the pipe server to start asynchronously listening for connections.
+        ///     Disconnects the pipe server from the clients.
+        /// </summary>
+        public void Disconnect()
+            {
+            _pipeServer.Disconnect();
+            }
+
+        /// <summary>
+        ///     Signals for the pipe server to start asynchronously listening for connections.
         /// </summary>
         public void StartListening()
             {
@@ -69,7 +71,7 @@ namespace MouseNet.Logophi.Utilities
             }
 
         /// <summary>
-        /// Signals for the pipe server to start asynchronously reading messages from the stream.
+        ///     Signals for the pipe server to start asynchronously reading messages from the stream.
         /// </summary>
         public void StartReading()
             {
@@ -77,7 +79,7 @@ namespace MouseNet.Logophi.Utilities
             }
 
         /// <summary>
-        /// Signals for the pipe server to stop reading messages from the stream.
+        ///     Signals for the pipe server to stop reading messages from the stream.
         /// </summary>
         public void StopReading()
             {
@@ -85,7 +87,7 @@ namespace MouseNet.Logophi.Utilities
             }
 
         /// <summary>
-        /// The message read loop.
+        ///     The message read loop.
         /// </summary>
         private void ReadLoop()
             {
@@ -111,19 +113,18 @@ namespace MouseNet.Logophi.Utilities
             }
 
         /// <summary>
-        /// Invoked when the pipe server has received a connection to a client.
+        ///     Invoked when the pipe server has received a connection to a client.
         /// </summary>
         public event EventHandler Connected;
-        
         /// <summary>
-        /// Invoked when a message is received through the pipe stream.
+        ///     Invoked when a message is received through the pipe stream.
         /// </summary>
         public event EventHandler<string> MessageReceived;
 
         /// <inheritdoc />
         /// <summary>
-        /// Wraps a <see cref="NamedPipeServerStream" /> and provides functions
-        /// to wait for connections.
+        ///     Wraps a <see cref="NamedPipeServerStream" /> and provides functions
+        ///     to wait for connections.
         /// </summary>
         private class PipeServer : IDisposable
         {
@@ -145,23 +146,14 @@ namespace MouseNet.Logophi.Utilities
                 }
 
             /// <summary>
-            /// Gets a value indicating whether or not the pipe server is connected
-            /// to a client.
+            ///     Gets a value indicating whether or not the pipe server is connected
+            ///     to a client.
             /// </summary>
             public bool IsConnected => _stream.IsConnected;
-            
             /// <summary>
-            /// Gets a stream object from which messages can be read.
+            ///     Gets a stream object from which messages can be read.
             /// </summary>
             public Stream Stream => _stream;
-
-            /// <summary>
-            /// Disconnects clients from the pipe server.
-            /// </summary>
-            public void Disconnect()
-                {
-                _stream.Disconnect();
-                }
 
             /// <inheritdoc />
             public void Dispose()
@@ -170,7 +162,7 @@ namespace MouseNet.Logophi.Utilities
                 }
 
             /// <summary>
-            /// Begins an asynchronous operation to wait for a connection.
+            ///     Begins an asynchronous operation to wait for a connection.
             /// </summary>
             public void BeginWait()
                 {
@@ -183,7 +175,7 @@ namespace MouseNet.Logophi.Utilities
                 }
 
             /// <summary>
-            /// Cancels a connection wait operation.
+            ///     Cancels a connection wait operation.
             /// </summary>
             public void CancelWait()
                 {
@@ -191,7 +183,15 @@ namespace MouseNet.Logophi.Utilities
                 _stream.EndWaitForConnection(_waitOperation);
                 _waitOperation = null;
                 }
-            
+
+            /// <summary>
+            ///     Disconnects clients from the pipe server.
+            /// </summary>
+            public void Disconnect()
+                {
+                _stream.Disconnect();
+                }
+
             private void WaitCallback
                 (IAsyncResult result)
                 {

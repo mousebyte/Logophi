@@ -1,32 +1,54 @@
 ﻿<?xml version='1.0' encoding='utf-8'?>
-<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="MouseNet.Logophi.Properties" GeneratedClassName="Settings">
+
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings"
+              CurrentProfile="(Default)"
+              GeneratedClassNamespace="MouseNet.Logophi.Properties"
+              GeneratedClassName="Settings">
   <Profiles />
   <Settings>
-    <Setting Name="SaveHistory" Type="System.Boolean" Scope="User">
+    <Setting Name="SaveHistory"
+             Type="System.Boolean"
+             Scope="User">
       <Value Profile="(Default)">True</Value>
     </Setting>
-    <Setting Name="MaxHistory" Type="System.Decimal" Scope="User">
+    <Setting Name="MaxHistory"
+             Type="System.Decimal"
+             Scope="User">
       <Value Profile="(Default)">25</Value>
     </Setting>
-    <Setting Name="PersistentCache" Type="System.Boolean" Scope="User">
+    <Setting Name="PersistentCache"
+             Type="System.Boolean"
+             Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
-    <Setting Name="AutoRun" Type="System.Boolean" Scope="User">
+    <Setting Name="AutoRun"
+             Type="System.Boolean"
+             Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
-    <Setting Name="AlwaysOnTop" Type="System.Boolean" Scope="User">
+    <Setting Name="AlwaysOnTop"
+             Type="System.Boolean"
+             Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
-    <Setting Name="DataDirectory" Type="System.String" Scope="User">
+    <Setting Name="DataDirectory"
+             Type="System.String"
+             Scope="User">
       <Value Profile="(Default)" />
     </Setting>
-    <Setting Name="EnableHotkey" Type="System.Boolean" Scope="User">
+    <Setting Name="EnableHotkey"
+             Type="System.Boolean"
+             Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
-    <Setting Name="Hotkey" Type="System.Windows.Forms.Keys" Scope="User">
+    <Setting Name="Hotkey"
+             Type="System.Windows.Forms.Keys"
+             Scope="User">
       <Value Profile="(Default)">None</Value>
     </Setting>
-    <Setting Name="Bookmarks" Type="System.Collections.Specialized.StringCollection" Scope="User">
+    <Setting Name="Bookmarks"
+             Type="System.Collections.Specialized.StringCollection"
+             Scope="User">
       <Value Profile="(Default)" />
     </Setting>
   </Settings>

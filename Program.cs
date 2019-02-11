@@ -29,7 +29,7 @@ namespace MouseNet.Logophi
             }
 
         /// <summary>
-        /// Runs the main Logophi application.
+        ///     Runs the main Logophi application.
         /// </summary>
         private static void Run()
             {
@@ -47,9 +47,9 @@ namespace MouseNet.Logophi
             }
 
         /// <summary>
-        /// Uses a pipe client to try to connect to a running
-        /// instance of Logophi, signaling that it sould display
-        /// its main window.
+        ///     Uses a pipe client to try to connect to a running
+        ///     instance of Logophi, signaling that it sould display
+        ///     its main window.
         /// </summary>
         private static void SendMessage()
             {

@@ -5,13 +5,12 @@ namespace MouseNet.Logophi.Views.Presentation
 {
     /// <inheritdoc />
     /// <summary>
-    /// Presents an <see cref="T:MouseNet.Logophi.Views.IBookmarksFormView" />.
+    ///     Presents an <see cref="IBookmarksFormView" />.
     /// </summary>
     internal class BookmarksFormPresenter
         : IViewPresenter<IBookmarksFormView>
     {
         private readonly IBookmarkManager _bookmarkManager;
-        private IBookmarksFormView _view;
 
         public BookmarksFormPresenter
             (IBookmarkManager bookmarkManager)
@@ -20,6 +19,11 @@ namespace MouseNet.Logophi.Views.Presentation
             _bookmarkManager.BookmarkAdded += OnBookmarkAdded;
             _bookmarkManager.BookmarkRemoved += OnBookmarkRemoved;
             }
+
+        /// <summary>
+        ///     Gets a value indicating whether or not the view is being presented to the user.
+        /// </summary>
+        public bool IsPresenting { get; private set; }
 
         /// <inheritdoc />
         public void Present
@@ -33,27 +37,23 @@ namespace MouseNet.Logophi.Views.Presentation
             (IBookmarksFormView view,
              object parent)
             {
-            _view = view;
+            View = view;
             foreach (var bookmark in _bookmarkManager.Bookmarks)
-                _view.Items.Add(bookmark);
-            _view.ViewEventActivated += OnViewEventActivated;
-            _view.BookmarkRemoved += OnBookmarkRemoved;
-            _view.Closed += OnClosed;
-            if (parent == null) _view.Show();
-            else _view.Show(parent);
+                View.Items.Add(bookmark);
+            View.ViewEventActivated += OnViewEventActivated;
+            View.BookmarkRemoved += OnBookmarkRemoved;
+            View.Closed += OnClosed;
+            if (parent == null) View.Show();
+            else View.Show(parent);
             IsPresenting = true;
             }
 
         /// <inheritdoc />
-        public IBookmarksFormView View => _view;
-        /// <summary>
-        /// Gets a value indicating whether or not the view is being presented to the user.
-        /// </summary>
-        public bool IsPresenting { get; private set; }
+        public IBookmarksFormView View { get; private set; }
 
         public void Dispose()
             {
-            _view?.Dispose();
+            View?.Dispose();
             }
 
         private void OnBookmarkAdded
@@ -61,7 +61,7 @@ namespace MouseNet.Logophi.Views.Presentation
              string e)
             {
             if (!IsPresenting) return;
-            _view.Items.Add(e);
+            View.Items.Add(e);
             }
 
         private void OnBookmarkRemoved
@@ -69,7 +69,7 @@ namespace MouseNet.Logophi.Views.Presentation
              string e)
             {
             if (!IsPresenting) return;
-            _view.Items.Remove(e);
+            View.Items.Remove(e);
             _bookmarkManager.RemoveBookmark(e);
             }
 
@@ -78,7 +78,7 @@ namespace MouseNet.Logophi.Views.Presentation
              EventArgs e)
             {
             IsPresenting = false;
-            _view.Dispose();
+            View.Dispose();
             }
 
         private void OnViewEventActivated
@@ -89,7 +89,7 @@ namespace MouseNet.Logophi.Views.Presentation
             }
 
         /// <summary>
-        /// Occurs when an item in the bookmarks list is activated.
+        ///     Occurs when an item in the bookmarks list is activated.
         /// </summary>
         public event EventHandler<string> BookmarkActivated;
     }

@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Windows.Forms;
 using MouseNet.Logophi.Forms;
-using MouseNet.Logophi.Views.Presentation;
 using MouseNet.Logophi.Thesaurus;
+using MouseNet.Logophi.Views.Presentation;
 
 namespace MouseNet.Logophi
 {
     /// <inheritdoc />
     /// <summary>
-    /// Manages presentation objects.
+    ///     Manages presentation objects.
     /// </summary>
     internal class PresentationAgent : IDisposable
     {
@@ -45,15 +45,6 @@ namespace MouseNet.Logophi
                 OnDeleteHistoryClicked;
             }
 
-        public event EventHandler PreferencesSaved;
-        
-        private void InvokePreferencesSaved
-            (object sender,
-             EventArgs args)
-            {
-            PreferencesSaved?.Invoke(sender, args);
-            }
-
         /// <inheritdoc />
         public void Dispose()
             {
@@ -63,7 +54,7 @@ namespace MouseNet.Logophi
             }
 
         /// <summary>
-        /// Closes the Logophi main window.
+        ///     Closes the Logophi main window.
         /// </summary>
         public void CloseMainForm()
             {
@@ -72,7 +63,7 @@ namespace MouseNet.Logophi
             }
 
         /// <summary>
-        /// Presents the about window to the user.
+        ///     Presents the about window to the user.
         /// </summary>
         public void PresentAboutDialog()
             {
@@ -82,7 +73,7 @@ namespace MouseNet.Logophi
             }
 
         /// <summary>
-        /// Presents the bookmarks window to the user.
+        ///     Presents the bookmarks window to the user.
         /// </summary>
         public void PresentBookmarksForm()
             {
@@ -92,8 +83,8 @@ namespace MouseNet.Logophi
             }
 
         /// <summary>
-        /// Presents the Logophi main window to the user, or
-        /// brings it to the front if it is already open.
+        ///     Presents the Logophi main window to the user, or
+        ///     brings it to the front if it is already open.
         /// </summary>
         public void PresentMainForm()
             {
@@ -103,7 +94,7 @@ namespace MouseNet.Logophi
             }
 
         /// <summary>
-        /// Presents the preferences window to the user.
+        ///     Presents the preferences window to the user.
         /// </summary>
         public void PresentPreferencesForm()
             {
@@ -158,5 +149,14 @@ namespace MouseNet.Logophi
             {
             PresentPreferencesForm();
             }
+
+        private void InvokePreferencesSaved
+            (object sender,
+             EventArgs args)
+            {
+            PreferencesSaved?.Invoke(sender, args);
+            }
+
+        public event EventHandler PreferencesSaved;
     }
 }

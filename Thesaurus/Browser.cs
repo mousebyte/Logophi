@@ -8,23 +8,27 @@ namespace MouseNet.Logophi.Thesaurus
 {
     /// <inheritdoc cref="TunaInterface" />
     /// <summary>
-    /// Represents a <see cref="TunaInterface" /> that supports browser-like
-    /// navigation and features.
+    ///     Represents a <see cref="TunaInterface" /> that supports browser-like
+    ///     navigation and features.
     /// </summary>
     internal class Browser : TunaInterface, IBookmarkManager
     {
-        private readonly IList _bookmarks = new StringCollection();
         private readonly string _bookmarkPath;
+        private readonly IList _bookmarks = new StringCollection();
 
         /// <inheritdoc />
         /// <summary>
-        /// Creates a new <see cref="T:MouseNet.Logophi.Thesaurus.Browser" /> object.
+        ///     Creates a new <see cref="Browser" /> object.
         /// </summary>
         /// <param name="dataDirectory">The location to use for persistent storage.</param>
-        /// <param name="persistentCache">A value indicating whether or not a persistent cache
-        /// should be used.</param>
-        /// <param name="persistentHistory">A value indicating whether or not a persistent
-        /// history file should be used.</param>
+        /// <param name="persistentCache">
+        ///     A value indicating whether or not a persistent cache
+        ///     should be used.
+        /// </param>
+        /// <param name="persistentHistory">
+        ///     A value indicating whether or not a persistent
+        ///     history file should be used.
+        /// </param>
         public Browser
             (string dataDirectory,
              bool persistentCache,
@@ -35,9 +39,9 @@ namespace MouseNet.Logophi.Thesaurus
                 new SearchHistory(dataDirectory, persistentHistory);
             _bookmarkPath =
                 Path.Combine(dataDirectory, "bookmarks.lphi");
-            
+
             //if a bookmarks file exists, load it
-            if(!File.Exists(_bookmarkPath)) return;
+            if (!File.Exists(_bookmarkPath)) return;
             var formatter = new BinaryFormatter();
             using (var strm = File.OpenRead(_bookmarkPath))
                 _bookmarks =
@@ -45,25 +49,28 @@ namespace MouseNet.Logophi.Thesaurus
             }
 
         /// <summary>
-        /// Gets the <see cref="SearchHistory"/> associated with the browser.
+        ///     Gets the <see cref="SearchHistory" /> associated with the browser.
         /// </summary>
         public SearchHistory History { get; }
+
+        /// <summary>
+        ///     Gets or sets a value indicating whether or not the current
+        ///     search term is bookmarked.
+        /// </summary>
+        public bool IsBookmarked {
+            get => _bookmarks.Contains(SearchTerm);
+            set {
+                if (value) AddBookmark(SearchTerm);
+                else RemoveBookmark(SearchTerm);
+            }
+        }
+
         /// <inheritdoc />
         public event EventHandler<string> BookmarkRemoved;
         /// <inheritdoc />
         public event EventHandler<string> BookmarkAdded;
         /// <inheritdoc />
         public IEnumerable Bookmarks => _bookmarks;
-
-        /// <summary>
-        /// Saves the bookmarks to a file.
-        /// </summary>
-        private void SaveBookmarks()
-            {
-            var formatter = new BinaryFormatter();
-            using(var strm = File.OpenWrite(_bookmarkPath))
-                formatter.Serialize(strm, _bookmarks);
-            }
 
         /// <inheritdoc />
         public void AddBookmark
@@ -86,16 +93,14 @@ namespace MouseNet.Logophi.Thesaurus
             }
 
         /// <summary>
-        /// Gets or sets a value indicating whether or not the current
-        /// search term is bookmarked.
+        ///     Saves the bookmarks to a file.
         /// </summary>
-        public bool IsBookmarked {
-            get => _bookmarks.Contains(SearchTerm);
-            set {
-                if (value) AddBookmark(SearchTerm);
-                else RemoveBookmark(SearchTerm);
+        private void SaveBookmarks()
+            {
+            var formatter = new BinaryFormatter();
+            using (var strm = File.OpenWrite(_bookmarkPath))
+                formatter.Serialize(strm, _bookmarks);
             }
-        }
 
         private void InvokeBookmarkAdded
             (object sender,

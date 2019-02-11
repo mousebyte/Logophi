@@ -4,10 +4,11 @@ using Newtonsoft.Json;
 namespace MouseNet.Logophi.Thesaurus
 {
     /// <summary>
-    /// Represents an entry in a <see cref="WordDefinition"/>'s list
-    /// of synonyms or antonyms.
+    ///     Represents an entry in a <see cref="WordDefinition" />'s list
+    ///     of synonyms or antonyms.
     /// </summary>
-    [JsonObject(MemberSerialization.OptIn), Serializable]
+    [JsonObject(MemberSerialization.OptIn)]
+    [Serializable]
     public class TermEntry
     {
         public TermEntry
@@ -19,14 +20,13 @@ namespace MouseNet.Logophi.Thesaurus
             }
 
         /// <summary>
-        /// The similarity value of this word relative to
-        /// the <see cref="WordDefinition"/>.
+        ///     The similarity value of this word relative to
+        ///     the <see cref="WordDefinition" />.
         /// </summary>
         [JsonProperty("similarity")]
         public int Similarity { get; }
-        
         /// <summary>
-        /// The word itself.
+        ///     The word itself.
         /// </summary>
         [JsonProperty("term")]
         public string Value { get; }

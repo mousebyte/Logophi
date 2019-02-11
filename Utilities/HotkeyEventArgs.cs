@@ -5,7 +5,7 @@ namespace MouseNet.Logophi.Utilities
 {
     /// <inheritdoc />
     /// <summary>
-    /// Provides data for the <see cref="E:MouseNet.Logophi.Utilities.GlobalHotkey.HotkeyPressed" /> event.
+    ///     Provides data for the <see cref="E:MouseNet.Logophi.Utilities.GlobalHotkey.HotkeyPressed" /> event.
     /// </summary>
     public class HotkeyEventArgs : EventArgs
     {
@@ -16,19 +16,17 @@ namespace MouseNet.Logophi.Utilities
             Modifiers = modifiers;
             KeyCode = key;
             }
-        
+
         /// <summary>
-        /// The keycode of the hotkey that was pressed.
+        ///     The keycode of the hotkey that was pressed.
         /// </summary>
         public Keys KeyCode { get; }
-        
         /// <summary>
-        /// The modifiers of the hotkey that was pressed.
+        ///     The modifiers of the hotkey that was pressed.
         /// </summary>
         public Keys Modifiers { get; }
-        
         /// <summary>
-        /// The value of the hotkey that was pressed.
+        ///     The value of the hotkey that was pressed.
         /// </summary>
         public Keys Hotkey => KeyCode | Modifiers;
     }
