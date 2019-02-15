@@ -25,7 +25,6 @@ namespace MouseNet.Logophi
             {
             Application.ApplicationExit += OnApplicationExit;
             SetupDirectories();
-
             //set up the tray icon
             var openMenuItem = new ToolStripMenuItem {Text = @"Open"};
             openMenuItem.Click += OnOpen;
@@ -138,6 +137,7 @@ namespace MouseNet.Logophi
             _trayIcon.Visible = false;
             _trayIcon.Dispose();
             _settingsHelper.Dispose();
+            _browser.Dispose();
             }
 
         /// <summary>
