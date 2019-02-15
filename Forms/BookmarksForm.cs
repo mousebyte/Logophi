@@ -5,7 +5,7 @@ using MouseNet.Logophi.Views;
 
 namespace MouseNet.Logophi.Forms
 {
-    public partial class BookmarksForm : Form, IBookmarksFormView
+    public partial class BookmarksForm : LogophiForm, IBookmarksFormView
     {
         public BookmarksForm()
             {
@@ -22,13 +22,6 @@ namespace MouseNet.Logophi.Forms
 
         public IList Items => _cBookmarksList.Items;
         public event EventHandler<string> BookmarkRemoved;
-
-        public void Show
-            (object parent)
-            {
-            if (!(parent is IWin32Window window)) return;
-            base.Show(window);
-            }
 
         public event EventHandler<ViewEventArgs> ViewEventActivated;
 

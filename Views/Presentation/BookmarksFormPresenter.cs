@@ -4,10 +4,9 @@ using MouseNet.Logophi.Thesaurus;
 namespace MouseNet.Logophi.Views.Presentation
 {
     internal class BookmarksFormPresenter
-        : IViewPresenter<IBookmarksFormView>
+        : ViewPresenter<IBookmarksFormView>
     {
         private readonly IBookmarkManager _bookmarkManager;
-        private IBookmarksFormView _view;
 
         public BookmarksFormPresenter
             (IBookmarkManager bookmarkManager)
@@ -17,33 +16,12 @@ namespace MouseNet.Logophi.Views.Presentation
             _bookmarkManager.BookmarkRemoved += OnBookmarkRemoved;
             }
 
-        public void Present
-            (IBookmarksFormView view)
+        protected override void InitializeView()
             {
-            Present(view, null);
-            }
-
-        public void Present
-            (IBookmarksFormView view,
-             object parent)
-            {
-            _view = view;
             foreach (var bookmark in _bookmarkManager.Bookmarks)
-                _view.Items.Add(bookmark);
-            _view.ViewEventActivated += OnViewEventActivated;
-            _view.BookmarkRemoved += OnBookmarkRemoved;
-            _view.Closed += OnClosed;
-            if (parent == null) _view.Show();
-            else _view.Show(parent);
-            IsPresenting = true;
-            }
-
-        public IBookmarksFormView View => _view;
-        public bool IsPresenting { get; private set; }
-
-        public void Dispose()
-            {
-            _view?.Dispose();
+                View.Items.Add(bookmark);
+            View.ViewEventActivated += OnViewEventActivated;
+            View.BookmarkRemoved += OnBookmarkRemoved;
             }
 
         private void OnBookmarkAdded
@@ -51,7 +29,7 @@ namespace MouseNet.Logophi.Views.Presentation
              string e)
             {
             if (!IsPresenting) return;
-            _view.Items.Add(e);
+            View.Items.Add(e);
             }
 
         private void OnBookmarkRemoved
@@ -59,16 +37,8 @@ namespace MouseNet.Logophi.Views.Presentation
              string e)
             {
             if (!IsPresenting) return;
-            _view.Items.Remove(e);
+            View.Items.Remove(e);
             _bookmarkManager.RemoveBookmark(e);
-            }
-
-        private void OnClosed
-            (object sender,
-             EventArgs e)
-            {
-            IsPresenting = false;
-            _view.Dispose();
             }
 
         private void OnViewEventActivated

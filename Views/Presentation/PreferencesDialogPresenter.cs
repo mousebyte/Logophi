@@ -1,38 +1,14 @@
 ﻿using System;
-using System.Windows.Forms;
-using MouseNet.Logophi.Properties;
 
 namespace MouseNet.Logophi.Views.Presentation
 {
     internal class PreferencesDialogPresenter
-        : IViewPresenter<IPreferencesDialogView>
+        : ViewPresenter<IPreferencesDialogView>
     {
-        private IPreferencesDialogView _view;
-        public IPreferencesDialogView View => _view;
-        public bool IsPresenting { get; private set; }
-
-        public void Present
-            (IPreferencesDialogView view)
-            {
-            Present(view, null);
-            }
-
-        public void Present
-            (IPreferencesDialogView view,
-             object parent)
-            {
-            _view = view;
-            view.ViewEventActivated += OnViewEventActivated;
-            IsPresenting = true;
-            var result = view.ShowDialog((IWin32Window) parent);
-            if (result != DialogResult.OK) Settings.Default.Reload();
-            else Settings.Default.Save();
-            }
-
-        public void Dispose()
-            {
-            _view?.Dispose();
-            }
+        protected override void InitializeView()
+        {
+            View.ViewEventActivated += OnViewEventActivated;
+        }
 
         private void OnViewEventActivated
             (object sender,

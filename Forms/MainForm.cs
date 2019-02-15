@@ -7,7 +7,7 @@ using MouseNet.Logophi.Views;
 
 namespace MouseNet.Logophi.Forms
 {
-    public partial class MainForm : Form, IMainFormView
+    public partial class MainForm : LogophiForm, IMainFormView
     {
         public MainForm()
             {
@@ -81,14 +81,7 @@ namespace MouseNet.Logophi.Forms
             {
             _cAntonymList.Clear();
             }
-
-        public void ToFront()
-            {
-            Activate();
-            WindowState = FormWindowState.Normal;
-            BringToFront();
-            }
-
+        
         public void AddSynonym
             (string term,
              int similarity)
@@ -101,13 +94,6 @@ namespace MouseNet.Logophi.Forms
              int similarity)
             {
             _cAntonymList.Items.Add(MakeItem(term, similarity));
-            }
-
-        public void Show
-            (object parent)
-            {
-            if (!(parent is IWin32Window window)) return;
-            base.Show(window);
             }
 
         private static ListViewItem MakeItem

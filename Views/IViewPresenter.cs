@@ -4,7 +4,7 @@ namespace MouseNet.Logophi.Views
 {
     
     
-    public interface IViewPresenter<TView> : IDisposable
+    public interface IViewPresenter<TView> : IDisposable where TView : IView
     {
         TView View { get; }
         void Present
@@ -13,6 +13,12 @@ namespace MouseNet.Logophi.Views
         void Present
             (TView view,
              object parent);
+
+        bool PresentDialog
+            (TView view,
+             object parent);
+        
+        bool IsPresenting { get; }
     }
 
     public class ViewEventArgs : EventArgs

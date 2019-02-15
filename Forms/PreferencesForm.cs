@@ -1,11 +1,10 @@
 ﻿using System;
-using System.Windows.Forms;
 using MouseNet.Logophi.Views;
 
 namespace MouseNet.Logophi.Forms
 {
     public partial class PreferencesForm
-        : Form, IPreferencesDialogView
+        : LogophiForm, IPreferencesDialogView
     {
         public PreferencesForm()
             {
@@ -36,13 +35,6 @@ namespace MouseNet.Logophi.Forms
             get => _cMaxHistory.Value;
             set => _cMaxHistory.Value = value;
         }
-
-        public void Show
-            (object parent)
-            {
-            if (!(parent is IWin32Window window)) return;
-            base.Show(window);
-            }
 
         public event EventHandler<ViewEventArgs> ViewEventActivated;
 

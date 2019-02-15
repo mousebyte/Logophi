@@ -6,47 +6,33 @@ using MouseNet.Logophi.Thesaurus;
 
 namespace MouseNet.Logophi.Views.Presentation
 {
-    internal class MainFormPresenter : IViewPresenter<IMainFormView>
+    internal class MainFormPresenter : ViewPresenter<IMainFormView>
     {
-        private readonly Browser _thesaurus;
-        private IMainFormView _view;
-        private bool SearchValid => _thesaurus.Definitions != null;
+        private readonly Browser _browser;
+        private bool SearchValid => _browser.Definitions != null;
 
         public MainFormPresenter
-            (Browser thesaurus)
+            (Browser browser)
             {
-            _thesaurus = thesaurus;
-            thesaurus.BookmarkRemoved += OnBookmarkRemoved;
-            thesaurus.BookmarkAdded += OnBookmarkAdded;
+            _browser = browser;
+            browser.BookmarkRemoved += OnBookmarkRemoved;
+            browser.BookmarkAdded += OnBookmarkAdded;
         }
 
-        public void Present
-            (IMainFormView view)
+        protected override void InitializeView()
             {
-            Present(view, null);
-            }
-
-        public void Present
-            (IMainFormView view,
-             object parent)
-            {
-            _view = view;
             PopulateDropDownItems();
-            _view.ViewEventActivated += OnViewEventActivated;
-            _view.Search += OnSearch;
-            _view.SelectedDefinitionChanged +=
+            View.ViewEventActivated += OnViewEventActivated;
+            View.Search += OnSearch;
+            View.SelectedDefinitionChanged +=
                 OnSelectedDefinitionChanged;
-            _view.BackClicked += OnBackClicked;
-            _view.ForwardClicked += OnForwardClicked;
-            _view.BookmarkClicked += OnBookmarkClicked;
-            _view.OpenDictionaryClicked += OnOpenDictionaryClicked;
-            _view.OpenGithubClicked += OnOpenGithubClicked;
-            _view.Closed += OnClosed;
-            if (parent == null) _view.Show();
-            else _view.Show(parent);
-            IsPresenting = true;
-            }
-
+            View.BackClicked += OnBackClicked;
+            View.ForwardClicked += OnForwardClicked;
+            View.BookmarkClicked += OnBookmarkClicked;
+            View.OpenDictionaryClicked += OnOpenDictionaryClicked;
+            View.OpenGithubClicked += OnOpenGithubClicked;
+        }
+        
         public event EventHandler ShowBookmarksClicked;
         public event EventHandler ShowPreferencesClicked;
         public event EventHandler ShowAboutClicked;
@@ -55,24 +41,24 @@ namespace MouseNet.Logophi.Views.Presentation
             (object sender,
              string e)
             {
-            if (IsPresenting && e == _thesaurus.SearchTerm)
-                _view.BookmarkOn();
+            if (IsPresenting && e == _browser.SearchTerm)
+                View.BookmarkOn();
             }
 
         private void OnBookmarkRemoved
             (object sender,
              string e)
             {
-            if (IsPresenting && e == _thesaurus.SearchTerm)
-                _view.BookmarkOff();
+            if (IsPresenting && e == _browser.SearchTerm)
+                View.BookmarkOff();
             }
 
         private void PopulateDropDownItems()
             {
-            if (_thesaurus.History.Count <= 0) return;
-            foreach (var i in _thesaurus.History)
-                if (!_view.DropDownItems.Contains(i))
-                    _view.DropDownItems.Add(i);
+            if (_browser.History.Count <= 0) return;
+            foreach (var i in _browser.History)
+                if (!View.DropDownItems.Contains(i))
+                    View.DropDownItems.Add(i);
             }
 
         private void OnViewEventActivated
@@ -100,9 +86,6 @@ namespace MouseNet.Logophi.Views.Presentation
                 }
             }
 
-        public IMainFormView View => _view;
-        public bool IsPresenting { get; private set; }
-
         public void Search
             (string word)
             {
@@ -111,29 +94,29 @@ namespace MouseNet.Logophi.Views.Presentation
 
         private void HandleInvalidSearch()
             {
-            _view.Definitions.Add(Resources.InvalidSearch);
-            _view.EnableBookmarkButton = false;
+            View.Definitions.Add(Resources.InvalidSearch);
+            View.EnableBookmarkButton = false;
             }
 
         private void PopulateDefinitions
             (string word)
             {
-            foreach (var def in _thesaurus.Definitions)
-                _view.Definitions.Add(
+            foreach (var def in _browser.Definitions)
+                View.Definitions.Add(
                     $"{def.PartOfSpeech}: {def.Definition}");
-            _view.EnableBookmarkButton = true;
-            _view.SelectedDefinitionIndex = 0;
-            if (!_view.DropDownItems.Contains(word))
-                _view.DropDownItems.Insert(0, word);
+            View.EnableBookmarkButton = true;
+            View.SelectedDefinitionIndex = 0;
+            if (!View.DropDownItems.Contains(word))
+                View.DropDownItems.Insert(0, word);
             }
 
         private void SearchFromHistory()
             {
-            OnSearch(this, _thesaurus.History.CurrentItem);
-            _view.SearchText = _thesaurus.History.CurrentItem;
+            OnSearch(this, _browser.History.CurrentItem);
+            View.SearchText = _browser.History.CurrentItem;
             }
 
-        private void OnOpenGithubClicked
+        private static void OnOpenGithubClicked
             (object sender,
              EventArgs e)
             {
@@ -144,16 +127,16 @@ namespace MouseNet.Logophi.Views.Presentation
             (object sender,
              EventArgs e)
             {
-            if (!_thesaurus.History.CanGoBackward) return;
+            if (!_browser.History.CanGoBackward) return;
             if (SearchValid)
-                _thesaurus.History.GoBack();
+                _browser.History.GoBack();
             SearchFromHistory();
             }
 
         private void UpdateBookmarkButtonState()
             {
-            if (_thesaurus.IsBookmarked) _view.BookmarkOn();
-            else _view.BookmarkOff();
+            if (_browser.IsBookmarked) View.BookmarkOn();
+            else View.BookmarkOff();
             }
 
         private void OnBookmarkClicked
@@ -161,23 +144,16 @@ namespace MouseNet.Logophi.Views.Presentation
              EventArgs e)
             {
             if (!SearchValid) return;
-            _thesaurus.IsBookmarked = !_thesaurus.IsBookmarked;
+            _browser.IsBookmarked = !_browser.IsBookmarked;
             UpdateBookmarkButtonState();
-            }
-
-        private void OnClosed
-            (object sender,
-             EventArgs e)
-            {
-            IsPresenting = false;
             }
 
         private void OnForwardClicked
             (object sender,
              EventArgs e)
             {
-            if (!_thesaurus.History.CanGoForward) return;
-            _thesaurus.History.GoForward();
+            if (!_browser.History.CanGoForward) return;
+            _browser.History.GoForward();
             SearchFromHistory();
             }
 
@@ -185,17 +161,17 @@ namespace MouseNet.Logophi.Views.Presentation
             (object sender,
              string word)
             {
-            if (_view.SearchText != word) _view.SearchText = word;
-            _view.Definitions.Clear();
-            _thesaurus.SearchWord(word);
+            if (View.SearchText != word) View.SearchText = word;
+            View.Definitions.Clear();
+            _browser.SearchWord(word);
 
-            if (!SearchValid || _thesaurus.Definitions.Count == 0)
+            if (!SearchValid || _browser.Definitions.Count == 0)
                 HandleInvalidSearch();
             else PopulateDefinitions(word);
 
-            _view.EnableBackButton = _thesaurus.History.CanGoBackward;
-            _view.EnableForwardButton =
-                _thesaurus.History.CanGoForward;
+            View.EnableBackButton = _browser.History.CanGoBackward;
+            View.EnableForwardButton =
+                _browser.History.CanGoForward;
             UpdateBookmarkButtonState();
             }
 
@@ -203,14 +179,14 @@ namespace MouseNet.Logophi.Views.Presentation
             (object sender,
              int e)
             {
-            _view.ClearSynonyms();
-            _view.ClearAntonyms();
+            View.ClearSynonyms();
+            View.ClearAntonyms();
             if (!SearchValid) return;
-            var def = _thesaurus.Definitions[e];
+            var def = _browser.Definitions[e];
             foreach (var syn in def.Synonyms)
-                _view.AddSynonym(syn.Value, syn.Similarity);
+                View.AddSynonym(syn.Value, syn.Similarity);
             foreach (var ant in def.Antonyms)
-                _view.AddAntonym(ant.Value, ant.Similarity);
+                View.AddAntonym(ant.Value, ant.Similarity);
             }
 
         private void OnOpenDictionaryClicked
@@ -218,12 +194,7 @@ namespace MouseNet.Logophi.Views.Presentation
              EventArgs e)
             {
             if (!SearchValid) return;
-            Process.Start(Resources.DictionaryUrl + _view.SearchText);
-            }
-
-        public void Dispose()
-            {
-            _view?.Dispose();
+            Process.Start(Resources.DictionaryUrl + View.SearchText);
             }
     }
 }
