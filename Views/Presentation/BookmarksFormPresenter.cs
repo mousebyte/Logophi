@@ -3,6 +3,10 @@ using MouseNet.Logophi.Thesaurus;
 
 namespace MouseNet.Logophi.Views.Presentation
 {
+    /// <inheritdoc />
+    /// <summary>
+    /// Presents an <see cref="T:MouseNet.Logophi.Views.IBookmarksFormView" />.
+    /// </summary>
     internal class BookmarksFormPresenter
         : ViewPresenter<IBookmarksFormView>
     {
@@ -48,6 +52,9 @@ namespace MouseNet.Logophi.Views.Presentation
             BookmarkActivated?.Invoke(sender, e.Tag as string);
             }
 
+        /// <summary>
+        /// Occurs when an item in the bookmarks list is activated.
+        /// </summary>
         public event EventHandler<string> BookmarkActivated;
     }
 }

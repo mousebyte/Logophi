@@ -6,6 +6,10 @@ using MouseNet.Logophi.Thesaurus;
 
 namespace MouseNet.Logophi
 {
+    /// <inheritdoc />
+    /// <summary>
+    /// Manages presentation objects.
+    /// </summary>
     internal class PresentationAgent : IDisposable
     {
         private readonly BookmarksFormPresenter
@@ -22,6 +26,7 @@ namespace MouseNet.Logophi
             (Browser thesaurus)
             {
             _thesaurus = thesaurus;
+            //create presenters and hook up event handlers
             _mainFormPresenter = new MainFormPresenter(thesaurus);
             _mainFormPresenter.ShowAboutClicked += OnShowAboutClicked;
             _mainFormPresenter.ShowBookmarksClicked +=
@@ -41,7 +46,7 @@ namespace MouseNet.Logophi
             }
 
         public event EventHandler PreferencesSaved;
-
+        
         private void InvokePreferencesSaved
             (object sender,
              EventArgs args)
@@ -49,6 +54,7 @@ namespace MouseNet.Logophi
             PreferencesSaved?.Invoke(sender, args);
             }
 
+        /// <inheritdoc />
         public void Dispose()
             {
             _mainFormPresenter?.Dispose();
@@ -56,12 +62,18 @@ namespace MouseNet.Logophi
             _preferencesDialogPresenter?.Dispose();
             }
 
+        /// <summary>
+        /// Closes the Logophi main window.
+        /// </summary>
         public void CloseMainForm()
             {
             if (_mainFormPresenter.IsPresenting)
                 _mainFormPresenter.View.Close();
             }
 
+        /// <summary>
+        /// Presents the about window to the user.
+        /// </summary>
         public void PresentAboutDialog()
             {
             var dialog = new AboutForm();
@@ -69,6 +81,9 @@ namespace MouseNet.Logophi
             dialog.Dispose();
             }
 
+        /// <summary>
+        /// Presents the bookmarks window to the user.
+        /// </summary>
         public void PresentBookmarksForm()
             {
             _bookmarksFormPresenter.Present(
@@ -76,6 +91,10 @@ namespace MouseNet.Logophi
                 _mainFormPresenter.View);
             }
 
+        /// <summary>
+        /// Presents the Logophi main window to the user, or
+        /// brings it to the front if it is already open.
+        /// </summary>
         public void PresentMainForm()
             {
             if (_mainFormPresenter.IsPresenting)
@@ -83,6 +102,9 @@ namespace MouseNet.Logophi
             else _mainFormPresenter.Present(new MainForm());
             }
 
+        /// <summary>
+        /// Presents the preferences window to the user.
+        /// </summary>
         public void PresentPreferencesForm()
             {
             var dialog = new PreferencesForm();
@@ -91,6 +113,7 @@ namespace MouseNet.Logophi
                 dialog,
                 _mainFormPresenter.View);
             dialog.Dispose();
+            //notify listeners that preferences were saved
             InvokePreferencesSaved(this, EventArgs.Empty);
             }
 

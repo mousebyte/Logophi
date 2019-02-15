@@ -2,6 +2,10 @@
 
 namespace MouseNet.Logophi.Views.Presentation
 {
+    /// <inheritdoc />
+    /// <summary>
+    /// Presents an <see cref="T:MouseNet.Logophi.Views.IPreferencesDialogView" />.
+    /// </summary>
     internal class PreferencesDialogPresenter
         : ViewPresenter<IPreferencesDialogView>
     {
@@ -27,7 +31,13 @@ namespace MouseNet.Logophi.Views.Presentation
                 }
             }
 
+        /// <summary>
+        /// Occurs when the delete cache button is clicked.
+        /// </summary>
         public event EventHandler DeleteCacheClicked;
+        /// <summary>
+        /// Occurs when the delete history button is clicked.
+        /// </summary>
         public event EventHandler DeleteHistoryClicked;
     }
 }

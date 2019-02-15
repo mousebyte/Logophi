@@ -34,7 +34,13 @@ namespace MouseNet.Logophi.Views.Presentation
         }
         
         public event EventHandler ShowBookmarksClicked;
+        /// <summary>
+        /// Occurs when the show preferences button is clicked.
+        /// </summary>
         public event EventHandler ShowPreferencesClicked;
+        /// <summary>
+        /// Occurs when the show about button is clicked.
+        /// </summary>
         public event EventHandler ShowAboutClicked;
 
         private void OnBookmarkAdded
@@ -53,6 +59,10 @@ namespace MouseNet.Logophi.Views.Presentation
                 View.BookmarkOff();
             }
 
+        /// <summary>
+        /// Populates the drop down items of the view's search box
+        /// with values from the browser's history.
+        /// </summary>
         private void PopulateDropDownItems()
             {
             if (_browser.History.Count <= 0) return;
@@ -92,12 +102,19 @@ namespace MouseNet.Logophi.Views.Presentation
             OnSearch(this, word);
             }
 
+        /// <summary>
+        /// Performs actions necessary to handle an invalid search.
+        /// </summary>
         private void HandleInvalidSearch()
             {
             View.Definitions.Add(Resources.InvalidSearch);
             View.EnableBookmarkButton = false;
             }
 
+        /// <summary>
+        /// Populates the definitions box with values from the browser.
+        /// </summary>
+        /// <param name="word">The word that the definitions belong to.</param>
         private void PopulateDefinitions
             (string word)
             {
@@ -110,6 +127,9 @@ namespace MouseNet.Logophi.Views.Presentation
                 View.DropDownItems.Insert(0, word);
             }
 
+        /// <summary>
+        /// Searches for the current history item.
+        /// </summary>
         private void SearchFromHistory()
             {
             OnSearch(this, _browser.History.CurrentItem);
@@ -133,6 +153,10 @@ namespace MouseNet.Logophi.Views.Presentation
             SearchFromHistory();
             }
 
+        //TODO: Depricate this
+        /// <summary>
+        /// Updates the states of the bookmark buttons.
+        /// </summary>
         private void UpdateBookmarkButtonState()
             {
             if (_browser.IsBookmarked) View.BookmarkOn();
