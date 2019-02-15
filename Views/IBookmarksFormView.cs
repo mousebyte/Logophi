@@ -14,9 +14,9 @@ namespace MouseNet.Logophi.Views
         /// </summary>
         IList Items { get; }
         /// <summary>
-        /// Occurs when the view is closed.
+        /// Occurs when a bookmark is activated.
         /// </summary>
-        event EventHandler Closed;
+        event EventHandler<string> BookmarkActivated; 
         /// <summary>
         /// Occurs when a bookmark is removed.
         /// </summary>

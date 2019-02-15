@@ -172,7 +172,7 @@
             this._cExitMenuItem.Name = "_cExitMenuItem";
             this._cExitMenuItem.Size = new System.Drawing.Size(210, 22);
             this._cExitMenuItem.Text = "E&xit";
-            this._cExitMenuItem.Click += new System.EventHandler(this.OnExitClicked);
+            this._cExitMenuItem.Click += new System.EventHandler(this.InvokeExitClicked);
             // 
             // _cDictionaryMenuItem
             // 
@@ -205,7 +205,7 @@
             this._cViewBookmarksMenuItem.Name = "_cViewBookmarksMenuItem";
             this._cViewBookmarksMenuItem.Size = new System.Drawing.Size(161, 22);
             this._cViewBookmarksMenuItem.Text = "&View Bookmarks";
-            this._cViewBookmarksMenuItem.Click += new System.EventHandler(this.OnShowBookmarksClicked);
+            this._cViewBookmarksMenuItem.Click += new System.EventHandler(this.InvokeShowBookmarksClicked);
             // 
             // _cOptionsMenuItem
             // 
@@ -220,7 +220,7 @@
             this._cPreferencesMenuItem.Name = "_cPreferencesMenuItem";
             this._cPreferencesMenuItem.Size = new System.Drawing.Size(135, 22);
             this._cPreferencesMenuItem.Text = "&Preferences";
-            this._cPreferencesMenuItem.Click += new System.EventHandler(this.OnShowPreferencesClicked);
+            this._cPreferencesMenuItem.Click += new System.EventHandler(this.InvokeShowPreferencesClicked);
             // 
             // helpToolStripMenuItem
             // 
@@ -238,7 +238,7 @@
             this._cAboutMenuItem.Size = new System.Drawing.Size(150, 22);
             this._cAboutMenuItem.Tag = "";
             this._cAboutMenuItem.Text = "&About";
-            this._cAboutMenuItem.Click += new System.EventHandler(this.OnShowAboutClicked);
+            this._cAboutMenuItem.Click += new System.EventHandler(this.InvokeShowAboutClicked);
             // 
             // _cGithubMenuItem
             // 

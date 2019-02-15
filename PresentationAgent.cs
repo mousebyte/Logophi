@@ -27,22 +27,16 @@ namespace MouseNet.Logophi
             {
             _thesaurus = thesaurus;
             //create presenters and hook up event handlers
-            _mainFormPresenter = new MainFormPresenter(thesaurus);
-            _mainFormPresenter.ShowAboutClicked += OnShowAboutClicked;
-            _mainFormPresenter.ShowBookmarksClicked +=
-                OnShowBookmarksClicked;
-            _mainFormPresenter.ShowPreferencesClicked +=
-                OnShowPreferencesClicked;
+            _mainFormPresenter = new MainFormPresenter(
+                thesaurus,
+                Application.Exit,
+                PresentBookmarksForm,
+                PresentPreferencesForm,
+                PresentAboutDialog);
             _bookmarksFormPresenter =
-                new BookmarksFormPresenter(thesaurus);
-            _bookmarksFormPresenter.BookmarkActivated +=
-                OnBookmarkActivated;
+                new BookmarksFormPresenter(thesaurus, _mainFormPresenter.Search);
             _preferencesDialogPresenter =
-                new PreferencesDialogPresenter();
-            _preferencesDialogPresenter.DeleteCacheClicked +=
-                OnDeleteCacheClicked;
-            _preferencesDialogPresenter.DeleteHistoryClicked +=
-                OnDeleteHistoryClicked;
+                new PreferencesDialogPresenter(DeleteCache, DeleteHistory);
             }
 
         public event EventHandler PreferencesSaved;
@@ -74,7 +68,7 @@ namespace MouseNet.Logophi
         /// <summary>
         /// Presents the about window to the user.
         /// </summary>
-        public void PresentAboutDialog()
+        private void PresentAboutDialog()
             {
             var dialog = new AboutForm();
             dialog.ShowDialog((IWin32Window) _mainFormPresenter.View);
@@ -84,7 +78,7 @@ namespace MouseNet.Logophi
         /// <summary>
         /// Presents the bookmarks window to the user.
         /// </summary>
-        public void PresentBookmarksForm()
+        private void PresentBookmarksForm()
             {
             _bookmarksFormPresenter.Present(
                 new BookmarksForm(),
@@ -105,7 +99,7 @@ namespace MouseNet.Logophi
         /// <summary>
         /// Presents the preferences window to the user.
         /// </summary>
-        public void PresentPreferencesForm()
+        private void PresentPreferencesForm()
             {
             var dialog = new PreferencesForm();
 
@@ -117,46 +111,14 @@ namespace MouseNet.Logophi
             InvokePreferencesSaved(this, EventArgs.Empty);
             }
 
-        private void OnBookmarkActivated
-            (object sender,
-             string e)
-            {
-            _mainFormPresenter.Search(e);
-            }
-
-        private void OnDeleteCacheClicked
-            (object sender,
-             EventArgs e)
+        private void DeleteCache()
             {
             _thesaurus.ClearCache();
             }
 
-        private void OnDeleteHistoryClicked
-            (object sender,
-             EventArgs e)
+        private void DeleteHistory()
             {
             _thesaurus.History.Clear();
-            }
-
-        private void OnShowAboutClicked
-            (object sender,
-             EventArgs e)
-            {
-            PresentAboutDialog();
-            }
-
-        private void OnShowBookmarksClicked
-            (object sender,
-             EventArgs e)
-            {
-            PresentBookmarksForm();
-            }
-
-        private void OnShowPreferencesClicked
-            (object sender,
-             EventArgs e)
-            {
-            PresentPreferencesForm();
             }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using MouseNet.Logophi.Thesaurus;
+using MouseNet.Logophi.Utilities;
 
 namespace MouseNet.Logophi.Views.Presentation
 {
@@ -11,11 +12,15 @@ namespace MouseNet.Logophi.Views.Presentation
         : ViewPresenter<IBookmarksFormView>
     {
         private readonly IBookmarkManager _bookmarkManager;
+        private readonly EventHandler<string> _onBookmarkActivated;
 
         public BookmarksFormPresenter
-            (IBookmarkManager bookmarkManager)
+            (IBookmarkManager bookmarkManager,
+             Action<string> bookmarkActivatedAction)
             {
             _bookmarkManager = bookmarkManager;
+            _onBookmarkActivated =
+                bookmarkActivatedAction.ToHandler();
             _bookmarkManager.BookmarkAdded += OnBookmarkAdded;
             _bookmarkManager.BookmarkRemoved += OnBookmarkRemoved;
             }
@@ -24,7 +29,7 @@ namespace MouseNet.Logophi.Views.Presentation
             {
             foreach (var bookmark in _bookmarkManager.Bookmarks)
                 View.Items.Add(bookmark);
-            View.ViewEventActivated += OnViewEventActivated;
+            View.BookmarkActivated += _onBookmarkActivated;
             View.BookmarkRemoved += OnBookmarkRemoved;
             }
 
@@ -44,17 +49,5 @@ namespace MouseNet.Logophi.Views.Presentation
             View.Items.Remove(e);
             _bookmarkManager.RemoveBookmark(e);
             }
-
-        private void OnViewEventActivated
-            (object sender,
-             ViewEventArgs e)
-            {
-            BookmarkActivated?.Invoke(sender, e.Tag as string);
-            }
-
-        /// <summary>
-        /// Occurs when an item in the bookmarks list is activated.
-        /// </summary>
-        public event EventHandler<string> BookmarkActivated;
     }
 }

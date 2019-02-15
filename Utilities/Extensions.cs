@@ -1,4 +1,5 @@
-﻿using System.Windows.Forms;
+﻿using System;
+using System.Windows.Forms;
 using System.Windows.Input;
 
 namespace MouseNet.Logophi.Utilities
@@ -49,7 +50,7 @@ namespace MouseNet.Logophi.Utilities
                 key |= Keys.LWin;
             return key;
             }
-        
+
         /// <summary>
         /// Converts a <see cref="Keys"/> value to <see cref="ModifierKeys"/>.
         /// </summary>
@@ -68,6 +69,22 @@ namespace MouseNet.Logophi.Utilities
             if (keys.HasFlag(Keys.LWin))
                 modifiers |= ModifierKeys.Windows;
             return modifiers;
+            }
+
+        public static EventHandler ToHandler
+            (this Action action)
+            {
+            return
+                (sender,
+                 args) => action?.Invoke();
+            }
+
+        public static EventHandler<TArg> ToHandler<TArg>
+            (this Action<TArg> action)
+            {
+            return
+                (sender,
+                 arg) => action?.Invoke(arg);
             }
     }
 }

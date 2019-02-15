@@ -38,21 +38,4 @@ namespace MouseNet.Logophi.Views
         
         bool IsPresenting { get; }
     }
-
-    /// <summary>
-    /// Provides data for the <see cref="IView.ViewEventActivated"/> event.
-    /// </summary>
-    public class ViewEventArgs : EventArgs
-    {
-        internal ViewEventArgs
-            (object tag)
-            {
-            Tag = tag;
-            }
-        
-        /// <summary>
-        /// The data tag associated with the event.
-        /// </summary>
-        public object Tag { get; }
-    }
 }

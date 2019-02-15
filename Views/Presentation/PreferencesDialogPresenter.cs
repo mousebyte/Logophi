@@ -1,43 +1,35 @@
 ﻿using System;
+using MouseNet.Logophi.Utilities;
 
 namespace MouseNet.Logophi.Views.Presentation
 {
     /// <inheritdoc />
     /// <summary>
-    /// Presents an <see cref="T:MouseNet.Logophi.Views.IPreferencesDialogView" />.
+    ///     Presents an <see cref="T:MouseNet.Logophi.Views.IPreferencesDialogView" />.
     /// </summary>
     internal class PreferencesDialogPresenter
         : ViewPresenter<IPreferencesDialogView>
     {
-        protected override void InitializeView()
-        {
-            View.ViewEventActivated += OnViewEventActivated;
-        }
+        private readonly EventHandler _onDeleteCache;
+        private readonly EventHandler _onDeleteHistory;
 
-        private void OnViewEventActivated
-            (object sender,
-             ViewEventArgs e)
+        /// <summary>
+        ///     Creates a new instance of the <see cref="PreferencesDialogPresenter" /> class.
+        /// </summary>
+        /// <param name="deleteCacheAction">The action to take to delete the cache.</param>
+        /// <param name="deleteHistoryAction">The action to take to delete the history.</param>
+        public PreferencesDialogPresenter
+            (Action deleteCacheAction,
+             Action deleteHistoryAction)
             {
-            switch (e.Tag)
-                {
-                case "DeleteCacheClicked":
-                    DeleteCacheClicked?.Invoke(this, EventArgs.Empty);
-                    break;
-                case "DeleteHistoryClicked":
-                    DeleteHistoryClicked?.Invoke(
-                        this,
-                        EventArgs.Empty);
-                    break;
-                }
+            _onDeleteCache = deleteCacheAction.ToHandler();
+            _onDeleteHistory = deleteHistoryAction.ToHandler();
             }
 
-        /// <summary>
-        /// Occurs when the delete cache button is clicked.
-        /// </summary>
-        public event EventHandler DeleteCacheClicked;
-        /// <summary>
-        /// Occurs when the delete history button is clicked.
-        /// </summary>
-        public event EventHandler DeleteHistoryClicked;
+        protected override void InitializeView()
+            {
+            View.DeleteCacheClicked += _onDeleteCache;
+            View.DeleteHistoryClicked += _onDeleteHistory;
+            }
     }
 }

@@ -14,6 +14,7 @@ namespace MouseNet.Logophi.Forms
             InitializeComponent();
             }
 
+        public event EventHandler ShowAboutClicked;
         public event EventHandler<string> Search;
         public event EventHandler BackClicked;
         public event EventHandler ForwardClicked;
@@ -21,7 +22,6 @@ namespace MouseNet.Logophi.Forms
         public event EventHandler<int> SelectedDefinitionChanged;
         public event EventHandler OpenDictionaryClicked;
         public event EventHandler OpenGithubClicked;
-        public event EventHandler<ViewEventArgs> ViewEventActivated;
         public IList Definitions => _cDefList.Items;
         public IList DropDownItems => _cSearchText.Items;
 
@@ -81,7 +81,11 @@ namespace MouseNet.Logophi.Forms
             {
             _cAntonymList.Clear();
             }
-        
+
+        public event EventHandler ExitClicked;
+        public event EventHandler ShowBookmarksClicked;
+        public event EventHandler ShowPreferencesClicked;
+
         public void AddSynonym
             (string term,
              int similarity)
@@ -125,15 +129,6 @@ namespace MouseNet.Logophi.Forms
             InvokeSearch(this, _cSearchText.Text);
             }
 
-        private void OnExitClicked
-            (object sender,
-             EventArgs args)
-            {
-            InvokeViewEventActivated(this,
-                                     new ViewEventArgs(
-                                         "ExitClicked"));
-            }
-
         private void OnSearchClicked
             (object sender,
              EventArgs e)
@@ -157,39 +152,40 @@ namespace MouseNet.Logophi.Forms
             InvokeSearch(this, _cSearchText.SelectedItem.ToString());
             }
 
-        private void OnShowAboutClicked
-            (object sender,
-             EventArgs args)
-            {
-            InvokeViewEventActivated(this,
-                                     new ViewEventArgs(
-                                         "ShowAboutClicked"));
-            }
-
-        private void OnShowBookmarksClicked
-            (object sender,
-             EventArgs args)
-            {
-            InvokeViewEventActivated(sender,
-                                     new ViewEventArgs(
-                                         "ShowBookmarksClicked"));
-            }
-
-        private void OnShowPreferencesClicked
-            (object sender,
-             EventArgs args)
-            {
-            InvokeViewEventActivated(this,
-                                     new ViewEventArgs(
-                                         "ShowPreferencesClicked"));
-            }
-
         private void OnTermEntryDoubleClick
             (object sender,
              EventArgs e)
             {
             if (!(sender is ListView view)) return;
             InvokeSearch(this, view.SelectedItems[0].Text);
+            }
+
+        private void InvokeExitClicked
+            (object sender,
+             EventArgs args)
+            {
+            ExitClicked?.Invoke(sender, args);
+            }
+
+        private void InvokeShowAboutClicked
+            (object sender,
+             EventArgs args)
+            {
+            ShowAboutClicked?.Invoke(sender, args);
+            }
+
+        private void InvokeShowBookmarksClicked
+            (object sender,
+             EventArgs args)
+            {
+            ShowBookmarksClicked?.Invoke(sender, args);
+            }
+
+        private void InvokeShowPreferencesClicked
+            (object sender,
+             EventArgs args)
+            {
+            ShowPreferencesClicked?.Invoke(sender, args);
             }
 
         private void InvokeSearch
@@ -241,13 +237,6 @@ namespace MouseNet.Logophi.Forms
              EventArgs args)
             {
             OpenGithubClicked?.Invoke(sender, args);
-            }
-
-        private void InvokeViewEventActivated
-            (object sender,
-             ViewEventArgs args)
-            {
-            ViewEventActivated?.Invoke(sender, args);
             }
     }
 }
