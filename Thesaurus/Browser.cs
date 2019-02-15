@@ -35,9 +35,9 @@ namespace MouseNet.Logophi.Thesaurus
                 new SearchHistory(dataDirectory, persistentHistory);
             _bookmarkPath =
                 Path.Combine(dataDirectory, "bookmarks.lphi");
-            
+
             //if a bookmarks file exists, load it
-            if(!File.Exists(_bookmarkPath)) return;
+            if (!File.Exists(_bookmarkPath)) return;
             var formatter = new BinaryFormatter();
             using (var strm = File.OpenRead(_bookmarkPath))
                 _bookmarks =
@@ -61,7 +61,7 @@ namespace MouseNet.Logophi.Thesaurus
         private void SaveBookmarks()
             {
             var formatter = new BinaryFormatter();
-            using(var strm = File.OpenWrite(_bookmarkPath))
+            using (var strm = File.OpenWrite(_bookmarkPath))
                 formatter.Serialize(strm, _bookmarks);
             }
 
@@ -111,13 +111,13 @@ namespace MouseNet.Logophi.Thesaurus
             BookmarkRemoved?.Invoke(sender, args);
             }
 
-        protected override void InvokeWordSearched
+        protected override void InvokeSearchCompleted
             (object sender,
-             string args)
+             SearchEventArgs args)
             {
-            if (args != History.CurrentItem)
-                History.AddItem(args);
-            base.InvokeWordSearched(sender, args);
+            if (args.Success && args.Word != History.CurrentItem)
+                History.AddItem(args.Word);
+            base.InvokeSearchCompleted(sender, args);
             }
     }
 }

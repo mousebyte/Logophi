@@ -17,7 +17,8 @@ namespace MouseNet.Logophi.Views.Presentation
             _browser = browser;
             browser.BookmarkRemoved += OnBookmarkRemoved;
             browser.BookmarkAdded += OnBookmarkAdded;
-        }
+            browser.SearchCompleted += OnSearchCompleted;
+            }
 
         protected override void InitializeView()
             {
@@ -31,8 +32,8 @@ namespace MouseNet.Logophi.Views.Presentation
             View.BookmarkClicked += OnBookmarkClicked;
             View.OpenDictionaryClicked += OnOpenDictionaryClicked;
             View.OpenGithubClicked += OnOpenGithubClicked;
-        }
-        
+            }
+
         public event EventHandler ShowBookmarksClicked;
         /// <summary>
         /// Occurs when the show preferences button is clicked.
@@ -112,19 +113,20 @@ namespace MouseNet.Logophi.Views.Presentation
             }
 
         /// <summary>
-        /// Populates the definitions box with values from the browser.
+        /// Performs actions necessary to handle a successful search.
         /// </summary>
-        /// <param name="word">The word that the definitions belong to.</param>
-        private void PopulateDefinitions
-            (string word)
+        private void HandleSuccessfulSearch()
             {
+            //populate the list of definitions
             foreach (var def in _browser.Definitions)
                 View.Definitions.Add(
                     $"{def.PartOfSpeech}: {def.Definition}");
+
             View.EnableBookmarkButton = true;
             View.SelectedDefinitionIndex = 0;
-            if (!View.DropDownItems.Contains(word))
-                View.DropDownItems.Insert(0, word);
+            //add to the dropdown items if it's not already there
+            if (!View.DropDownItems.Contains(_browser.SearchTerm))
+                View.DropDownItems.Insert(0, _browser.SearchTerm);
             }
 
         /// <summary>
@@ -148,28 +150,19 @@ namespace MouseNet.Logophi.Views.Presentation
              EventArgs e)
             {
             if (!_browser.History.CanGoBackward) return;
+            //check if the search is valid because invalid search
+            //terms are not added to history
             if (SearchValid)
                 _browser.History.GoBack();
             SearchFromHistory();
-            }
-
-        //TODO: Depricate this
-        /// <summary>
-        /// Updates the states of the bookmark buttons.
-        /// </summary>
-        private void UpdateBookmarkButtonState()
-            {
-            if (_browser.IsBookmarked) View.BookmarkOn();
-            else View.BookmarkOff();
             }
 
         private void OnBookmarkClicked
             (object sender,
              EventArgs e)
             {
-            if (!SearchValid) return;
-            _browser.IsBookmarked = !_browser.IsBookmarked;
-            UpdateBookmarkButtonState();
+            if (SearchValid)
+                _browser.IsBookmarked = !_browser.IsBookmarked;
             }
 
         private void OnForwardClicked
@@ -188,24 +181,33 @@ namespace MouseNet.Logophi.Views.Presentation
             if (View.SearchText != word) View.SearchText = word;
             View.Definitions.Clear();
             _browser.SearchWord(word);
+            }
 
-            if (!SearchValid || _browser.Definitions.Count == 0)
-                HandleInvalidSearch();
-            else PopulateDefinitions(word);
+        private void OnSearchCompleted
+            (object sender,
+             SearchEventArgs e)
+            {
+            //handle valid or invalid search
+            if (e.Success) HandleSuccessfulSearch();
+            else HandleInvalidSearch();
 
+            //update button states
             View.EnableBackButton = _browser.History.CanGoBackward;
-            View.EnableForwardButton =
-                _browser.History.CanGoForward;
-            UpdateBookmarkButtonState();
+            View.EnableForwardButton = _browser.History.CanGoForward;
+
+            if (_browser.IsBookmarked) View.BookmarkOn();
+            else View.BookmarkOff();
             }
 
         private void OnSelectedDefinitionChanged
             (object sender,
              int e)
             {
+            //clear lists
             View.ClearSynonyms();
             View.ClearAntonyms();
             if (!SearchValid) return;
+            //populate synonyms and antonyms from currently selected def
             var def = _browser.Definitions[e];
             foreach (var syn in def.Synonyms)
                 View.AddSynonym(syn.Value, syn.Similarity);
@@ -217,8 +219,9 @@ namespace MouseNet.Logophi.Views.Presentation
             (object sender,
              EventArgs e)
             {
-            if (!SearchValid) return;
-            Process.Start(Resources.DictionaryUrl + View.SearchText);
+            if (SearchValid)
+                Process.Start(Resources.DictionaryUrl
+                            + View.SearchText);
             }
     }
 }

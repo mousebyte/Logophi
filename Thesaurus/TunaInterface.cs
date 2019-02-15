@@ -41,7 +41,7 @@ namespace MouseNet.Logophi.Thesaurus
               | SecurityProtocolType.Tls11
               | SecurityProtocolType.Tls12
               | SecurityProtocolType.Ssl3;
-            
+
             Definitions = new List<WordDefinition>();
             PersistentCache = persistentCache;
             _cachePath = Path.Combine(dataDirectory, "cache.lphi");
@@ -52,7 +52,6 @@ namespace MouseNet.Logophi.Thesaurus
         /// Gets a list of definitions returned by the last search.
         /// </summary>
         public List<WordDefinition> Definitions { get; private set; }
-        
         /// <summary>
         /// Gets or sets a value indicating whether or not a persistent cache should be used.
         /// </summary>
@@ -90,8 +89,11 @@ namespace MouseNet.Logophi.Thesaurus
             if (_cache.Contains(word))
                 Definitions = _cache[word] as List<WordDefinition>;
             else LoadFromWeb(word);
-            
-            InvokeWordSearched(this, word);
+
+            InvokeSearchCompleted(this,
+                                  new SearchEventArgs(
+                                      word,
+                                      Definitions != null));
             }
 
         /// <summary>
@@ -104,12 +106,12 @@ namespace MouseNet.Logophi.Thesaurus
             //create a new request to the Tuna API
             var request = WebRequest.CreateHttp(
                 Resources.ThesaurusUrl + term.Trim().ToLower());
-            
+
             //request the word data, and select the JToken
             //containing the definition data
             var data = RequestWordData(request)
                .SelectToken("data.definitionData.definitions");
-            
+
             //deserialize the token into a list of WordDefinition objects
             //then update the cache
             Definitions = data?.ToObject<List<WordDefinition>>();
@@ -123,7 +125,7 @@ namespace MouseNet.Logophi.Thesaurus
             {
             var formatter = new BinaryFormatter();
             if (!PersistentCache || !File.Exists(_cachePath)) return;
-            
+
             //open the file and deserialize its contents
             //if it can be successfully cast into an array of key-value pairs,
             //then iterate through the array to load it into the cache
@@ -165,7 +167,7 @@ namespace MouseNet.Logophi.Thesaurus
                 return;
             _cache[SearchTerm] = Definitions;
             if (!PersistentCache) return;
-            
+
             //if persistent caching is enabled, convert the cache to an array
             //and serialize it to a file
             var formatter = new BinaryFormatter();
@@ -173,16 +175,16 @@ namespace MouseNet.Logophi.Thesaurus
                 formatter.Serialize(strm, _cache.ToArray());
             }
 
-        protected virtual void InvokeWordSearched
+        protected virtual void InvokeSearchCompleted
             (object sender,
-             string args)
+             SearchEventArgs args)
             {
-            WordSearched?.Invoke(sender, args);
+            SearchCompleted?.Invoke(sender, args);
             }
 
         /// <summary>
         /// Occurs when a word search has completed.
         /// </summary>
-        public event EventHandler<string> WordSearched;
+        public event EventHandler<SearchEventArgs> SearchCompleted;
     }
 }
