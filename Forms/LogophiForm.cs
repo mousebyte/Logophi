@@ -22,7 +22,7 @@ namespace MouseNet.Logophi.Forms
                 }
             }
 
-        public bool PresentDialog
+        public bool PresentModal
             (object owner)
             {
             if (owner == null || !(owner is IWin32Window wnd))
