@@ -15,11 +15,11 @@ namespace MouseNet.Logophi.Thesaurus
     ///     Consumes the http://thesaurus.com/ Tuna API and exposes
     ///     functions to retrieve information about words from the web.
     /// </summary>
-    public class TunaInterface
+    public class TunaInterface : IDisposable
     {
         private readonly string _cachePath;
 
-        private ObjectCache
+        private MemoryCache
             _cache = new MemoryCache("ThesaurusCache");
 
         private string _searchTerm;
@@ -92,10 +92,10 @@ namespace MouseNet.Logophi.Thesaurus
                 Definitions = _cache[word] as List<WordDefinition>;
             else LoadFromWeb(word);
 
-            InvokeWordSearched(this,
-                               new SearchEventArgs(
-                                   word,
-                                   Definitions != null));
+            InvokeSearchCompleted(this,
+                                  new SearchEventArgs(
+                                      word,
+                                      Definitions != null));
             }
 
         /// <summary>
@@ -179,7 +179,7 @@ namespace MouseNet.Logophi.Thesaurus
                 formatter.Serialize(strm, _cache.ToArray());
             }
 
-        protected virtual void InvokeWordSearched
+        protected virtual void InvokeSearchCompleted
             (object sender,
              SearchEventArgs args)
             {
@@ -190,5 +190,10 @@ namespace MouseNet.Logophi.Thesaurus
         ///     Occurs when a word search has completed.
         /// </summary>
         public event EventHandler<SearchEventArgs> SearchCompleted;
+
+        public void Dispose()
+            {
+            _cache.Dispose();
+            }
     }
 }

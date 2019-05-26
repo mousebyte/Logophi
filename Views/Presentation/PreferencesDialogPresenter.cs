@@ -1,71 +1,35 @@
 ﻿using System;
-using System.Windows.Forms;
-using MouseNet.Logophi.Properties;
+using MouseNet.Logophi.Utilities;
 
 namespace MouseNet.Logophi.Views.Presentation
 {
     /// <inheritdoc />
     /// <summary>
-    ///     Presents an <see cref="IPreferencesDialogView" />.
+    ///     Presents an <see cref="T:MouseNet.Logophi.Views.IPreferencesDialogView" />.
     /// </summary>
     internal class PreferencesDialogPresenter
-        : IViewPresenter<IPreferencesDialogView>
+        : ViewPresenter<IPreferencesDialogView>
     {
-        /// <summary>
-        ///     Gets a value indicating whether or not the view is being presented to the user.
-        /// </summary>
-        public bool IsPresenting { get; private set; }
-        public IPreferencesDialogView View { get; private set; }
-
-        /// <inheritdoc />
-        public void Present
-            (IPreferencesDialogView view)
-            {
-            Present(view, null);
-            }
-
-        /// <inheritdoc />
-        public void Present
-            (IPreferencesDialogView view,
-             object parent)
-            {
-            View = view;
-            view.ViewEventActivated += OnViewEventActivated;
-            IsPresenting = true;
-            var result = view.ShowDialog((IWin32Window) parent);
-            if (result != DialogResult.OK) Settings.Default.Reload();
-            else Settings.Default.Save();
-            }
-
-        public void Dispose()
-            {
-            View?.Dispose();
-            }
-
-        private void OnViewEventActivated
-            (object sender,
-             ViewEventArgs e)
-            {
-            switch (e.Tag)
-                {
-                case "DeleteCacheClicked":
-                    DeleteCacheClicked?.Invoke(this, EventArgs.Empty);
-                    break;
-                case "DeleteHistoryClicked":
-                    DeleteHistoryClicked?.Invoke(
-                        this,
-                        EventArgs.Empty);
-                    break;
-                }
-            }
+        private readonly EventHandler _onDeleteCache;
+        private readonly EventHandler _onDeleteHistory;
 
         /// <summary>
-        ///     Occurs when the delete cache button is clicked.
+        ///     Creates a new instance of the <see cref="PreferencesDialogPresenter" /> class.
         /// </summary>
-        public event EventHandler DeleteCacheClicked;
-        /// <summary>
-        ///     Occurs when the delete history button is clicked.
-        /// </summary>
-        public event EventHandler DeleteHistoryClicked;
+        /// <param name="deleteCacheAction">The action to take to delete the cache.</param>
+        /// <param name="deleteHistoryAction">The action to take to delete the history.</param>
+        public PreferencesDialogPresenter
+            (Action deleteCacheAction,
+             Action deleteHistoryAction)
+            {
+            _onDeleteCache = deleteCacheAction.ToHandler();
+            _onDeleteHistory = deleteHistoryAction.ToHandler();
+            }
+
+        protected override void InitializeView()
+            {
+            View.DeleteCacheClicked += _onDeleteCache;
+            View.DeleteHistoryClicked += _onDeleteHistory;
+            }
     }
 }

@@ -72,6 +72,16 @@ namespace MouseNet.Logophi.Thesaurus
         /// <inheritdoc />
         public IEnumerable Bookmarks => _bookmarks;
 
+        /// <summary>
+        /// Saves the bookmarks to a file.
+        /// </summary>
+        private void SaveBookmarks()
+            {
+            var formatter = new BinaryFormatter();
+            using (var strm = File.OpenWrite(_bookmarkPath))
+                formatter.Serialize(strm, _bookmarks);
+            }
+
         /// <inheritdoc />
         public void AddBookmark
             (object item)
@@ -116,13 +126,13 @@ namespace MouseNet.Logophi.Thesaurus
             BookmarkRemoved?.Invoke(sender, args);
             }
 
-        protected override void InvokeWordSearched
+        protected override void InvokeSearchCompleted
             (object sender,
              SearchEventArgs args)
             {
-            if (args.Word != History.CurrentItem)
+            if (args.Success && args.Word != History.CurrentItem)
                 History.AddItem(args.Word);
-            base.InvokeWordSearched(sender, args);
+            base.InvokeSearchCompleted(sender, args);
             }
     }
 }

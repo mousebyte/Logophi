@@ -87,9 +87,21 @@ namespace MouseNet.Logophi.Views
         void BookmarkOn();
 
         /// <summary>
-        ///     Occurs when the view is closed.
+        /// Occurs when the exit button is clicked.
         /// </summary>
-        event EventHandler Closed;
+        event EventHandler ExitClicked;
+        /// <summary>
+        /// Occurs when the show bookmarks button is clicked.
+        /// </summary>
+        event EventHandler ShowBookmarksClicked;
+        /// <summary>
+        /// Occurs when the show preferences button is clicked.
+        /// </summary>
+        event EventHandler ShowPreferencesClicked;
+        /// <summary>
+        /// Occurs when the show about button is clicked.
+        /// </summary>
+        event EventHandler ShowAboutClicked;
         /// <summary>
         ///     Occurs when a search is initiated.
         /// </summary>

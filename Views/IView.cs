@@ -1,34 +1,32 @@
 ﻿using System;
 
-namespace MouseNet.Logophi.Views
-{
+namespace MouseNet.Logophi.Views {
     /// <inheritdoc />
     /// <summary>
     ///     Exposes a view, which can be presented by an <see cref="IViewPresenter{TView}" />.
     /// </summary>
-    public interface IView : IDisposable
-    {
+    public interface IView : IDisposable {
+        /// <summary>
+        ///     Occurs when the view is closed.
+        /// </summary>
+        event EventHandler Closed;
+
         /// <summary>
         ///     Closes the view.
         /// </summary>
         void Close();
 
         /// <summary>
-        ///     Shows the view.
+        ///     Presents the view to the user.
         /// </summary>
-        void Show();
+        /// <param name="parent">An optional parent of the view.</param>
+        void Present(object parent = null);
 
         /// <summary>
-        ///     Shows the view using the given object as its parent.
+        ///     Presents the view to the user as a dialog.
         /// </summary>
         /// <param name="parent">The parent of the view.</param>
-        void Show
-            (object parent);
-
-        //TODO: Depricate ViewEventActivated, because it's silly.
-        /// <summary>
-        ///     Occurs when a view sends a message to its presenter.
-        /// </summary>
-        event EventHandler<ViewEventArgs> ViewEventActivated;
+        /// <returns>A value indicating the result of the dialog.</returns>
+        bool PresentModal(object parent);
     }
 }

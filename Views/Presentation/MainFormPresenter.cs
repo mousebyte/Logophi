@@ -1,52 +1,51 @@
 ﻿using System;
 using System.Diagnostics;
-using System.Windows.Forms;
 using MouseNet.Logophi.Properties;
 using MouseNet.Logophi.Thesaurus;
+using MouseNet.Logophi.Utilities;
 
 namespace MouseNet.Logophi.Views.Presentation
 {
-    /// <inheritdoc />
-    /// <summary>
-    ///     Presents an <see cref="IMainFormView" />.
-    /// </summary>
-    internal class MainFormPresenter : IViewPresenter<IMainFormView>
+    internal class MainFormPresenter : ViewPresenter<IMainFormView>
     {
-        private readonly Browser _thesaurus;
+        private readonly Browser _browser;
+        private readonly EventHandler _onExit;
+        private readonly EventHandler _onShowAbout;
+        private readonly EventHandler _onShowBookmarks;
+        private readonly EventHandler _onShowPreferences;
 
         public MainFormPresenter
-            (Browser thesaurus)
+            (Browser browser,
+             Action exitAction,
+             Action showBookmarksAction,
+             Action showPreferencesAction,
+             Action showAboutAction)
             {
-            _thesaurus = thesaurus;
-            thesaurus.BookmarkRemoved += OnBookmarkRemoved;
-            thesaurus.BookmarkAdded += OnBookmarkAdded;
+            _browser = browser;
+            _onExit = exitAction.ToHandler();
+            _onShowBookmarks = showBookmarksAction.ToHandler();
+            _onShowPreferences = showPreferencesAction.ToHandler();
+            _onShowAbout = showAboutAction.ToHandler();
+            browser.BookmarkRemoved += OnBookmarkRemoved;
+            browser.BookmarkAdded += OnBookmarkAdded;
+            browser.SearchCompleted += OnSearchCompleted;
             }
 
-        private bool SearchValid => _thesaurus.Definitions != null;
-        /// <summary>
-        ///     Gets a value indicating whether or not the view is being shown to the user.
-        /// </summary>
-        public bool IsPresenting { get; private set; }
+        private bool SearchValid => _browser.Definitions != null;
 
-        /// <inheritdoc />
-        public void Present
-            (IMainFormView view)
+        public void Search
+            (string word)
             {
-            Present(view, null);
+            OnSearch(this, word);
             }
 
-        /// <inheritdoc />
-        public void Present
-            (IMainFormView view,
-             object parent)
+        protected override void InitializeView()
             {
-            View = view;
-            //populate dropdown items from search history
             PopulateDropDownItems();
-
-            //connect event handlers
-            _thesaurus.SearchCompleted += OnSearchCompleted;
-            View.ViewEventActivated += OnViewEventActivated;
+            View.ExitClicked += _onExit;
+            View.ShowBookmarksClicked += _onShowBookmarks;
+            View.ShowPreferencesClicked += _onShowPreferences;
+            View.ShowAboutClicked += _onShowAbout;
             View.Search += OnSearch;
             View.SelectedDefinitionChanged +=
                 OnSelectedDefinitionChanged;
@@ -55,30 +54,6 @@ namespace MouseNet.Logophi.Views.Presentation
             View.BookmarkClicked += OnBookmarkClicked;
             View.OpenDictionaryClicked += OnOpenDictionaryClicked;
             View.OpenGithubClicked += OnOpenGithubClicked;
-            View.Closed += OnClosed;
-
-            //show the view
-            if (parent == null) View.Show();
-            else View.Show(parent);
-            IsPresenting = true;
-            }
-
-        /// <inheritdoc />
-        public IMainFormView View { get; private set; }
-
-        public void Dispose()
-            {
-            View?.Dispose();
-            }
-
-        /// <summary>
-        ///     Searches for a word.
-        /// </summary>
-        /// <param name="word">The word to search for.</param>
-        public void Search
-            (string word)
-            {
-            OnSearch(this, word);
             }
 
         /// <summary>
@@ -96,15 +71,15 @@ namespace MouseNet.Logophi.Views.Presentation
         private void HandleSuccessfulSearch()
             {
             //populate the list of definitions
-            foreach (var def in _thesaurus.Definitions)
+            foreach (var def in _browser.Definitions)
                 View.Definitions.Add(
                     $"{def.PartOfSpeech}: {def.Definition}");
 
             View.EnableBookmarkButton = true;
             View.SelectedDefinitionIndex = 0;
             //add to the dropdown items if it's not already there
-            if (!View.DropDownItems.Contains(_thesaurus.SearchTerm))
-                View.DropDownItems.Insert(0, _thesaurus.SearchTerm);
+            if (!View.DropDownItems.Contains(_browser.SearchTerm))
+                View.DropDownItems.Insert(0, _browser.SearchTerm);
             }
 
         /// <summary>
@@ -113,8 +88,8 @@ namespace MouseNet.Logophi.Views.Presentation
         /// </summary>
         private void PopulateDropDownItems()
             {
-            if (_thesaurus.History.Count <= 0) return;
-            foreach (var i in _thesaurus.History)
+            if (_browser.History.Count <= 0) return;
+            foreach (var i in _browser.History)
                 if (!View.DropDownItems.Contains(i))
                     View.DropDownItems.Add(i);
             }
@@ -122,21 +97,21 @@ namespace MouseNet.Logophi.Views.Presentation
         /// <summary>
         ///     Searches for the current history item.
         /// </summary>
-        private void SearchFromHistory()
+        private void PopulateDropDownItems()
             {
-            OnSearch(this, _thesaurus.History.CurrentItem);
-            View.SearchText = _thesaurus.History.CurrentItem;
+            OnSearch(this, _browser.History.CurrentItem);
+            View.SearchText = _browser.History.CurrentItem;
             }
 
         private void OnBackClicked
             (object sender,
              EventArgs e)
             {
-            if (!_thesaurus.History.CanGoBackward) return;
+            if (!_browser.History.CanGoBackward) return;
             //check if the search is valid because invalid search
             //terms are not added to history
             if (SearchValid)
-                _thesaurus.History.GoBack();
+                _browser.History.GoBack();
             SearchFromHistory();
             }
 
@@ -144,7 +119,7 @@ namespace MouseNet.Logophi.Views.Presentation
             (object sender,
              string e)
             {
-            if (IsPresenting && e == _thesaurus.SearchTerm)
+            if (IsPresenting && e == _browser.SearchTerm)
                 View.BookmarkOn();
             }
 
@@ -153,31 +128,40 @@ namespace MouseNet.Logophi.Views.Presentation
              EventArgs e)
             {
             if (SearchValid)
-                _thesaurus.IsBookmarked = !_thesaurus.IsBookmarked;
+                _browser.IsBookmarked = !_browser.IsBookmarked;
             }
 
         private void OnBookmarkRemoved
             (object sender,
              string e)
             {
-            if (IsPresenting && e == _thesaurus.SearchTerm)
+            if (IsPresenting && e == _browser.SearchTerm)
                 View.BookmarkOff();
-            }
-
-        private void OnClosed
-            (object sender,
-             EventArgs e)
-            {
-            IsPresenting = false;
             }
 
         private void OnForwardClicked
             (object sender,
              EventArgs e)
             {
-            if (!_thesaurus.History.CanGoForward) return;
-            _thesaurus.History.GoForward();
+            if (!_browser.History.CanGoForward) return;
+            _browser.History.GoForward();
             SearchFromHistory();
+            }
+
+        private void OnOpenDictionaryClicked
+            (object sender,
+             EventArgs e)
+            {
+            if (SearchValid)
+                Process.Start(Resources.DictionaryUrl
+                            + View.SearchText);
+            }
+
+        private static void OnOpenGithubClicked
+            (object sender,
+             EventArgs e)
+            {
+            Process.Start(Resources.GithubUrl);
             }
 
         private void OnOpenDictionaryClicked
@@ -202,7 +186,7 @@ namespace MouseNet.Logophi.Views.Presentation
             {
             if (View.SearchText != word) View.SearchText = word;
             View.Definitions.Clear();
-            _thesaurus.SearchWord(word);
+            _browser.SearchWord(word);
             }
 
         private void OnSearchCompleted
@@ -214,11 +198,10 @@ namespace MouseNet.Logophi.Views.Presentation
             else HandleInvalidSearch();
 
             //update button states
-            View.EnableBackButton = _thesaurus.History.CanGoBackward;
-            View.EnableForwardButton =
-                _thesaurus.History.CanGoForward;
+            View.EnableBackButton = _browser.History.CanGoBackward;
+            View.EnableForwardButton = _browser.History.CanGoForward;
 
-            if (_thesaurus.IsBookmarked) View.BookmarkOn();
+            if (_browser.IsBookmarked) View.BookmarkOn();
             else View.BookmarkOff();
             }
 
@@ -226,56 +209,16 @@ namespace MouseNet.Logophi.Views.Presentation
             (object sender,
              int e)
             {
-            //clear synonyms and antonyms
+            //clear lists
             View.ClearSynonyms();
             View.ClearAntonyms();
-            //if the search is invalid, return and leave them blank
             if (!SearchValid) return;
-            //get the definition at the currently selected index and
-            //populate synonyms and antonyms from it
-            var def = _thesaurus.Definitions[e];
+            //populate synonyms and antonyms from currently selected def
+            var def = _browser.Definitions[e];
             foreach (var syn in def.Synonyms)
                 View.AddSynonym(syn.Value, syn.Similarity);
             foreach (var ant in def.Antonyms)
                 View.AddAntonym(ant.Value, ant.Similarity);
             }
-
-        private void OnViewEventActivated
-            (object sender,
-             ViewEventArgs e)
-            {
-            switch (e.Tag)
-                {
-                case "ShowBookmarksClicked":
-                    ShowBookmarksClicked?.Invoke(
-                        this,
-                        EventArgs.Empty);
-                    break;
-                case "ShowPreferencesClicked":
-                    ShowPreferencesClicked?.Invoke(
-                        this,
-                        EventArgs.Empty);
-                    break;
-                case "ShowAboutClicked":
-                    ShowAboutClicked?.Invoke(this, EventArgs.Empty);
-                    break;
-                case "ExitClicked":
-                    Application.Exit();
-                    break;
-                }
-            }
-
-        /// <summary>
-        ///     Occurs when the show bookmarks button is clicked.
-        /// </summary>
-        public event EventHandler ShowBookmarksClicked;
-        /// <summary>
-        ///     Occurs when the show preferences button is clicked.
-        /// </summary>
-        public event EventHandler ShowPreferencesClicked;
-        /// <summary>
-        ///     Occurs when the show about button is clicked.
-        /// </summary>
-        public event EventHandler ShowAboutClicked;
     }
 }

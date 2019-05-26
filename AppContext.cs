@@ -1,8 +1,7 @@
 ﻿using System;
-using System.ComponentModel;
 using System.IO;
 using System.Windows.Forms;
-using Microsoft.Win32;
+using MouseNet.Logophi.Forms;
 using MouseNet.Logophi.Properties;
 using MouseNet.Logophi.Thesaurus;
 using MouseNet.Logophi.Utilities;
@@ -17,18 +16,15 @@ namespace MouseNet.Logophi
     internal class AppContext : ApplicationContext
     {
         private readonly PresentationAgent _agent;
-        private readonly GlobalHotkey _hotkey = new GlobalHotkey();
         private readonly Settings _settings = Settings.Default;
-        private readonly Browser _thesaurus;
+        private readonly Browser _browser;
         private readonly NotifyIcon _trayIcon;
-        private Keys _registeredHotkey = Keys.None;
+        private readonly SettingsHelper _settingsHelper;
 
         public AppContext()
             {
             Application.ApplicationExit += OnApplicationExit;
-            _settings.PropertyChanged += OnSettingsPropertyChanged;
             SetupDirectories();
-
             //set up the tray icon
             var openMenuItem = new ToolStripMenuItem {Text = @"Open"};
             openMenuItem.Click += OnOpen;
@@ -48,25 +44,87 @@ namespace MouseNet.Logophi
                 };
             _trayIcon.DoubleClick += OnOpen;
 
-            //initialize the hotkey feature
-            _hotkey.HotkeyPressed += OnHotkeyPressed;
-            RegisterHotkey();
+            _browser = new Browser(_settings.DataDirectory,
+                                   _settings.PersistentCache,
+                                   _settings.SaveHistory);
+            _browser.History.MaxItems = (int) _settings.MaxHistory;
 
-            _thesaurus = new Browser(_settings.DataDirectory,
-                                     _settings.PersistentCache,
-                                     _settings.SaveHistory);
-            _thesaurus.History.MaxItems = (int) _settings.MaxHistory;
-            _agent = new PresentationAgent(_thesaurus);
-            _agent.PreferencesSaved += OnPreferencesSaved;
-            Activate();
+            _settingsHelper = new SettingsHelper(_settings, _browser);
+            _settingsHelper.Hotkey.HotkeyPressed += OnHotkeyPressed;
+
+            _agent = new PresentationAgent(
+                _browser,
+                Application.Exit,
+                PresentBookmarksForm,
+                PresentPreferencesForm,
+                PresentAboutDialog,
+                DeleteCache,
+                DeleteHistory);
+            PresentMainForm();
+            }
+
+        private void DeleteCache()
+            {
+            _browser.ClearCache();
+            }
+
+        private void DeleteHistory()
+            {
+            _browser.History.Clear();
             }
 
         /// <summary>
-        ///     Shows the main form.
+        /// Closes the Logophi main window.
         /// </summary>
-        public void Activate()
+        private void CloseMainForm()
             {
-            _agent.PresentMainForm();
+            if (_agent.Main.IsPresenting)
+                _agent.Main.View.Close();
+            }
+
+        /// <summary>
+        /// Presents the about window to the user.
+        /// </summary>
+        private void PresentAboutDialog()
+            {
+            var dialog = new AboutForm();
+            dialog.ShowDialog((IWin32Window) _agent.Main.View);
+            dialog.Dispose();
+            }
+
+        /// <summary>
+        /// Presents the bookmarks window to the user.
+        /// </summary>
+        private void PresentBookmarksForm()
+            {
+            _agent.Bookmarks.Present(new BookmarksForm(),
+                                     _agent.Main.View);
+            }
+
+        /// <summary>
+        /// Presents the Logophi main window to the user, or
+        /// brings it to the front if it is already open.
+        /// </summary>
+        public void PresentMainForm()
+            {
+            if (_agent.Main.IsPresenting)
+                _agent.Main.View.ToFront();
+            else _agent.Main.Present(new MainForm());
+            }
+
+        /// <summary>
+        /// Presents the preferences window to the user.
+        /// </summary>
+        private void PresentPreferencesForm()
+            {
+            var dialog = new PreferencesForm();
+
+            var accept =
+                _agent.Preferences.PresentDialog(
+                    dialog,
+                    _agent.Main.View);
+            if (accept) _settingsHelper.UpdatePreferences();
+            else _settings.Reload();
             }
 
         /// <inheritdoc />
@@ -75,28 +133,11 @@ namespace MouseNet.Logophi
             {
             base.Dispose(disposing);
             if (!disposing) return;
-            _agent?.Dispose();
+            _agent.Dispose();
             _trayIcon.Visible = false;
-            _trayIcon?.Dispose();
-            _hotkey?.Dispose();
-            }
-
-        /// <summary>
-        ///     Registers the hotkey stored in settings, or updates
-        ///     the currently registered hotkey if it is different than
-        ///     the one stored in settings.
-        /// </summary>
-        private void RegisterHotkey()
-            {
-            //return if no hotkey is set, or if the value in settings
-            //is the same as the hotkey already registered
-            if (_settings.Hotkey == Keys.None
-             || _settings.Hotkey == _registeredHotkey)
-                return;
-            if (_registeredHotkey != Keys.None)
-                _hotkey.UnregisterHotkey(0);
-            _hotkey.RegisterHotkey(_settings.Hotkey);
-            _registeredHotkey = _settings.Hotkey;
+            _trayIcon.Dispose();
+            _settingsHelper.Dispose();
+            _browser.Dispose();
             }
 
         /// <summary>
@@ -121,91 +162,25 @@ namespace MouseNet.Logophi
                 Directory.CreateDirectory(_settings.DataDirectory);
             }
 
-        /// <summary>
-        ///     Unregisters the global hotkey if one is set.
-        /// </summary>
-        private void UnregisterHotkey()
-            {
-            if (_registeredHotkey == Keys.None) return;
-            _hotkey.UnregisterHotkey(0);
-            _registeredHotkey = Keys.None;
-            }
-
         private void OnApplicationExit
             (object sender,
              EventArgs e)
             {
-            _agent.CloseMainForm();
+            CloseMainForm();
             }
 
         private void OnHotkeyPressed
             (object sender,
              HotkeyEventArgs e)
             {
-            Activate();
+            PresentMainForm();
             }
 
         private void OnOpen
             (object sender,
              EventArgs e)
             {
-            Activate();
-            }
-
-        private void OnPreferencesSaved
-            (object sender,
-             EventArgs e)
-            {
-            //update hotkey registration
-            if (_settings.EnableHotkey)
-                RegisterHotkey();
-            else UnregisterHotkey();
-
-            //update autorun registry entry
-            var key = OpenAutoRunKey();
-            if (key == null) return;
-            if (_settings.AutoRun)
-                key.SetValue(Resources.AppName,
-                             Application.ExecutablePath);
-            else if (key.GetValue(Resources.AppName) != null)
-                key.DeleteValue(Resources.AppName);
-            }
-
-        private void OnSettingsPropertyChanged
-            (object sender,
-             PropertyChangedEventArgs e)
-            {
-            //update browser property values when corresponding
-            //settings values are changed.
-            switch (e.PropertyName)
-                {
-                case "PersistentCache":
-                    _thesaurus.PersistentCache =
-                        _settings.PersistentCache;
-                    break;
-                case "SaveHistory":
-                    _thesaurus.History.PersistentHistory =
-                        _settings.SaveHistory;
-                    break;
-                case "MaxHistory":
-                    _thesaurus.History.MaxItems =
-                        (int) _settings.MaxHistory;
-                    break;
-                }
-            }
-
-        /// <summary>
-        ///     Opens the Logophi autorun registry key.
-        /// </summary>
-        /// <returns>
-        ///     The <see cref="RegistryKey" /> that allows
-        ///     logophi to be run at logon.
-        /// </returns>
-        private static RegistryKey OpenAutoRunKey()
-            {
-            return Registry.CurrentUser.OpenSubKey(
-                Resources.AutoRunKey,
-                true);
+            PresentMainForm();
             }
     }
 }

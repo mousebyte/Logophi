@@ -75,7 +75,7 @@ namespace MouseNet.Logophi
             {
             //show the main window and reset the message receiver
             //to continue listening for new instances of Logophi
-            _app.Activate();
+            _app.PresentMainForm();
             if (_messageReceiver.IsConnected)
                 _messageReceiver.Disconnect();
             _messageReceiver.StartListening();
