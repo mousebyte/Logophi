@@ -102,16 +102,6 @@ namespace MouseNet.Logophi.Thesaurus
             InvokeBookmarkRemoved(this, item as string);
             }
 
-        /// <summary>
-        ///     Saves the bookmarks to a file.
-        /// </summary>
-        private void SaveBookmarks()
-            {
-            var formatter = new BinaryFormatter();
-            using (var strm = File.OpenWrite(_bookmarkPath))
-                formatter.Serialize(strm, _bookmarks);
-            }
-
         private void InvokeBookmarkAdded
             (object sender,
              string args)

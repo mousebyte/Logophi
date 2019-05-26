@@ -4,10 +4,8 @@ using MouseNet.Logophi.Properties;
 using MouseNet.Logophi.Thesaurus;
 using MouseNet.Logophi.Utilities;
 
-namespace MouseNet.Logophi.Views.Presentation
-{
-    internal class MainFormPresenter : ViewPresenter<IMainFormView>
-    {
+namespace MouseNet.Logophi.Views.Presentation {
+    internal class MainFormPresenter : ViewPresenter<IMainFormView> {
         private readonly Browser _browser;
         private readonly EventHandler _onExit;
         private readonly EventHandler _onShowAbout;
@@ -15,11 +13,11 @@ namespace MouseNet.Logophi.Views.Presentation
         private readonly EventHandler _onShowPreferences;
 
         public MainFormPresenter
-            (Browser browser,
-             Action exitAction,
-             Action showBookmarksAction,
-             Action showPreferencesAction,
-             Action showAboutAction)
+        (Browser browser,
+         Action exitAction,
+         Action showBookmarksAction,
+         Action showPreferencesAction,
+         Action showAboutAction)
             {
             _browser = browser;
             _onExit = exitAction.ToHandler();
@@ -97,15 +95,15 @@ namespace MouseNet.Logophi.Views.Presentation
         /// <summary>
         ///     Searches for the current history item.
         /// </summary>
-        private void PopulateDropDownItems()
+        private void SearchFromHistory()
             {
             OnSearch(this, _browser.History.CurrentItem);
             View.SearchText = _browser.History.CurrentItem;
             }
 
         private void OnBackClicked
-            (object sender,
-             EventArgs e)
+        (object sender,
+         EventArgs e)
             {
             if (!_browser.History.CanGoBackward) return;
             //check if the search is valid because invalid search
@@ -116,32 +114,32 @@ namespace MouseNet.Logophi.Views.Presentation
             }
 
         private void OnBookmarkAdded
-            (object sender,
-             string e)
+        (object sender,
+         string e)
             {
             if (IsPresenting && e == _browser.SearchTerm)
                 View.BookmarkOn();
             }
 
         private void OnBookmarkClicked
-            (object sender,
-             EventArgs e)
+        (object sender,
+         EventArgs e)
             {
             if (SearchValid)
                 _browser.IsBookmarked = !_browser.IsBookmarked;
             }
 
         private void OnBookmarkRemoved
-            (object sender,
-             string e)
+        (object sender,
+         string e)
             {
             if (IsPresenting && e == _browser.SearchTerm)
                 View.BookmarkOff();
             }
 
         private void OnForwardClicked
-            (object sender,
-             EventArgs e)
+        (object sender,
+         EventArgs e)
             {
             if (!_browser.History.CanGoForward) return;
             _browser.History.GoForward();
@@ -149,40 +147,25 @@ namespace MouseNet.Logophi.Views.Presentation
             }
 
         private void OnOpenDictionaryClicked
-            (object sender,
-             EventArgs e)
+        (object sender,
+         EventArgs e)
             {
             if (SearchValid)
-                Process.Start(Resources.DictionaryUrl
-                            + View.SearchText);
+                Process.Start(
+                    Resources.DictionaryUrl
+                  + View.SearchText);
             }
 
         private static void OnOpenGithubClicked
-            (object sender,
-             EventArgs e)
-            {
-            Process.Start(Resources.GithubUrl);
-            }
-
-        private void OnOpenDictionaryClicked
-            (object sender,
-             EventArgs e)
-            {
-            if (SearchValid)
-                Process.Start(Resources.DictionaryUrl
-                            + View.SearchText);
-            }
-
-        private static void OnOpenGithubClicked
-            (object sender,
-             EventArgs e)
+        (object sender,
+         EventArgs e)
             {
             Process.Start(Resources.GithubUrl);
             }
 
         private void OnSearch
-            (object sender,
-             string word)
+        (object sender,
+         string word)
             {
             if (View.SearchText != word) View.SearchText = word;
             View.Definitions.Clear();
@@ -190,8 +173,8 @@ namespace MouseNet.Logophi.Views.Presentation
             }
 
         private void OnSearchCompleted
-            (object sender,
-             SearchEventArgs e)
+        (object sender,
+         SearchEventArgs e)
             {
             //handle valid or invalid search
             if (e.Success) HandleSuccessfulSearch();
@@ -206,8 +189,8 @@ namespace MouseNet.Logophi.Views.Presentation
             }
 
         private void OnSelectedDefinitionChanged
-            (object sender,
-             int e)
+        (object sender,
+         int e)
             {
             //clear lists
             View.ClearSynonyms();
