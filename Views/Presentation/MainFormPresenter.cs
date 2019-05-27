@@ -7,23 +7,12 @@ using MouseNet.Logophi.Utilities;
 namespace MouseNet.Logophi.Views.Presentation {
     internal class MainFormPresenter : ViewPresenter<IMainFormView> {
         private readonly Browser _browser;
-        private readonly EventHandler _onExit;
-        private readonly EventHandler _onShowAbout;
-        private readonly EventHandler _onShowBookmarks;
-        private readonly EventHandler _onShowPreferences;
+
 
         public MainFormPresenter
-        (Browser browser,
-         Action exitAction,
-         Action showBookmarksAction,
-         Action showPreferencesAction,
-         Action showAboutAction)
+        (Browser browser)
             {
             _browser = browser;
-            _onExit = exitAction.ToHandler();
-            _onShowBookmarks = showBookmarksAction.ToHandler();
-            _onShowPreferences = showPreferencesAction.ToHandler();
-            _onShowAbout = showAboutAction.ToHandler();
             browser.BookmarkRemoved += OnBookmarkRemoved;
             browser.BookmarkAdded += OnBookmarkAdded;
             browser.SearchCompleted += OnSearchCompleted;
@@ -40,10 +29,6 @@ namespace MouseNet.Logophi.Views.Presentation {
         protected override void InitializeView()
             {
             PopulateDropDownItems();
-            View.ExitClicked += _onExit;
-            View.ShowBookmarksClicked += _onShowBookmarks;
-            View.ShowPreferencesClicked += _onShowPreferences;
-            View.ShowAboutClicked += _onShowAbout;
             View.Search += OnSearch;
             View.SelectedDefinitionChanged +=
                 OnSelectedDefinitionChanged;

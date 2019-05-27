@@ -2,6 +2,13 @@
 
 namespace MouseNet.Logophi.Views.Presentation {
     public abstract class ViewPresenter<TView> : IViewPresenter<TView> where TView : IView {
+        public event EventHandler ViewPresented;
+
+        protected virtual void InvokeViewPresented(object sender, EventArgs args)
+            {
+            ViewPresented?.Invoke(sender, args);
+            }
+
         /// <summary>
         ///     The view currently being presented.
         /// </summary>
@@ -19,6 +26,7 @@ namespace MouseNet.Logophi.Views.Presentation {
             if (parent == null)
                 throw new ArgumentException(@"parent cannot be null.", nameof(parent));
             InitializeViewInternal(view);
+            InvokeViewPresented(this, EventArgs.Empty);
             return view.PresentModal(parent);
             }
 
@@ -49,6 +57,7 @@ namespace MouseNet.Logophi.Views.Presentation {
             InitializeViewInternal(view);
             if (parent == null) view.Present();
             else view.Present(parent);
+            InvokeViewPresented(this, EventArgs.Empty);
             }
 
         private void OnClosed(object sender, EventArgs e)

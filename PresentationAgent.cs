@@ -21,14 +21,10 @@ namespace MouseNet.Logophi
              Action deleteHistoryAction)
             {
             var main = new MainFormPresenter(
-                browser,
-                exitAction,
-                showBookmarksAction,
-                showPreferencesAction,
-                showAboutAction);
+                browser);
             Main = main;
             Bookmarks =
-                new BookmarksFormPresenter(browser, main.Search);
+                new BookmarksFormPresenter(browser);
             Preferences =
                 new PreferencesDialogPresenter(
                     deleteCacheAction,

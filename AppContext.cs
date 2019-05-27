@@ -6,20 +6,19 @@ using MouseNet.Logophi.Properties;
 using MouseNet.Logophi.Thesaurus;
 using MouseNet.Logophi.Utilities;
 
-namespace MouseNet.Logophi
-{
+namespace MouseNet.Logophi {
     /// <inheritdoc />
     /// <summary>
     ///     The Logophi application context. Sets up the application environment
     ///     and handles various application-wide tasks.
     /// </summary>
-    internal class AppContext : ApplicationContext
-    {
+    internal class AppContext : ApplicationContext {
         private readonly PresentationAgent _agent;
         private readonly Settings _settings = Settings.Default;
         private readonly Browser _browser;
         private readonly NotifyIcon _trayIcon;
         private readonly SettingsHelper _settingsHelper;
+        private readonly Logophi _logophi;
 
         public AppContext()
             {
@@ -30,8 +29,13 @@ namespace MouseNet.Logophi
             openMenuItem.Click += OnOpen;
             var exitMenuItem = new ToolStripMenuItem {Text = @"Exit"};
             exitMenuItem.Click +=
-                (sender,
-                 args) => Application.Exit();
+            (sender,
+             args) => Application.Exit();
+            _logophi = new Logophi();
+            _logophi.TrayIcon.ContextMenuStrip = new ContextMenuStrip
+                {
+                Items = {openMenuItem, exitMenuItem}
+                };
             _trayIcon = new NotifyIcon
                 {
                 Icon = Resources.logophi,
@@ -44,9 +48,10 @@ namespace MouseNet.Logophi
                 };
             _trayIcon.DoubleClick += OnOpen;
 
-            _browser = new Browser(_settings.DataDirectory,
-                                   _settings.PersistentCache,
-                                   _settings.SaveHistory);
+            _browser = new Browser(
+                _settings.DataDirectory,
+                _settings.PersistentCache,
+                _settings.SaveHistory);
             _browser.History.MaxItems = (int) _settings.MaxHistory;
 
             _settingsHelper = new SettingsHelper(_settings, _browser);
@@ -97,8 +102,7 @@ namespace MouseNet.Logophi
         /// </summary>
         private void PresentBookmarksForm()
             {
-            _agent.Bookmarks.Present(new BookmarksForm(),
-                                     _agent.Main.View);
+            _logophi.Bookmarks.Present(new BookmarksForm(), _logophi.Main.View);
             }
 
         /// <summary>
@@ -107,9 +111,18 @@ namespace MouseNet.Logophi
         /// </summary>
         public void PresentMainForm()
             {
-            if (_agent.Main.IsPresenting)
-                _agent.Main.View.ToFront();
-            else _agent.Main.Present(new MainForm());
+            if (!_logophi.Main.IsPresenting)
+                {
+                var form = new MainForm();
+                form.ExitClicked += (sender, args) => Application.Exit();
+                form.ShowAboutClicked += (sender, args) => PresentAboutDialog();
+                form.ShowBookmarksClicked +=
+                    (sender, args) => PresentBookmarksForm();
+                form.ShowPreferencesClicked +=
+                    (sender, args) => PresentPreferencesForm();
+                _logophi.Main.Present(form);
+                }
+            else _logophi.Main.View.ToFront();
             }
 
         /// <summary>
@@ -152,7 +165,7 @@ namespace MouseNet.Logophi
                 _settings.DataDirectory = Path.Combine(
                     Environment.GetFolderPath(
                         Environment
-                           .SpecialFolder.LocalApplicationData),
+                            .SpecialFolder.LocalApplicationData),
                     Resources.AppName);
                 _settings.Save();
                 }
@@ -163,22 +176,22 @@ namespace MouseNet.Logophi
             }
 
         private void OnApplicationExit
-            (object sender,
-             EventArgs e)
+        (object sender,
+         EventArgs e)
             {
             CloseMainForm();
             }
 
         private void OnHotkeyPressed
-            (object sender,
-             HotkeyEventArgs e)
+        (object sender,
+         HotkeyEventArgs e)
             {
             PresentMainForm();
             }
 
         private void OnOpen
-            (object sender,
-             EventArgs e)
+        (object sender,
+         EventArgs e)
             {
             PresentMainForm();
             }

@@ -7,6 +7,8 @@ namespace MouseNet.Logophi.Views {
     /// </summary>
     /// <typeparam name="TView">The type of view.</typeparam>
     public interface IViewPresenter<TView> : IDisposable where TView : IView {
+
+        event EventHandler ViewPresented;
         /// <summary>
         ///     The view currently being presented.
         /// </summary>
