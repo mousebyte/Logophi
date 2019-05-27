@@ -1,5 +1,4 @@
 ﻿using MouseNet.Logophi.Thesaurus;
-using MouseNet.Logophi.Utilities;
 
 namespace MouseNet.Logophi.Views.Presentation
 {

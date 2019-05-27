@@ -2,7 +2,6 @@
 using System.Diagnostics;
 using MouseNet.Logophi.Properties;
 using MouseNet.Logophi.Thesaurus;
-using MouseNet.Logophi.Utilities;
 
 namespace MouseNet.Logophi.Views.Presentation {
     internal class MainFormPresenter : ViewPresenter<IMainFormView> {

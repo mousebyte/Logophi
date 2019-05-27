@@ -38,7 +38,7 @@
     <AssemblyInfoVersionType>SemVer1</AssemblyInfoVersionType>
     <InheritWinAppVersionFrom>None</InheritWinAppVersionFrom>
     <AssemblyInfoVersionSemVerSettings>AssemblyVersion.IncrementOnce.Beta</AssemblyInfoVersionSemVerSettings>
-    <AssemblyVersion>0.5.7087.10</AssemblyVersion>
+    <AssemblyVersion>0.5.7087.11</AssemblyVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -60,8 +60,7 @@
     <InheritWinAppVersionFrom>None</InheritWinAppVersionFrom>
     <AssemblyFileVersionSettings>None.IncrementOnDemand.IncrementWithResetOnIncrease.NoneWithAutoReset</AssemblyFileVersionSettings>
     <AssemblyInfoVersionSettings>None.None.None.None</AssemblyInfoVersionSettings>
-    <AssemblyInfoVersionSemVerSettings>
-    </AssemblyInfoVersionSemVerSettings>
+    <AssemblyInfoVersionSemVerSettings>AssemblyVersion.NoneWithAutoReset.Beta</AssemblyInfoVersionSemVerSettings>
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
@@ -182,7 +181,6 @@
     <Compile Include="Thesaurus\IBookmarkManager.cs" />
     <Compile Include="Utilities\MessageReceiver.cs" />
     <Compile Include="Utilities\NativeMethods.cs" />
-    <Compile Include="PresentationAgent.cs" />
     <Compile Include="Thesaurus\SearchHistory.cs" />
     <Compile Include="Thesaurus\TermEntry.cs" />
     <Compile Include="Thesaurus\Browser.cs" />

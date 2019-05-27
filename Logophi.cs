@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using MouseNet.Logophi.Properties;
 using MouseNet.Logophi.Thesaurus;
@@ -10,11 +6,11 @@ using MouseNet.Logophi.Views;
 using MouseNet.Logophi.Views.Presentation;
 
 namespace MouseNet.Logophi {
-    internal class Logophi {
+    internal class Logophi : IDisposable {
         private readonly Settings _settings = Settings.Default;
         private readonly Browser _browser;
-        private readonly SettingsHelper _settingsHelper;
         private readonly MainFormPresenter _mainFormPresenter;
+        public SettingsHelper SettingsHelper { get; }
 
         public NotifyIcon TrayIcon { get; } = new NotifyIcon
             {
@@ -34,16 +30,50 @@ namespace MouseNet.Logophi {
                 _settings.DataDirectory,
                 _settings.PersistentCache,
                 _settings.SaveHistory);
-            _settingsHelper = new SettingsHelper(_settings, _browser);
+            _browser.History.MaxItems = (int) _settings.MaxHistory;
+            SettingsHelper = new SettingsHelper(_settings, _browser);
             _mainFormPresenter = new MainFormPresenter(_browser);
             Bookmarks = new BookmarksFormPresenter(_browser);
             Bookmarks.ViewPresented += OnBookmarksViewPresented;
+            Preferences = new PreferencesDialogPresenter();
+            Preferences.ViewPresented += OnPreferencesDialogPresented;
             }
 
         private void OnBookmarksViewPresented(object sender, EventArgs args)
             {
-            Bookmarks.View.BookmarkActivated +=
-                (o, s) => _mainFormPresenter.Search(s);
+            Bookmarks.View.BookmarkActivated += OnBookmarkActivated;
+            }
+
+        private void OnDeleteCache(object sender, EventArgs args)
+            {
+            _browser.ClearCache();
+            }
+
+        private void OnDeleteHistory(object sender, EventArgs args)
+            {
+            _browser.History.Clear();
+            }
+
+        private void OnBookmarkActivated(object sender, string args)
+            {
+            _mainFormPresenter.Search(args);
+            }
+
+        private void OnPreferencesDialogPresented(object sender, EventArgs args)
+            {
+            Preferences.View.DeleteHistoryClicked += OnDeleteHistory;
+            Preferences.View.DeleteCacheClicked += OnDeleteCache;
+            }
+
+        public void Dispose()
+            {
+            _browser.Dispose();
+            SettingsHelper.Dispose();
+            _mainFormPresenter.Dispose();
+            TrayIcon.Visible = false;
+            TrayIcon.Dispose();
+            Bookmarks.Dispose();
+            Preferences.Dispose();
             }
     }
 }

@@ -1,9 +1,6 @@
 ﻿using System;
-using System.IO;
 using System.Windows.Forms;
 using MouseNet.Logophi.Forms;
-using MouseNet.Logophi.Properties;
-using MouseNet.Logophi.Thesaurus;
 using MouseNet.Logophi.Utilities;
 
 namespace MouseNet.Logophi {
@@ -13,17 +10,12 @@ namespace MouseNet.Logophi {
     ///     and handles various application-wide tasks.
     /// </summary>
     internal class AppContext : ApplicationContext {
-        private readonly PresentationAgent _agent;
-        private readonly Settings _settings = Settings.Default;
-        private readonly Browser _browser;
-        private readonly NotifyIcon _trayIcon;
-        private readonly SettingsHelper _settingsHelper;
         private readonly Logophi _logophi;
 
         public AppContext()
             {
             Application.ApplicationExit += OnApplicationExit;
-            SetupDirectories();
+            _logophi = new Logophi();
             //set up the tray icon
             var openMenuItem = new ToolStripMenuItem {Text = @"Open"};
             openMenuItem.Click += OnOpen;
@@ -31,60 +23,23 @@ namespace MouseNet.Logophi {
             exitMenuItem.Click +=
             (sender,
              args) => Application.Exit();
-            _logophi = new Logophi();
             _logophi.TrayIcon.ContextMenuStrip = new ContextMenuStrip
                 {
                 Items = {openMenuItem, exitMenuItem}
                 };
-            _trayIcon = new NotifyIcon
-                {
-                Icon = Resources.logophi,
-                Text = Resources.AppName,
-                Visible = true,
-                ContextMenuStrip = new ContextMenuStrip
-                    {
-                    Items = {openMenuItem, exitMenuItem}
-                    }
-                };
-            _trayIcon.DoubleClick += OnOpen;
-
-            _browser = new Browser(
-                _settings.DataDirectory,
-                _settings.PersistentCache,
-                _settings.SaveHistory);
-            _browser.History.MaxItems = (int) _settings.MaxHistory;
-
-            _settingsHelper = new SettingsHelper(_settings, _browser);
-            _settingsHelper.Hotkey.HotkeyPressed += OnHotkeyPressed;
-
-            _agent = new PresentationAgent(
-                _browser,
-                Application.Exit,
-                PresentBookmarksForm,
-                PresentPreferencesForm,
-                PresentAboutDialog,
-                DeleteCache,
-                DeleteHistory);
+            _logophi.TrayIcon.DoubleClick += OnOpen;
+            _logophi.SettingsHelper.Hotkey.HotkeyPressed += OnHotkeyPressed;
             PresentMainForm();
             }
 
-        private void DeleteCache()
-            {
-            _browser.ClearCache();
-            }
-
-        private void DeleteHistory()
-            {
-            _browser.History.Clear();
-            }
 
         /// <summary>
         /// Closes the Logophi main window.
         /// </summary>
         private void CloseMainForm()
             {
-            if (_agent.Main.IsPresenting)
-                _agent.Main.View.Close();
+            if (_logophi.Main.IsPresenting)
+                _logophi.Main.View.Close();
             }
 
         /// <summary>
@@ -93,7 +48,7 @@ namespace MouseNet.Logophi {
         private void PresentAboutDialog()
             {
             var dialog = new AboutForm();
-            dialog.ShowDialog((IWin32Window) _agent.Main.View);
+            dialog.ShowDialog((IWin32Window) _logophi.Main.View);
             dialog.Dispose();
             }
 
@@ -131,13 +86,13 @@ namespace MouseNet.Logophi {
         private void PresentPreferencesForm()
             {
             var dialog = new PreferencesForm();
-
             var accept =
-                _agent.Preferences.PresentDialog(
+                _logophi.Preferences.PresentDialog(
                     dialog,
-                    _agent.Main.View);
-            if (accept) _settingsHelper.UpdatePreferences();
-            else _settings.Reload();
+                    _logophi.Main.View);
+            if (accept) _logophi.SettingsHelper.UpdatePreferences();
+            else _logophi.SettingsHelper.ReloadPreferences();
+            dialog.Dispose();
             }
 
         /// <inheritdoc />
@@ -146,33 +101,7 @@ namespace MouseNet.Logophi {
             {
             base.Dispose(disposing);
             if (!disposing) return;
-            _agent.Dispose();
-            _trayIcon.Visible = false;
-            _trayIcon.Dispose();
-            _settingsHelper.Dispose();
-            _browser.Dispose();
-            }
-
-        /// <summary>
-        ///     If necessary, creates the Logophi directory in local appdata
-        ///     and stores the path in settings.
-        /// </summary>
-        private void SetupDirectories()
-            {
-            //make sure the DataDirectory setting is set
-            if (_settings.DataDirectory == string.Empty)
-                {
-                _settings.DataDirectory = Path.Combine(
-                    Environment.GetFolderPath(
-                        Environment
-                            .SpecialFolder.LocalApplicationData),
-                    Resources.AppName);
-                _settings.Save();
-                }
-
-            //create the data directory if necessary
-            if (!Directory.Exists(_settings.DataDirectory))
-                Directory.CreateDirectory(_settings.DataDirectory);
+            _logophi.Dispose();
             }
 
         private void OnApplicationExit

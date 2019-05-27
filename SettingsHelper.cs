@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using System.IO;
 using System.Windows.Forms;
 using Microsoft.Win32;
 using MouseNet.Logophi.Properties;
@@ -21,6 +22,29 @@ namespace MouseNet.Logophi
             _settings = settings;
             _browser = browser;
             _settings.PropertyChanged += OnSettingsPropertyChanged;
+            SetupDirectories();
+            }
+
+        /// <summary>
+        ///     If necessary, creates the Logophi directory in local appdata
+        ///     and stores the path in settings.
+        /// </summary>
+        private void SetupDirectories()
+            {
+            //make sure the DataDirectory setting is set
+            if (_settings.DataDirectory == string.Empty)
+                {
+                _settings.DataDirectory = Path.Combine(
+                    Environment.GetFolderPath(
+                        Environment
+                            .SpecialFolder.LocalApplicationData),
+                    Resources.AppName);
+                _settings.Save();
+                }
+
+            //create the data directory if necessary
+            if (!Directory.Exists(_settings.DataDirectory))
+                Directory.CreateDirectory(_settings.DataDirectory);
             }
 
         public GlobalHotkey Hotkey { get; } = new GlobalHotkey();
@@ -45,6 +69,11 @@ namespace MouseNet.Logophi
                              Application.ExecutablePath);
             else if (key.GetValue(Resources.AppName) != null)
                 key.DeleteValue(Resources.AppName);
+            }
+
+        public void ReloadPreferences()
+            {
+            _settings.Reload();
             }
 
         /// <summary>
