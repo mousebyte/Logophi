@@ -38,7 +38,7 @@
     <AssemblyInfoVersionType>SemVer1</AssemblyInfoVersionType>
     <InheritWinAppVersionFrom>None</InheritWinAppVersionFrom>
     <AssemblyInfoVersionSemVerSettings>AssemblyVersion.IncrementOnce.Beta</AssemblyInfoVersionSemVerSettings>
-    <AssemblyVersion>0.5.7085.1</AssemblyVersion>
+    <AssemblyVersion>0.5.7087.10</AssemblyVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -111,7 +111,7 @@
     <UpdateAssemblyFileVersion>False</UpdateAssemblyFileVersion>
     <UpdateAssemblyInfoVersion>False</UpdateAssemblyInfoVersion>
     <UpdatePackageVersion>False</UpdatePackageVersion>
-    <AssemblyInfoVersionSemVerSettings />
+    <AssemblyInfoVersionSemVerSettings>AssemblyVersion.NoneWithAutoReset.Beta</AssemblyInfoVersionSemVerSettings>
     <AssemblyInfoVersionType>SettingsVersion</AssemblyInfoVersionType>
     <InheritWinAppVersionFrom>None</InheritWinAppVersionFrom>
   </PropertyGroup>
@@ -122,7 +122,7 @@
     <UpdateAssemblyFileVersion>False</UpdateAssemblyFileVersion>
     <UpdateAssemblyInfoVersion>False</UpdateAssemblyInfoVersion>
     <UpdatePackageVersion>False</UpdatePackageVersion>
-    <AssemblyInfoVersionSemVerSettings />
+    <AssemblyInfoVersionSemVerSettings>AssemblyVersion.NoneWithAutoReset.Beta</AssemblyInfoVersionSemVerSettings>
     <AssemblyInfoVersionType>SettingsVersion</AssemblyInfoVersionType>
     <InheritWinAppVersionFrom>None</InheritWinAppVersionFrom>
   </PropertyGroup>
@@ -232,6 +232,7 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <None Include="App.config" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
