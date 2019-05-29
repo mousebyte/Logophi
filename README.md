@@ -7,7 +7,7 @@
 
 <br /> <br />
 
-Logophi is a simple thesaurus program that utilizes the [Thesaurus.com](http://thesaurus.com) API. It allows the user to quickly search for words and view synonyms and antonyms for their various possible definitions.
+Logophi is a simple thesaurus program that utilizes the [Thesaurus.com](http://thesaurus.com) API. It allows the user to quickly search for words and view synonyms and antonyms for their various possible definitions. Get the latest release [here](https://github.com/mousebyte/Logophi/releases/latest)!
 
 
 [<img src="https://github.com/mousebyte/Logophi/blob/master/Resources/logophi-screenshot-1-thumb.png" align="left" />](https://github.com/mousebyte/Logophi/blob/master/Resources/logophi-screenshot-1.png)
