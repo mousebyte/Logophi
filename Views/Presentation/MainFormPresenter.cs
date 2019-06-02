@@ -22,7 +22,7 @@ namespace MouseNet.Logophi.Views.Presentation {
         public void Search
             (string word)
             {
-            OnSearch(this, word);
+            View.SearchText = word;
             }
 
         protected override void InitializeView()
@@ -81,7 +81,6 @@ namespace MouseNet.Logophi.Views.Presentation {
         /// </summary>
         private void SearchFromHistory()
             {
-            OnSearch(this, _browser.History.CurrentItem);
             View.SearchText = _browser.History.CurrentItem;
             }
 
@@ -151,7 +150,6 @@ namespace MouseNet.Logophi.Views.Presentation {
         (object sender,
          string word)
             {
-            if (View.SearchText != word) View.SearchText = word;
             View.Definitions.Clear();
             _browser.SearchWord(word);
             }

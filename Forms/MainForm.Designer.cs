@@ -33,9 +33,9 @@
             this._cDefList = new System.Windows.Forms.ListBox();
             this._cTabs = new System.Windows.Forms.TabControl();
             this._cTabSynonyms = new System.Windows.Forms.TabPage();
-            this._cSynonymList = new System.Windows.Forms.ListView();
+            this._cSynonymList = new MouseNet.Logophi.Forms.TermList();
             this._cTabAntonyms = new System.Windows.Forms.TabPage();
-            this._cAntonymList = new System.Windows.Forms.ListView();
+            this._cAntonymList = new MouseNet.Logophi.Forms.TermList();
             this._cSearchText = new System.Windows.Forms.ComboBox();
             this._cMenuStrip = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -97,15 +97,19 @@
             // 
             // _cSynonymList
             // 
+            this._cSynonymList.AutoScroll = true;
+            this._cSynonymList.BackColor = System.Drawing.SystemColors.Window;
+            this._cSynonymList.BoldColor = System.Drawing.Color.Black;
+            this._cSynonymList.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this._cSynonymList.Dock = System.Windows.Forms.DockStyle.Fill;
+            this._cSynonymList.LightColor = System.Drawing.Color.DarkGray;
             this._cSynonymList.Location = new System.Drawing.Point(3, 3);
-            this._cSynonymList.MultiSelect = false;
             this._cSynonymList.Name = "_cSynonymList";
+            this._cSynonymList.NormalColor = System.Drawing.Color.DimGray;
+            this._cSynonymList.Padding = new System.Windows.Forms.Padding(4);
             this._cSynonymList.Size = new System.Drawing.Size(393, 204);
             this._cSynonymList.TabIndex = 0;
-            this._cSynonymList.UseCompatibleStateImageBehavior = false;
-            this._cSynonymList.View = System.Windows.Forms.View.List;
-            this._cSynonymList.ItemActivate += new System.EventHandler(this.OnTermEntryDoubleClick);
+            this._cSynonymList.ItemActivated += new System.EventHandler<string>(this.OnTermEntryDoubleClick);
             // 
             // _cTabAntonyms
             // 
@@ -120,15 +124,19 @@
             // 
             // _cAntonymList
             // 
-            this._cAntonymList.Activation = System.Windows.Forms.ItemActivation.TwoClick;
+            this._cAntonymList.AutoScroll = true;
+            this._cAntonymList.BackColor = System.Drawing.SystemColors.Window;
+            this._cAntonymList.BoldColor = System.Drawing.Color.Black;
+            this._cAntonymList.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this._cAntonymList.Dock = System.Windows.Forms.DockStyle.Fill;
+            this._cAntonymList.LightColor = System.Drawing.Color.DarkGray;
             this._cAntonymList.Location = new System.Drawing.Point(3, 3);
             this._cAntonymList.Name = "_cAntonymList";
+            this._cAntonymList.NormalColor = System.Drawing.Color.DimGray;
+            this._cAntonymList.Padding = new System.Windows.Forms.Padding(4);
             this._cAntonymList.Size = new System.Drawing.Size(393, 204);
             this._cAntonymList.TabIndex = 0;
-            this._cAntonymList.UseCompatibleStateImageBehavior = false;
-            this._cAntonymList.View = System.Windows.Forms.View.List;
-            this._cAntonymList.ItemActivate += new System.EventHandler(this.OnTermEntryDoubleClick);
+            this._cAntonymList.ItemActivated += new System.EventHandler<string>(this.OnTermEntryDoubleClick);
             // 
             // _cSearchText
             // 
@@ -348,8 +356,6 @@
         private System.Windows.Forms.TabControl _cTabs;
         private System.Windows.Forms.TabPage _cTabSynonyms;
         private System.Windows.Forms.TabPage _cTabAntonyms;
-        private System.Windows.Forms.ListView _cSynonymList;
-        private System.Windows.Forms.ListView _cAntonymList;
         private System.Windows.Forms.Button _cBackBtn;
         private System.Windows.Forms.Button _cForwardBtn;
         private System.Windows.Forms.Button _cSearchBtn;
@@ -368,6 +374,8 @@
         private System.Windows.Forms.ToolStripMenuItem helpToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem _cAboutMenuItem;
         private System.Windows.Forms.ToolStripMenuItem _cGithubMenuItem;
+        private TermList _cSynonymList;
+        private TermList _cAntonymList;
     }
 }
 

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Drawing;
 
 namespace MouseNet.Logophi.Views {
     /// <inheritdoc />
@@ -28,5 +29,8 @@ namespace MouseNet.Logophi.Views {
         /// <param name="parent">The parent of the view.</param>
         /// <returns>A value indicating the result of the dialog.</returns>
         bool PresentModal(object parent);
+
+        Point Location { get; set; }
+        Size Size { get; set; }
     }
 }

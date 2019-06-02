@@ -1,14 +1,11 @@
 ﻿using System;
 using System.Collections;
-using System.Drawing;
 using System.Windows.Forms;
 using MouseNet.Logophi.Properties;
 using MouseNet.Logophi.Views;
 
-namespace MouseNet.Logophi.Forms
-{
-    public partial class MainForm : LogophiForm, IMainFormView
-    {
+namespace MouseNet.Logophi.Forms {
+    public partial class MainForm : LogophiForm, IMainFormView {
         public MainForm()
             {
             InitializeComponent();
@@ -27,7 +24,10 @@ namespace MouseNet.Logophi.Forms
 
         public string SearchText {
             get => _cSearchText.Text;
-            set => _cSearchText.Text = value;
+            set {
+                _cSearchText.Text = value;
+                TrySearch();
+            }
         }
 
         public bool EnableBackButton {
@@ -87,41 +87,17 @@ namespace MouseNet.Logophi.Forms
         public event EventHandler ShowPreferencesClicked;
 
         public void AddSynonym
-            (string term,
-             int similarity)
+        (string term,
+         int similarity)
             {
-            _cSynonymList.Items.Add(MakeItem(term, similarity));
+            _cSynonymList.AddTerm(term, similarity);
             }
 
         public void AddAntonym
-            (string term,
-             int similarity)
+        (string term,
+         int similarity)
             {
-            _cAntonymList.Items.Add(MakeItem(term, similarity));
-            }
-
-        private static ListViewItem MakeItem
-            (string term,
-             int similarity)
-            {
-            var item = new ListViewItem(term);
-            switch (Math.Abs(similarity))
-                {
-                case 100:
-                    item.Font = new Font(item.Font, FontStyle.Bold);
-                    break;
-                case 50:
-                    item.ForeColor = Color.DimGray;
-                    break;
-                case 10:
-                    item.ForeColor = Color.DarkGray;
-                    break;
-                default:
-                    item.ForeColor = Color.LightGray;
-                    break;
-                }
-
-            return item;
+            _cAntonymList.AddTerm(term, similarity);
             }
 
         private void TrySearch()
@@ -130,15 +106,15 @@ namespace MouseNet.Logophi.Forms
             }
 
         private void OnSearchClicked
-            (object sender,
-             EventArgs e)
+        (object sender,
+         EventArgs e)
             {
             TrySearch();
             }
 
         private void OnSearchTextReturnPressed
-            (object sender,
-             KeyEventArgs e)
+        (object sender,
+         KeyEventArgs e)
             {
             if (e.KeyCode != Keys.Return) return;
             e.Handled = true;
@@ -146,79 +122,78 @@ namespace MouseNet.Logophi.Forms
             }
 
         private void OnSearchTextSelectionChangeCommitted
-            (object sender,
-             EventArgs e)
+        (object sender,
+         EventArgs e)
             {
             InvokeSearch(this, _cSearchText.SelectedItem.ToString());
             }
 
         private void OnTermEntryDoubleClick
-            (object sender,
-             EventArgs e)
+        (object sender,
+         string e)
             {
-            if (!(sender is ListView view)) return;
-            InvokeSearch(this, view.SelectedItems[0].Text);
+            SearchText = e;
             }
 
         private void InvokeExitClicked
-            (object sender,
-             EventArgs args)
+        (object sender,
+         EventArgs args)
             {
             ExitClicked?.Invoke(sender, args);
             }
 
         private void InvokeShowAboutClicked
-            (object sender,
-             EventArgs args)
+        (object sender,
+         EventArgs args)
             {
             ShowAboutClicked?.Invoke(sender, args);
             }
 
         private void InvokeShowBookmarksClicked
-            (object sender,
-             EventArgs args)
+        (object sender,
+         EventArgs args)
             {
             ShowBookmarksClicked?.Invoke(sender, args);
             }
 
         private void InvokeShowPreferencesClicked
-            (object sender,
-             EventArgs args)
+        (object sender,
+         EventArgs args)
             {
             ShowPreferencesClicked?.Invoke(sender, args);
             }
 
         private void InvokeSearch
-            (object sender,
-             string args)
+        (object sender,
+         string args)
             {
             Search?.Invoke(sender, args);
             }
 
         private void InvokeBackClicked
-            (object sender,
-             EventArgs args)
+        (object sender,
+         EventArgs args)
             {
             BackClicked?.Invoke(sender, args);
             }
 
         private void InvokeForwardClicked
-            (object sender,
-             EventArgs args)
+        (object sender,
+         EventArgs args)
             {
             ForwardClicked?.Invoke(sender, args);
             }
 
         private void InvokeBookmarkClicked
-            (object sender,
-             EventArgs args)
+        (object sender,
+         EventArgs args)
             {
             BookmarkClicked?.Invoke(sender, args);
             }
 
         private void InvokeSelectedDefinitionChanged
-            (object sender,
-             EventArgs args)
+        (object sender,
+         EventArgs args)
             {
             SelectedDefinitionChanged?.Invoke(
                 sender,
@@ -226,15 +201,15 @@ namespace MouseNet.Logophi.Forms
             }
 
         private void InvokeViewDictionaryClicked
-            (object sender,
-             EventArgs args)
+        (object sender,
+         EventArgs args)
             {
             OpenDictionaryClicked?.Invoke(sender, args);
             }
 
         private void InvokeGithubProjectClicked
-            (object sender,
-             EventArgs args)
+        (object sender,
+         EventArgs args)
             {
             OpenGithubClicked?.Invoke(sender, args);
             }

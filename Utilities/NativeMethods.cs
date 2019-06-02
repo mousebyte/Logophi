@@ -21,5 +21,9 @@ namespace MouseNet.Logophi.Utilities
         internal static extern bool UnregisterHotKey
             (IntPtr hWnd,
              int id);
+
+        //Gets a handle to the window in the foreground.
+        [DllImport("user32.dll")]
+        internal static extern IntPtr GetForegroundWindow();
     }
 }
