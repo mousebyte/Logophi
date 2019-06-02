@@ -38,6 +38,7 @@ namespace MouseNet.Logophi
 
         public void UpdatePreferences()
             {
+            _settings.Save();
             //update hotkey registration
             if (_settings.EnableHotkey)
                 RegisterHotkey();
