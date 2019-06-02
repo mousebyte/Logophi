@@ -339,6 +339,7 @@
             this.Controls.Add(this._cDefList);
             this.Controls.Add(this._cMenuStrip);
             this.DataBindings.Add(new System.Windows.Forms.Binding("TopMost", global::MouseNet.Logophi.Properties.Settings.Default, "AlwaysOnTop", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.DoubleBuffered = true;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this._cMenuStrip;
             this.Name = "MainForm";

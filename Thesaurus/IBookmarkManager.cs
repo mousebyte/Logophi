@@ -1,17 +1,20 @@
 ﻿using System;
 using System.Collections;
 
-namespace MouseNet.Logophi.Thesaurus
-{
+namespace MouseNet.Logophi.Thesaurus {
     /// <summary>
     ///     Exposes an object which manages a collection of bookmarks.
     /// </summary>
-    internal interface IBookmarkManager
-    {
+    internal interface IBookmarkManager {
         /// <summary>
-        ///     Gets the bookmarks stored in the bookmark manager.
+        ///     Occurs when a bookmark is added.
         /// </summary>
-        IEnumerable Bookmarks { get; }
+        event EventHandler<string> BookmarkAdded;
+
+        /// <summary>
+        ///     Occurs when a bookmark is removed.
+        /// </summary>
+        event EventHandler<string> BookmarkRemoved;
 
         /// <summary>
         ///     Bookmarks an item.
@@ -21,19 +24,15 @@ namespace MouseNet.Logophi.Thesaurus
             (object item);
 
         /// <summary>
+        ///     Gets the bookmarks stored in the bookmark manager.
+        /// </summary>
+        IEnumerable Bookmarks { get; }
+
+        /// <summary>
         ///     Removes a bookmarked item.
         /// </summary>
         /// <param name="item">The item to remove from the bookmark manager.</param>
         void RemoveBookmark
             (object item);
-
-        /// <summary>
-        ///     Occurs when a bookmark is removed.
-        /// </summary>
-        event EventHandler<string> BookmarkRemoved;
-        /// <summary>
-        ///     Occurs when a bookmark is added.
-        /// </summary>
-        event EventHandler<string> BookmarkAdded;
     }
 }

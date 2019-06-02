@@ -11,33 +11,25 @@ namespace MouseNet.Logophi.Forms {
             InitializeComponent();
             }
 
-        public event EventHandler ShowAboutClicked;
-        public event EventHandler<string> Search;
         public event EventHandler BackClicked;
-        public event EventHandler ForwardClicked;
         public event EventHandler BookmarkClicked;
-        public event EventHandler<int> SelectedDefinitionChanged;
+
+        public event EventHandler ExitClicked;
+        public event EventHandler ForwardClicked;
         public event EventHandler OpenDictionaryClicked;
         public event EventHandler OpenGithubClicked;
+        public event EventHandler<string> Search;
+        public event EventHandler<int> SelectedDefinitionChanged;
+
+        public event EventHandler ShowAboutClicked;
+        public event EventHandler ShowBookmarksClicked;
+        public event EventHandler ShowPreferencesClicked;
         public IList Definitions => _cDefList.Items;
         public IList DropDownItems => _cSearchText.Items;
-
-        public string SearchText {
-            get => _cSearchText.Text;
-            set {
-                _cSearchText.Text = value;
-                TrySearch();
-            }
-        }
 
         public bool EnableBackButton {
             get => _cBackBtn.Enabled;
             set => _cBackBtn.Enabled = value;
-        }
-
-        public bool EnableForwardButton {
-            get => _cForwardBtn.Enabled;
-            set => _cForwardBtn.Enabled = value;
         }
 
         public bool EnableBookmarkButton {
@@ -49,61 +41,23 @@ namespace MouseNet.Logophi.Forms {
             }
         }
 
+        public bool EnableForwardButton {
+            get => _cForwardBtn.Enabled;
+            set => _cForwardBtn.Enabled = value;
+        }
+
+        public string SearchText {
+            get => _cSearchText.Text;
+            set {
+                _cSearchText.Text = value;
+                TrySearch();
+            }
+        }
+
         public int SelectedDefinitionIndex {
             get => _cDefList.SelectedIndex;
             set => _cDefList.SelectedIndex = value;
         }
-
-        public void BookmarkOn()
-            {
-            if (!EnableBookmarkButton) return;
-            _cBookmarkBtn.Image = Resources.bookmark_enabled;
-            _cBookmarkMenuItem.Image = Resources.bookmark_disabled;
-            _cBookmarkMenuItem.Text = @"Remove";
-            _cToolTip.SetToolTip(_cBookmarkBtn, "Remove Bookmark");
-            }
-
-        public void BookmarkOff()
-            {
-            if (!EnableBookmarkButton) return;
-            _cBookmarkBtn.Image = Resources.bookmark_disabled;
-            _cBookmarkMenuItem.Image = Resources.bookmark_enabled;
-            _cBookmarkMenuItem.Text = @"Add";
-            _cToolTip.SetToolTip(_cBookmarkBtn, "Add Bookmark");
-            }
-
-        public void ClearSynonyms()
-            {
-            _cSynonymList.Clear();
-            }
-
-        public void ClearAntonyms()
-            {
-            _cAntonymList.Clear();
-            }
-
-        public event EventHandler ExitClicked;
-        public event EventHandler ShowBookmarksClicked;
-        public event EventHandler ShowPreferencesClicked;
-
-        public void AddSynonym
-        (string term,
-         int similarity)
-            {
-            _cSynonymList.AddTerm(term, similarity);
-            }
-
-        public void AddAntonym
-        (string term,
-         int similarity)
-            {
-            _cAntonymList.AddTerm(term, similarity);
-            }
-
-        private void TrySearch()
-            {
-            InvokeSearch(this, _cSearchText.Text);
-            }
 
         private void OnSearchClicked
         (object sender,
@@ -163,13 +117,6 @@ namespace MouseNet.Logophi.Forms {
             ShowPreferencesClicked?.Invoke(sender, args);
             }
 
-        private void InvokeSearch
-        (object sender,
-         string args)
-            {
-            Search?.Invoke(sender, args);
-            }
-
         private void InvokeBackClicked
         (object sender,
          EventArgs args)
@@ -212,6 +159,60 @@ namespace MouseNet.Logophi.Forms {
          EventArgs args)
             {
             OpenGithubClicked?.Invoke(sender, args);
+            }
+
+        private void InvokeSearch
+        (object sender,
+         string args)
+            {
+            Search?.Invoke(sender, args);
+            }
+
+        public void BookmarkOn()
+            {
+            if (!EnableBookmarkButton) return;
+            _cBookmarkBtn.Image = Resources.bookmark_enabled;
+            _cBookmarkMenuItem.Image = Resources.bookmark_disabled;
+            _cBookmarkMenuItem.Text = @"Remove";
+            _cToolTip.SetToolTip(_cBookmarkBtn, "Remove Bookmark");
+            }
+
+        public void BookmarkOff()
+            {
+            if (!EnableBookmarkButton) return;
+            _cBookmarkBtn.Image = Resources.bookmark_disabled;
+            _cBookmarkMenuItem.Image = Resources.bookmark_enabled;
+            _cBookmarkMenuItem.Text = @"Add";
+            _cToolTip.SetToolTip(_cBookmarkBtn, "Add Bookmark");
+            }
+
+        public void ClearSynonyms()
+            {
+            _cSynonymList.Clear();
+            }
+
+        public void ClearAntonyms()
+            {
+            _cAntonymList.Clear();
+            }
+
+        public void AddSynonym
+        (string term,
+         int similarity)
+            {
+            _cSynonymList.AddTerm(term, similarity);
+            }
+
+        public void AddAntonym
+        (string term,
+         int similarity)
+            {
+            _cAntonymList.AddTerm(term, similarity);
+            }
+
+        private void TrySearch()
+            {
+            InvokeSearch(this, _cSearchText.Text);
             }
     }
 }

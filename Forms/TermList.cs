@@ -15,11 +15,31 @@ namespace MouseNet.Logophi.Forms {
             InitializeComponent();
             }
 
+        public event EventHandler<string> ItemActivated;
+
+        [Browsable(true)] public Color BoldColor { get; set; } = Color.Black;
+
+        [Browsable(true)]
+        public Color LightColor { get; set; } = Color.DarkGray;
+
+        [Browsable(true)]
+        public Color NormalColor { get; set; } = Color.DimGray;
+
 
         protected override void OnResize(EventArgs eventargs)
             {
             base.OnResize(eventargs);
             LayoutItems();
+            }
+
+        private void OnItemDoubleClick(object sender, EventArgs args)
+            {
+            InvokeItemActivated(this, (sender as Control)?.Text);
+            }
+
+        private void InvokeItemActivated(object sender, string args)
+            {
+            ItemActivated?.Invoke(sender, args);
             }
 
         public void LayoutItems(int startAt = 1)
@@ -36,13 +56,15 @@ namespace MouseNet.Logophi.Forms {
                     loc = new Point(4, loc.Y + height);
                 current.Location = loc;
                 }
+
             ResumeLayout(false);
             }
 
 
         public void AddTerm(string term, int similarity)
             {
-            var item = new TermListItem {BackColor = BackColor, Text = term, Font = BaseFont};
+            var item = new TermListItem
+                    {BackColor = BackColor, Text = term, Font = BaseFont};
             switch (Math.Abs(similarity))
                 {
                 case 100:
@@ -73,31 +95,11 @@ namespace MouseNet.Logophi.Forms {
             Controls.Clear();
             }
 
-        public event EventHandler<string> ItemActivated;
-
-        private void InvokeItemActivated(object sender, string args)
-            {
-            ItemActivated?.Invoke(sender, args);
-            }
-
-        private void OnItemDoubleClick(object sender, EventArgs args)
-            {
-            InvokeItemActivated(this, (sender as Control)?.Text);
-            }
-
-        [Browsable(true)] public Color BoldColor { get; set; } = Color.Black;
-
-        [Browsable(true)]
-        public Color NormalColor { get; set; } = Color.DimGray;
-
-        [Browsable(true)]
-        public Color LightColor { get; set; } = Color.DarkGray;
-
         private class TermListItem : Control {
-            private Color _foreColor;
-
             private static readonly BufferedGraphicsContext Ctx =
                 BufferedGraphicsManager.Current;
+
+            private Color _foreColor;
 
             private BufferedGraphics _gBuff;
 
@@ -126,13 +128,20 @@ namespace MouseNet.Logophi.Forms {
                 DrawToBuffer();
                 }
 
+            protected override void OnPaint(PaintEventArgs e)
+                {
+                _gBuff.Render(e.Graphics);
+                }
+
             private void OnTextOrFontChanged(object sender, EventArgs args)
                 {
                 Size = Size.Add(
                     TextRenderer.MeasureText(Text, Font),
                     new Size(4, 4));
                 _gBuff?.Dispose();
-                _gBuff = Ctx.Allocate(CreateGraphics(), new Rectangle(0, 0, Width, Height));
+                _gBuff = Ctx.Allocate(
+                    CreateGraphics(),
+                    new Rectangle(0, 0, Width, Height));
                 DrawToBuffer();
                 }
 
@@ -156,11 +165,6 @@ namespace MouseNet.Logophi.Forms {
                     ClientRectangle,
                     format);
                 Invalidate();
-                }
-
-            protected override void OnPaint(PaintEventArgs e)
-                {
-                _gBuff.Render(e.Graphics);
                 }
         }
     }

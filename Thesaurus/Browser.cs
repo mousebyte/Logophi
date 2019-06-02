@@ -4,15 +4,13 @@ using System.Collections.Specialized;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 
-namespace MouseNet.Logophi.Thesaurus
-{
+namespace MouseNet.Logophi.Thesaurus {
     /// <inheritdoc cref="TunaInterface" />
     /// <summary>
     ///     Represents a <see cref="TunaInterface" /> that supports browser-like
     ///     navigation and features.
     /// </summary>
-    internal class Browser : TunaInterface, IBookmarkManager
-    {
+    internal class Browser : TunaInterface, IBookmarkManager {
         private readonly string _bookmarkPath;
         private readonly IList _bookmarks = new StringCollection();
 
@@ -30,9 +28,9 @@ namespace MouseNet.Logophi.Thesaurus
         ///     history file should be used.
         /// </param>
         public Browser
-            (string dataDirectory,
-             bool persistentCache,
-             bool persistentHistory)
+        (string dataDirectory,
+         bool persistentCache,
+         bool persistentHistory)
             : base(dataDirectory, persistentCache)
             {
             History =
@@ -44,9 +42,20 @@ namespace MouseNet.Logophi.Thesaurus
             if (!File.Exists(_bookmarkPath)) return;
             var formatter = new BinaryFormatter();
             using (var strm = File.OpenRead(_bookmarkPath))
+                {
                 _bookmarks =
                     formatter.Deserialize(strm) as StringCollection;
+                }
             }
+
+        /// <inheritdoc />
+        public event EventHandler<string> BookmarkAdded;
+
+        /// <inheritdoc />
+        public event EventHandler<string> BookmarkRemoved;
+
+        /// <inheritdoc />
+        public IEnumerable Bookmarks => _bookmarks;
 
         /// <summary>
         ///     Gets the <see cref="SearchHistory" /> associated with the browser.
@@ -65,21 +74,39 @@ namespace MouseNet.Logophi.Thesaurus
             }
         }
 
-        /// <inheritdoc />
-        public event EventHandler<string> BookmarkRemoved;
-        /// <inheritdoc />
-        public event EventHandler<string> BookmarkAdded;
-        /// <inheritdoc />
-        public IEnumerable Bookmarks => _bookmarks;
+        protected override void InvokeSearchCompleted
+        (object sender,
+         SearchEventArgs args)
+            {
+            if (args.Success && args.Word != History.CurrentItem)
+                History.AddItem(args.Word);
+            base.InvokeSearchCompleted(sender, args);
+            }
+
+        private void InvokeBookmarkAdded
+        (object sender,
+         string args)
+            {
+            BookmarkAdded?.Invoke(sender, args);
+            }
+
+        private void InvokeBookmarkRemoved
+        (object sender,
+         string args)
+            {
+            BookmarkRemoved?.Invoke(sender, args);
+            }
 
         /// <summary>
-        /// Saves the bookmarks to a file.
+        ///     Saves the bookmarks to a file.
         /// </summary>
         private void SaveBookmarks()
             {
             var formatter = new BinaryFormatter();
             using (var strm = File.OpenWrite(_bookmarkPath))
+                {
                 formatter.Serialize(strm, _bookmarks);
+                }
             }
 
         /// <inheritdoc />
@@ -100,29 +127,6 @@ namespace MouseNet.Logophi.Thesaurus
             _bookmarks.Remove(item);
             SaveBookmarks();
             InvokeBookmarkRemoved(this, item as string);
-            }
-
-        private void InvokeBookmarkAdded
-            (object sender,
-             string args)
-            {
-            BookmarkAdded?.Invoke(sender, args);
-            }
-
-        private void InvokeBookmarkRemoved
-            (object sender,
-             string args)
-            {
-            BookmarkRemoved?.Invoke(sender, args);
-            }
-
-        protected override void InvokeSearchCompleted
-            (object sender,
-             SearchEventArgs args)
-            {
-            if (args.Success && args.Word != History.CurrentItem)
-                History.AddItem(args.Word);
-            base.InvokeSearchCompleted(sender, args);
             }
     }
 }

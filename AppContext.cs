@@ -18,7 +18,7 @@ namespace MouseNet.Logophi {
             {
             Icon = Resources.logophi,
             Text = Resources.AppName,
-            Visible = true,
+            Visible = true
             };
 
         public AppContext()
@@ -40,74 +40,6 @@ namespace MouseNet.Logophi {
             _logophi.SettingsHelper.Hotkey.HotkeyPressed += OnHotkeyPressed;
             _logophi.SettingsHelper.UpdatePreferences();
             PresentMainForm();
-            }
-
-
-        /// <summary>
-        /// Closes the Logophi main window.
-        /// </summary>
-        private void CloseMainForm()
-            {
-            if (_logophi.Main.IsPresenting)
-                _logophi.Main.View.Close();
-            }
-
-        /// <summary>
-        /// Presents the about window to the user.
-        /// </summary>
-        private void PresentAboutDialog()
-            {
-            var dialog = new AboutForm();
-            dialog.ShowDialog((IWin32Window) _logophi.Main.View);
-            dialog.Dispose();
-            }
-
-        /// <summary>
-        /// Presents the bookmarks window to the user.
-        /// </summary>
-        private void PresentBookmarksForm()
-            {
-            _logophi.Bookmarks.Present(new BookmarksForm(), _logophi.Main.View);
-            }
-
-        /// <summary>
-        /// Presents the Logophi main window to the user, or
-        /// brings it to the front if it is already open.
-        /// </summary>
-        public void PresentMainForm()
-            {
-            if (!_logophi.Main.IsPresenting)
-                {
-                var form = new MainForm();
-                ConnectMainFormEvents(form);
-                _logophi.Main.Present(form);
-                }
-            else _logophi.Main.View.ToFront();
-            }
-
-        private void ConnectMainFormEvents(MainForm form)
-            {
-            form.ExitClicked += (sender, args) => Application.Exit();
-            form.ShowAboutClicked += (sender, args) => PresentAboutDialog();
-            form.ShowBookmarksClicked +=
-                (sender, args) => PresentBookmarksForm();
-            form.ShowPreferencesClicked +=
-                (sender, args) => PresentPreferencesForm();
-            }
-
-        /// <summary>
-        /// Presents the preferences window to the user.
-        /// </summary>
-        private void PresentPreferencesForm()
-            {
-            var dialog = new PreferencesForm();
-            var accept =
-                _logophi.Preferences.PresentDialog(
-                    dialog,
-                    _logophi.Main.View);
-            if (accept) _logophi.SettingsHelper.UpdatePreferences();
-            else _logophi.SettingsHelper.ReloadPreferences();
-            dialog.Dispose();
             }
 
         /// <inheritdoc />
@@ -136,6 +68,84 @@ namespace MouseNet.Logophi {
             else PresentMainForm();
             }
 
+        private void OnOpen
+        (object sender,
+         EventArgs e)
+            {
+            PresentMainForm();
+            }
+
+
+        /// <summary>
+        ///     Closes the Logophi main window.
+        /// </summary>
+        private void CloseMainForm()
+            {
+            if (_logophi.Main.IsPresenting)
+                _logophi.Main.View.Close();
+            }
+
+        /// <summary>
+        ///     Presents the about window to the user.
+        /// </summary>
+        private void PresentAboutDialog()
+            {
+            var dialog = new AboutForm();
+            dialog.ShowDialog((IWin32Window) _logophi.Main.View);
+            dialog.Dispose();
+            }
+
+        /// <summary>
+        ///     Presents the bookmarks window to the user.
+        /// </summary>
+        private void PresentBookmarksForm()
+            {
+            _logophi.Bookmarks.Present(new BookmarksForm(), _logophi.Main.View);
+            }
+
+        /// <summary>
+        ///     Presents the Logophi main window to the user, or
+        ///     brings it to the front if it is already open.
+        /// </summary>
+        public void PresentMainForm()
+            {
+            if (!_logophi.Main.IsPresenting)
+                {
+                var form = new MainForm();
+                ConnectMainFormEvents(form);
+                _logophi.Main.Present(form);
+                }
+            else
+                {
+                _logophi.Main.View.ToFront();
+                }
+            }
+
+        private void ConnectMainFormEvents(MainForm form)
+            {
+            form.ExitClicked += (sender, args) => Application.Exit();
+            form.ShowAboutClicked += (sender, args) => PresentAboutDialog();
+            form.ShowBookmarksClicked +=
+                (sender, args) => PresentBookmarksForm();
+            form.ShowPreferencesClicked +=
+                (sender, args) => PresentPreferencesForm();
+            }
+
+        /// <summary>
+        ///     Presents the preferences window to the user.
+        /// </summary>
+        private void PresentPreferencesForm()
+            {
+            var dialog = new PreferencesForm();
+            var accept =
+                _logophi.Preferences.PresentDialog(
+                    dialog,
+                    _logophi.Main.View);
+            if (accept) _logophi.SettingsHelper.UpdatePreferences();
+            else _logophi.SettingsHelper.ReloadPreferences();
+            dialog.Dispose();
+            }
+
         private void PresentQuickSearchForm()
             {
             if (_logophi.QuickSearch.IsPresenting) return;
@@ -151,13 +161,6 @@ namespace MouseNet.Logophi {
                                       _logophi.Main.View.SearchText = text;
                                       };
             _logophi.QuickSearch.Present(form);
-            }
-
-        private void OnOpen
-        (object sender,
-         EventArgs e)
-            {
-            PresentMainForm();
             }
     }
 }

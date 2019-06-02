@@ -2,13 +2,11 @@
 using System.Windows.Forms;
 using System.Windows.Input;
 
-namespace MouseNet.Logophi.Utilities
-{
+namespace MouseNet.Logophi.Utilities {
     /// <summary>
     ///     Contains extension methods used by Logophi.
     /// </summary>
-    public static class Extensions
-    {
+    public static class Extensions {
         /// <summary>
         ///     Removes modifiers from a <see cref="Keys" /> value.
         /// </summary>
@@ -79,16 +77,16 @@ namespace MouseNet.Logophi.Utilities
             (this Action action)
             {
             return
-                (sender,
-                 args) => action?.Invoke();
+            (sender,
+             args) => action?.Invoke();
             }
 
         public static EventHandler<TArg> ToHandler<TArg>
             (this Action<TArg> action)
             {
             return
-                (sender,
-                 arg) => action?.Invoke(arg);
+            (sender,
+             arg) => action?.Invoke(arg);
             }
     }
 }

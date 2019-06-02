@@ -8,12 +8,6 @@ namespace MouseNet.Logophi {
     internal class Logophi : IDisposable {
         private readonly Browser _browser;
         private readonly MainFormPresenter _mainFormPresenter;
-        public SettingsHelper SettingsHelper { get; }
-
-        public IViewPresenter<IMainFormView> Main => _mainFormPresenter;
-        public IViewPresenter<IBookmarksFormView> Bookmarks { get; }
-        public IViewPresenter<IPreferencesDialogView> Preferences { get; }
-        public IViewPresenter<IQuickSearchFormView> QuickSearch { get; }
 
         public Logophi(Settings settings)
             {
@@ -30,6 +24,13 @@ namespace MouseNet.Logophi {
             Preferences.ViewPresented += OnPreferencesDialogPresented;
             QuickSearch = new QuickSearchFormPresenter(_browser);
             }
+
+        public IViewPresenter<IBookmarksFormView> Bookmarks { get; }
+
+        public IViewPresenter<IMainFormView> Main => _mainFormPresenter;
+        public IViewPresenter<IPreferencesDialogView> Preferences { get; }
+        public IViewPresenter<IQuickSearchFormView> QuickSearch { get; }
+        public SettingsHelper SettingsHelper { get; }
 
 
         private void OnBookmarksViewPresented(object sender, EventArgs args)

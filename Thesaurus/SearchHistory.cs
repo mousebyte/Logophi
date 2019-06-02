@@ -3,16 +3,14 @@ using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 
-namespace MouseNet.Logophi.Thesaurus
-{
+namespace MouseNet.Logophi.Thesaurus {
     /// <inheritdoc />
     /// <summary>
     ///     Represents a collection of strings that track the history
     ///     of a browser or similar application. The collection can be
     ///     traversed and modified similarly to traditional browser history.
     /// </summary>
-    internal class SearchHistory : IEnumerable<string>
-    {
+    internal class SearchHistory : IEnumerable<string> {
         private readonly List<string> _data = new List<string>();
         private readonly string _filePath;
         private int _currentIndex;
@@ -28,8 +26,8 @@ namespace MouseNet.Logophi.Thesaurus
         ///     file should be used.
         /// </param>
         public SearchHistory
-            (string dataDirectory,
-             bool persistentHistory)
+        (string dataDirectory,
+         bool persistentHistory)
             {
             _filePath = Path.Combine(dataDirectory, "history.lphi");
             _persistentHistory = persistentHistory;
@@ -38,19 +36,28 @@ namespace MouseNet.Logophi.Thesaurus
             if (!persistentHistory || !File.Exists(_filePath)) return;
             var formatter = new BinaryFormatter();
             using (var strm = File.OpenRead(_filePath))
+                {
                 _data = formatter.Deserialize(strm) as List<string>;
+                }
             }
+
+        /// <summary>
+        ///     Gets a value indicating whether or not the history can be traversed
+        ///     forwards from the current item.
+        /// </summary>
+        public bool CanGoBackward => _currentIndex > 0;
 
         /// <summary>
         ///     Gets a value indicating whether or not the history can be traversed
         ///     backwards from the current item.
         /// </summary>
         public bool CanGoForward => _currentIndex < Count - 1;
+
         /// <summary>
-        ///     Gets a value indicating whether or not the history can be traversed
-        ///     forwards from the current item.
+        ///     Gets the number of items in the history.
         /// </summary>
-        public bool CanGoBackward => _currentIndex > 0;
+        public int Count => _data.Count;
+
         /// <summary>
         ///     Gets the item at the current position in the history.
         /// </summary>
@@ -58,10 +65,6 @@ namespace MouseNet.Logophi.Thesaurus
             _currentIndex < Count
                 ? _data[_currentIndex]
                 : string.Empty;
-        /// <summary>
-        ///     Gets the number of items in the history.
-        /// </summary>
-        public int Count => _data.Count;
 
         /// <summary>
         ///     Gets or sets the maximum number of items to keep in history.
@@ -110,8 +113,9 @@ namespace MouseNet.Logophi.Thesaurus
             {
             //delete any items ahead of the current position
             if (Count > 1)
-                _data.RemoveRange(_currentIndex + 1,
-                                  Count - _currentIndex - 1);
+                _data.RemoveRange(
+                    _currentIndex + 1,
+                    Count - _currentIndex - 1);
 
             //add the item and trim the history to ensure MaxItems
             //hasn't been exceeded
@@ -185,7 +189,9 @@ namespace MouseNet.Logophi.Thesaurus
             var formatter = new BinaryFormatter();
             File.Delete(_filePath);
             using (var strm = File.OpenWrite(_filePath))
+                {
                 formatter.Serialize(strm, _data);
+                }
             }
     }
 }

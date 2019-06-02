@@ -1,14 +1,12 @@
 ﻿using MouseNet.Logophi.Thesaurus;
 
-namespace MouseNet.Logophi.Views.Presentation
-{
+namespace MouseNet.Logophi.Views.Presentation {
     /// <inheritdoc />
     /// <summary>
     ///     Presents an <see cref="IBookmarksFormView" />.
     /// </summary>
     internal class BookmarksFormPresenter
-        : ViewPresenter<IBookmarksFormView>
-    {
+        : ViewPresenter<IBookmarksFormView> {
         private readonly IBookmarkManager _bookmarkManager;
 
         public BookmarksFormPresenter
@@ -27,16 +25,16 @@ namespace MouseNet.Logophi.Views.Presentation
             }
 
         private void OnBookmarkAdded
-            (object sender,
-             string e)
+        (object sender,
+         string e)
             {
             if (!IsPresenting) return;
             View.Items.Add(e);
             }
 
         private void OnBookmarkRemoved
-            (object sender,
-             string e)
+        (object sender,
+         string e)
             {
             if (!IsPresenting) return;
             View.Items.Remove(e);

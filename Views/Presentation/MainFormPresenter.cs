@@ -9,7 +9,7 @@ namespace MouseNet.Logophi.Views.Presentation {
 
 
         public MainFormPresenter
-        (Browser browser)
+            (Browser browser)
             {
             _browser = browser;
             browser.BookmarkRemoved += OnBookmarkRemoved;
@@ -18,12 +18,6 @@ namespace MouseNet.Logophi.Views.Presentation {
             }
 
         private bool SearchValid => _browser.Definitions != null;
-
-        public void Search
-            (string word)
-            {
-            View.SearchText = word;
-            }
 
         protected override void InitializeView()
             {
@@ -36,52 +30,6 @@ namespace MouseNet.Logophi.Views.Presentation {
             View.BookmarkClicked += OnBookmarkClicked;
             View.OpenDictionaryClicked += OnOpenDictionaryClicked;
             View.OpenGithubClicked += OnOpenGithubClicked;
-            }
-
-        /// <summary>
-        ///     Performs actions necessary to handle an invalid search.
-        /// </summary>
-        private void HandleInvalidSearch()
-            {
-            View.Definitions.Add(Resources.InvalidSearch);
-            View.EnableBookmarkButton = false;
-            }
-
-        /// <summary>
-        ///     Performs actions necessary to handle a successful search.
-        /// </summary>
-        private void HandleSuccessfulSearch()
-            {
-            //populate the list of definitions
-            foreach (var def in _browser.Definitions)
-                View.Definitions.Add(
-                    $"{def.PartOfSpeech}: {def.Definition}");
-
-            View.EnableBookmarkButton = true;
-            View.SelectedDefinitionIndex = 0;
-            //add to the dropdown items if it's not already there
-            if (!View.DropDownItems.Contains(_browser.SearchTerm))
-                View.DropDownItems.Insert(0, _browser.SearchTerm);
-            }
-
-        /// <summary>
-        ///     Populates the drop down items of the view's search box
-        ///     with values from the browser's history.
-        /// </summary>
-        private void PopulateDropDownItems()
-            {
-            if (_browser.History.Count <= 0) return;
-            foreach (var i in _browser.History)
-                if (!View.DropDownItems.Contains(i))
-                    View.DropDownItems.Add(i);
-            }
-
-        /// <summary>
-        ///     Searches for the current history item.
-        /// </summary>
-        private void SearchFromHistory()
-            {
-            View.SearchText = _browser.History.CurrentItem;
             }
 
         private void OnBackClicked
@@ -184,6 +132,58 @@ namespace MouseNet.Logophi.Views.Presentation {
                 View.AddSynonym(syn.Value, syn.Similarity);
             foreach (var ant in def.Antonyms)
                 View.AddAntonym(ant.Value, ant.Similarity);
+            }
+
+        public void Search
+            (string word)
+            {
+            View.SearchText = word;
+            }
+
+        /// <summary>
+        ///     Performs actions necessary to handle an invalid search.
+        /// </summary>
+        private void HandleInvalidSearch()
+            {
+            View.Definitions.Add(Resources.InvalidSearch);
+            View.EnableBookmarkButton = false;
+            }
+
+        /// <summary>
+        ///     Performs actions necessary to handle a successful search.
+        /// </summary>
+        private void HandleSuccessfulSearch()
+            {
+            //populate the list of definitions
+            foreach (var def in _browser.Definitions)
+                View.Definitions.Add(
+                    $"{def.PartOfSpeech}: {def.Definition}");
+
+            View.EnableBookmarkButton = true;
+            View.SelectedDefinitionIndex = 0;
+            //add to the dropdown items if it's not already there
+            if (!View.DropDownItems.Contains(_browser.SearchTerm))
+                View.DropDownItems.Insert(0, _browser.SearchTerm);
+            }
+
+        /// <summary>
+        ///     Populates the drop down items of the view's search box
+        ///     with values from the browser's history.
+        /// </summary>
+        private void PopulateDropDownItems()
+            {
+            if (_browser.History.Count <= 0) return;
+            foreach (var i in _browser.History)
+                if (!View.DropDownItems.Contains(i))
+                    View.DropDownItems.Add(i);
+            }
+
+        /// <summary>
+        ///     Searches for the current history item.
+        /// </summary>
+        private void SearchFromHistory()
+            {
+            View.SearchText = _browser.History.CurrentItem;
             }
     }
 }

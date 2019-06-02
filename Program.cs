@@ -4,12 +4,29 @@ using System.Threading;
 using System.Windows.Forms;
 using MouseNet.Logophi.Utilities;
 
-namespace MouseNet.Logophi
-{
-    internal static class Program
-    {
-        private static MessageReceiver _messageReceiver;
+namespace MouseNet.Logophi {
+    internal static class Program {
         private static AppContext _app;
+        private static MessageReceiver _messageReceiver;
+
+        private static void OnApplicationExit
+        (object sender,
+         EventArgs e)
+            {
+            _messageReceiver?.Dispose();
+            }
+
+        private static void OnMessageReceiverConnected
+        (object sender,
+         EventArgs e)
+            {
+            //show the main window and reset the message receiver
+            //to continue listening for new instances of Logophi
+            _app.PresentMainForm();
+            if (_messageReceiver.IsConnected)
+                _messageReceiver.Disconnect();
+            _messageReceiver.StartListening();
+            }
 
         /// <summary>
         ///     The main entry point for the application.
@@ -22,10 +39,11 @@ namespace MouseNet.Logophi
             //to show the main form
             //otherwise run the program
             using (new Mutex(true, "LogophiMtx", out var createdNew))
-                if (createdNew)
-                    Run();
-                else
-                    SendMessage();
+                {
+                if (createdNew) Run();
+                else SendMessage();
+                }
+            _messageReceiver.Dispose();
             }
 
         /// <summary>
@@ -59,26 +77,9 @@ namespace MouseNet.Logophi
                     "LogophiMessageReceiver",
                     PipeDirection.Out,
                     PipeOptions.Asynchronous))
+                {
                 pipeClient.Connect();
-            }
-
-        private static void OnApplicationExit
-            (object sender,
-             EventArgs e)
-            {
-            _messageReceiver?.Dispose();
-            }
-
-        private static void OnMessageReceiverConnected
-            (object sender,
-             EventArgs e)
-            {
-            //show the main window and reset the message receiver
-            //to continue listening for new instances of Logophi
-            _app.PresentMainForm();
-            if (_messageReceiver.IsConnected)
-                _messageReceiver.Disconnect();
-            _messageReceiver.StartListening();
+                }
             }
     }
 }

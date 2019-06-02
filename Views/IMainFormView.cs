@@ -1,45 +1,66 @@
 ﻿using System;
 using System.Collections;
 
-namespace MouseNet.Logophi.Views
-{
+namespace MouseNet.Logophi.Views {
     /// <inheritdoc />
     /// <summary>
     ///     Exposes a main form view.
     /// </summary>
-    public interface IMainFormView : IView
-    {
+    public interface IMainFormView : IView {
         /// <summary>
-        ///     Gets the list of definitions displayed in the main window.
+        ///     Occurs when the back button is clicked.
         /// </summary>
-        IList Definitions { get; }
+        event EventHandler BackClicked;
+
         /// <summary>
-        ///     Gets the items in the search box's drop down list.
+        ///     Occurs when the bookmark button is clicked.
         /// </summary>
-        IList DropDownItems { get; }
+        event EventHandler BookmarkClicked;
+
         /// <summary>
-        ///     Gets or sets the text in the search box.
+        ///     Occurs when the exit button is clicked.
         /// </summary>
-        string SearchText { get; set; }
+        event EventHandler ExitClicked;
+
         /// <summary>
-        ///     Gets or sets a value indicating whether or not the back
-        ///     button is enabled.
+        ///     Occurs when the forward button is clicked.
         /// </summary>
-        bool EnableBackButton { get; set; }
+        event EventHandler ForwardClicked;
+
         /// <summary>
-        ///     Gets or sets a value indicating whether or not the forward
-        ///     button is enabled.
+        ///     Occurs when the open dictionary button is clicked.
         /// </summary>
-        bool EnableForwardButton { get; set; }
+        event EventHandler OpenDictionaryClicked;
+
         /// <summary>
-        ///     Gets or sets a value indicating whether or not the bookmark
-        ///     button is enabled.
+        ///     Occurs when the open github button is clicked.
         /// </summary>
-        bool EnableBookmarkButton { get; set; }
+        event EventHandler OpenGithubClicked;
+
         /// <summary>
-        ///     Gets or sets the index of the currently selected definition.
+        ///     Occurs when a search is initiated.
         /// </summary>
-        int SelectedDefinitionIndex { get; set; }
+        event EventHandler<string> Search;
+
+        /// <summary>
+        ///     Occurs when the selected definition is changed.
+        /// </summary>
+        event EventHandler<int> SelectedDefinitionChanged;
+
+        /// <summary>
+        ///     Occurs when the show about button is clicked.
+        /// </summary>
+        event EventHandler ShowAboutClicked;
+
+        /// <summary>
+        ///     Occurs when the show bookmarks button is clicked.
+        /// </summary>
+        event EventHandler ShowBookmarksClicked;
+
+        /// <summary>
+        ///     Occurs when the show preferences button is clicked.
+        /// </summary>
+        event EventHandler ShowPreferencesClicked;
 
         /// <summary>
         ///     Adds a term to the list of antonyms.
@@ -47,8 +68,8 @@ namespace MouseNet.Logophi.Views
         /// <param name="term">The word to add to the list.</param>
         /// <param name="similarity">The similarity value of the antonym.</param>
         void AddAntonym
-            (string term,
-             int similarity);
+        (string term,
+         int similarity);
 
         /// <summary>
         ///     Adds a term to the list of synonyms.
@@ -56,23 +77,8 @@ namespace MouseNet.Logophi.Views
         /// <param name="term">The word to add to the list.</param>
         /// <param name="similarity">The similarity value of the synonym.</param>
         void AddSynonym
-            (string term,
-             int similarity);
-
-        /// <summary>
-        ///     Clears the list of antonyms.
-        /// </summary>
-        void ClearAntonyms();
-
-        /// <summary>
-        ///     Clears the list of synonyms.
-        /// </summary>
-        void ClearSynonyms();
-
-        /// <summary>
-        ///     Brings the view to the front.
-        /// </summary>
-        void ToFront();
+        (string term,
+         int similarity);
 
         /// <summary>
         ///     Toggles the bookmark buttons to the off state, indicating
@@ -87,48 +93,56 @@ namespace MouseNet.Logophi.Views
         void BookmarkOn();
 
         /// <summary>
-        /// Occurs when the exit button is clicked.
+        ///     Clears the list of antonyms.
         /// </summary>
-        event EventHandler ExitClicked;
+        void ClearAntonyms();
+
         /// <summary>
-        /// Occurs when the show bookmarks button is clicked.
+        ///     Clears the list of synonyms.
         /// </summary>
-        event EventHandler ShowBookmarksClicked;
+        void ClearSynonyms();
+
         /// <summary>
-        /// Occurs when the show preferences button is clicked.
+        ///     Gets the list of definitions displayed in the main window.
         /// </summary>
-        event EventHandler ShowPreferencesClicked;
+        IList Definitions { get; }
+
         /// <summary>
-        /// Occurs when the show about button is clicked.
+        ///     Gets the items in the search box's drop down list.
         /// </summary>
-        event EventHandler ShowAboutClicked;
+        IList DropDownItems { get; }
+
         /// <summary>
-        ///     Occurs when a search is initiated.
+        ///     Gets or sets a value indicating whether or not the back
+        ///     button is enabled.
         /// </summary>
-        event EventHandler<string> Search;
+        bool EnableBackButton { get; set; }
+
         /// <summary>
-        ///     Occurs when the back button is clicked.
+        ///     Gets or sets a value indicating whether or not the bookmark
+        ///     button is enabled.
         /// </summary>
-        event EventHandler BackClicked;
+        bool EnableBookmarkButton { get; set; }
+
         /// <summary>
-        ///     Occurs when the forward button is clicked.
+        ///     Gets or sets a value indicating whether or not the forward
+        ///     button is enabled.
         /// </summary>
-        event EventHandler ForwardClicked;
+        bool EnableForwardButton { get; set; }
+
         /// <summary>
-        ///     Occurs when the bookmark button is clicked.
+        ///     Gets or sets the text in the search box.
         /// </summary>
-        event EventHandler BookmarkClicked;
+        string SearchText { get; set; }
+
         /// <summary>
-        ///     Occurs when the open dictionary button is clicked.
+        ///     Gets or sets the index of the currently selected definition.
         /// </summary>
-        event EventHandler OpenDictionaryClicked;
+        int SelectedDefinitionIndex { get; set; }
+
         /// <summary>
-        ///     Occurs when the open github button is clicked.
+        ///     Brings the view to the front.
         /// </summary>
-        event EventHandler OpenGithubClicked;
-        /// <summary>
-        ///     Occurs when the selected definition is changed.
-        /// </summary>
-        event EventHandler<int> SelectedDefinitionChanged;
+        void ToFront();
     }
 }

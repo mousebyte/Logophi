@@ -7,12 +7,7 @@ namespace MouseNet.Logophi.Views {
     /// </summary>
     /// <typeparam name="TView">The type of view.</typeparam>
     public interface IViewPresenter<TView> : IDisposable where TView : IView {
-
         event EventHandler ViewPresented;
-        /// <summary>
-        ///     The view currently being presented.
-        /// </summary>
-        TView View { get; }
 
         bool IsPresenting { get; }
 
@@ -38,5 +33,10 @@ namespace MouseNet.Logophi.Views {
         /// <param name="parent">The parent to use for the view.</param>
         /// <returns>The dialog result.</returns>
         bool PresentDialog(TView view, object parent);
+
+        /// <summary>
+        ///     The view currently being presented.
+        /// </summary>
+        TView View { get; }
     }
 }

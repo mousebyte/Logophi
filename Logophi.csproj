@@ -24,7 +24,7 @@
     <AssemblyInfoVersionType>SemVer1</AssemblyInfoVersionType>
     <InheritWinAppVersionFrom>None</InheritWinAppVersionFrom>
     <AssemblyInfoVersionSemVerSettings>AssemblyVersion.IncrementOnce.Beta</AssemblyInfoVersionSemVerSettings>
-    <AssemblyVersion>0.5.7093.41</AssemblyVersion>
+    <AssemblyVersion>0.5.7093.42</AssemblyVersion>
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>

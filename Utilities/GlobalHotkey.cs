@@ -3,15 +3,13 @@ using System.Collections.Generic;
 using System.Windows.Forms;
 using System.Windows.Input;
 
-namespace MouseNet.Logophi.Utilities
-{
+namespace MouseNet.Logophi.Utilities {
     /// <inheritdoc />
     /// <summary>
     ///     Allows for the registration and removal of global hotkeys,
     ///     and notifies listeners when they are activated.
     /// </summary>
-    public class GlobalHotkey : IDisposable
-    {
+    public class GlobalHotkey : IDisposable {
         //the win32 window message that indicates a hotkey was pressed.
         private const int HotkeyMsg = 0x0312;
         private readonly Form _form;
@@ -22,10 +20,19 @@ namespace MouseNet.Logophi.Utilities
             _form = new DummyForm(this);
             }
 
+        public event EventHandler<HotkeyEventArgs> HotkeyPressed;
+
         /// <summary>
         ///     Returns the hotkeys registered in the <see cref="GlobalHotkey" /> object.
         /// </summary>
         public IEnumerable<Keys> Hotkeys => _hotkeys;
+
+        private void InvokeHotkeyPressed
+        (object sender,
+         HotkeyEventArgs args)
+            {
+            HotkeyPressed?.Invoke(sender, args);
+            }
 
         /// <inheritdoc />
         public void Dispose()
@@ -52,10 +59,11 @@ namespace MouseNet.Logophi.Utilities
             var keycode = (int) hotkey.GetKeyCode();
 
             //register the hotkey to the dummy form and add it to the list
-            if (!NativeMethods.RegisterHotKey(_form.Handle,
-                                              _hotkeys.Count + 1,
-                                              modifiers,
-                                              keycode))
+            if (!NativeMethods.RegisterHotKey(
+                    _form.Handle,
+                    _hotkeys.Count + 1,
+                    modifiers,
+                    keycode))
                 throw new InvalidOperationException(
                     "Failed to register hotkey.");
             _hotkeys.Add(hotkey);
@@ -76,21 +84,11 @@ namespace MouseNet.Logophi.Utilities
             _hotkeys.RemoveAt(id);
             }
 
-        private void InvokeHotkeyPressed
-            (object sender,
-             HotkeyEventArgs args)
-            {
-            HotkeyPressed?.Invoke(sender, args);
-            }
-
-        public event EventHandler<HotkeyEventArgs> HotkeyPressed;
-
         /// <inheritdoc />
         /// <summary>
         ///     A dummy form to which hotkeys are registered.
         /// </summary>
-        private class DummyForm : Form
-        {
+        private class DummyForm : Form {
             private readonly GlobalHotkey _parent;
 
             public DummyForm

@@ -1,9 +1,7 @@
 ﻿using System.Drawing;
-using System.Threading;
 using System.Windows.Forms;
 using MouseNet.Logophi.Thesaurus;
 using MouseNet.Logophi.Utilities;
-using Timer = System.Threading.Timer;
 
 namespace MouseNet.Logophi.Views.Presentation {
     internal class
@@ -16,6 +14,15 @@ namespace MouseNet.Logophi.Views.Presentation {
             _browser.SearchCompleted += OnSearchCompleted;
             }
 
+        protected override void InitializeView()
+            {
+            View.Search += OnSearch;
+            var workArea = Screen
+                           .FromHandle(NativeMethods.GetForegroundWindow())
+                           .WorkingArea;
+            View.Location = new Point(workArea.Right - 210, workArea.Bottom);
+            }
+
         private void OnSearchCompleted(object sender, SearchEventArgs args)
             {
             if (!IsPresenting) return;
@@ -24,15 +31,6 @@ namespace MouseNet.Logophi.Views.Presentation {
                     View.AddSynonym(termEntry.Value, termEntry.Similarity);
             else View.AddSynonym("No results found", 100);
             View.ShowTerms();
-            }
-
-        protected override void InitializeView()
-            {
-            View.Search += OnSearch;
-            var workArea = Screen
-                           .FromHandle(NativeMethods.GetForegroundWindow())
-                           .WorkingArea;
-            View.Location = new Point(workArea.Right - 210, workArea.Bottom);
             }
 
         private void OnSearch(object sender, string word)

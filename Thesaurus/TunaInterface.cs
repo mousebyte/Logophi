@@ -9,14 +9,12 @@ using MouseNet.Logophi.Properties;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
-namespace MouseNet.Logophi.Thesaurus
-{
+namespace MouseNet.Logophi.Thesaurus {
     /// <summary>
     ///     Consumes the http://thesaurus.com/ Tuna API and exposes
     ///     functions to retrieve information about words from the web.
     /// </summary>
-    public class TunaInterface : IDisposable
-    {
+    public class TunaInterface : IDisposable {
         private readonly string _cachePath;
 
         private MemoryCache
@@ -33,8 +31,8 @@ namespace MouseNet.Logophi.Thesaurus
         ///     should be used.
         /// </param>
         protected TunaInterface
-            (string dataDirectory,
-             bool persistentCache)
+        (string dataDirectory,
+         bool persistentCache)
             {
             //required for compatibility with Windows 7
             ServicePointManager.Expect100Continue = true;
@@ -51,9 +49,15 @@ namespace MouseNet.Logophi.Thesaurus
             }
 
         /// <summary>
+        ///     Occurs when a word search has completed.
+        /// </summary>
+        public event EventHandler<SearchEventArgs> SearchCompleted;
+
+        /// <summary>
         ///     Gets a list of definitions returned by the last search.
         /// </summary>
         public List<WordDefinition> Definitions { get; private set; }
+
         /// <summary>
         ///     Gets or sets a value indicating whether or not a persistent cache should be used.
         /// </summary>
@@ -66,6 +70,13 @@ namespace MouseNet.Logophi.Thesaurus
             get => _searchTerm;
             set => SearchWord(value);
         }
+
+        protected virtual void InvokeSearchCompleted
+        (object sender,
+         SearchEventArgs args)
+            {
+            SearchCompleted?.Invoke(sender, args);
+            }
 
         /// <summary>
         ///     Clears the cache in memory, and from the filesystem if a persistent cache
@@ -92,10 +103,11 @@ namespace MouseNet.Logophi.Thesaurus
                 Definitions = _cache[word] as List<WordDefinition>;
             else LoadFromWeb(word);
 
-            InvokeSearchCompleted(this,
-                                  new SearchEventArgs(
-                                      word,
-                                      Definitions != null));
+            InvokeSearchCompleted(
+                this,
+                new SearchEventArgs(
+                    word,
+                    Definitions != null));
             }
 
         /// <summary>
@@ -112,7 +124,7 @@ namespace MouseNet.Logophi.Thesaurus
             //request the word data, and select the JToken
             //containing the definition data
             var data = RequestWordData(request)
-               .SelectToken("data.definitionData.definitions");
+                .SelectToken("data.definitionData.definitions");
 
             //deserialize the token into a list of WordDefinition objects
             //then update the cache
@@ -132,10 +144,12 @@ namespace MouseNet.Logophi.Thesaurus
             //if it can be successfully cast into an array of key-value pairs,
             //then iterate through the array to load it into the cache
             using (var strm = File.OpenRead(_cachePath))
+                {
                 if (formatter.Deserialize(strm) is
                         KeyValuePair<string, object>[] items)
                     foreach (var i in items)
                         _cache[i.Key] = i.Value;
+                }
             }
 
         /// <summary>
@@ -153,10 +167,16 @@ namespace MouseNet.Logophi.Thesaurus
             //get the response and create a JsonTextReader from the response stream
             //then use that to load a JObject
             using (var resp = request.GetResponse())
+                {
                 using (var sr =
                     new StreamReader(resp.GetResponseStream()))
+                    {
                     using (var jr = new JsonTextReader(sr))
+                        {
                         return JObject.Load(jr);
+                        }
+                    }
+                }
             }
 
         /// <summary>
@@ -176,20 +196,10 @@ namespace MouseNet.Logophi.Thesaurus
             //and serialize it to a file
             var formatter = new BinaryFormatter();
             using (var strm = File.OpenWrite(_cachePath))
+                {
                 formatter.Serialize(strm, _cache.ToArray());
+                }
             }
-
-        protected virtual void InvokeSearchCompleted
-            (object sender,
-             SearchEventArgs args)
-            {
-            SearchCompleted?.Invoke(sender, args);
-            }
-
-        /// <summary>
-        ///     Occurs when a word search has completed.
-        /// </summary>
-        public event EventHandler<SearchEventArgs> SearchCompleted;
 
         public void Dispose()
             {

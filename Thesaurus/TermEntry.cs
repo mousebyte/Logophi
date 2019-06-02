@@ -1,19 +1,17 @@
 ﻿using System;
 using Newtonsoft.Json;
 
-namespace MouseNet.Logophi.Thesaurus
-{
+namespace MouseNet.Logophi.Thesaurus {
     /// <summary>
     ///     Represents an entry in a <see cref="WordDefinition" />'s list
     ///     of synonyms or antonyms.
     /// </summary>
     [JsonObject(MemberSerialization.OptIn)]
     [Serializable]
-    public class TermEntry
-    {
+    public class TermEntry {
         public TermEntry
-            (int similarity,
-             string value)
+        (int similarity,
+         string value)
             {
             Similarity = similarity;
             Value = value;
@@ -25,6 +23,7 @@ namespace MouseNet.Logophi.Thesaurus
         /// </summary>
         [JsonProperty("similarity")]
         public int Similarity { get; }
+
         /// <summary>
         ///     The word itself.
         /// </summary>

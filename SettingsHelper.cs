@@ -29,6 +29,31 @@ namespace MouseNet.Logophi {
             _settings.Save();
             }
 
+        public GlobalHotkey Hotkey { get; } = new GlobalHotkey();
+
+        private void OnSettingsPropertyChanged
+        (object sender,
+         PropertyChangedEventArgs e)
+            {
+            //update browser property values when corresponding
+            //settings values are changed.
+            switch (e.PropertyName)
+                {
+                case "PersistentCache":
+                    _browser.PersistentCache =
+                        _settings.PersistentCache;
+                    break;
+                case "SaveHistory":
+                    _browser.History.PersistentHistory =
+                        _settings.SaveHistory;
+                    break;
+                case "MaxHistory":
+                    _browser.History.MaxItems =
+                        (int) _settings.MaxHistory;
+                    break;
+                }
+            }
+
 
         /// <summary>
         ///     If necessary, creates the Logophi directory in local appdata
@@ -41,8 +66,7 @@ namespace MouseNet.Logophi {
                 {
                 _settings.DataDirectory = Path.Combine(
                     Environment.GetFolderPath(
-                        Environment
-                            .SpecialFolder.LocalApplicationData),
+                        Environment.SpecialFolder.LocalApplicationData),
                     Resources.AppName);
                 _settings.Save();
                 }
@@ -51,8 +75,6 @@ namespace MouseNet.Logophi {
             if (!Directory.Exists(_settings.DataDirectory))
                 Directory.CreateDirectory(_settings.DataDirectory);
             }
-
-        public GlobalHotkey Hotkey { get; } = new GlobalHotkey();
 
         public void Dispose()
             {
@@ -110,29 +132,6 @@ namespace MouseNet.Logophi {
             if (_registeredHotkey == Keys.None) return;
             Hotkey.UnregisterHotkey(0);
             _registeredHotkey = Keys.None;
-            }
-
-        private void OnSettingsPropertyChanged
-        (object sender,
-         PropertyChangedEventArgs e)
-            {
-            //update browser property values when corresponding
-            //settings values are changed.
-            switch (e.PropertyName)
-                {
-                case "PersistentCache":
-                    _browser.PersistentCache =
-                        _settings.PersistentCache;
-                    break;
-                case "SaveHistory":
-                    _browser.History.PersistentHistory =
-                        _settings.SaveHistory;
-                    break;
-                case "MaxHistory":
-                    _browser.History.MaxItems =
-                        (int) _settings.MaxHistory;
-                    break;
-                }
             }
 
         /// <summary>

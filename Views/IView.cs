@@ -17,6 +17,8 @@ namespace MouseNet.Logophi.Views {
         /// </summary>
         void Close();
 
+        Point Location { get; set; }
+
         /// <summary>
         ///     Presents the view to the user.
         /// </summary>
@@ -30,7 +32,6 @@ namespace MouseNet.Logophi.Views {
         /// <returns>A value indicating the result of the dialog.</returns>
         bool PresentModal(object parent);
 
-        Point Location { get; set; }
         Size Size { get; set; }
     }
 }
