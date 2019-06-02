@@ -38,7 +38,6 @@ namespace MouseNet.Logophi {
                 };
             _trayIcon.DoubleClick += OnOpen;
             _logophi.SettingsHelper.Hotkey.HotkeyPressed += OnHotkeyPressed;
-            _logophi.SettingsHelper.UpdatePreferences();
             PresentMainForm();
             }
 

@@ -26,7 +26,7 @@ namespace MouseNet.Logophi {
                 return;
             _settings.AutoRun = true;
             key.Dispose();
-            _settings.Save();
+            UpdatePreferences();
             }
 
         public GlobalHotkey Hotkey { get; } = new GlobalHotkey();
