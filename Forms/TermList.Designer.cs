@@ -32,7 +32,6 @@
             // 
             // TermList
             // 
-            this.AutoScroll = true;
             this.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.Padding = new System.Windows.Forms.Padding(4);
             this.ResumeLayout(false);

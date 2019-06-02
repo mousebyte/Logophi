@@ -7,13 +7,12 @@ namespace MouseNet.Logophi.Forms {
     public partial class TermList : Panel {
         private static readonly Font BaseFont = new Font(
             new FontFamily("Arial"),
-            8,
+            10,
             GraphicsUnit.Point);
 
         public TermList()
             {
             InitializeComponent();
-            base.DoubleBuffered = true;
             }
 
 
@@ -43,7 +42,7 @@ namespace MouseNet.Logophi.Forms {
 
         public void AddTerm(string term, int similarity)
             {
-            var item = new TermListItem {BackColor = BackColor, Text = term};
+            var item = new TermListItem {BackColor = BackColor, Text = term, Font = BaseFont};
             switch (Math.Abs(similarity))
                 {
                 case 100:
@@ -65,6 +64,7 @@ namespace MouseNet.Logophi.Forms {
             Controls.Add(item);
             if (Controls.Count == 1) item.Location = new Point(4, 4);
             else LayoutItems(Controls.Count - 1);
+            item.DrawToBuffer();
             }
 
 
@@ -105,7 +105,8 @@ namespace MouseNet.Logophi.Forms {
                 {
                 TextChanged += OnTextOrFontChanged;
                 FontChanged += OnTextOrFontChanged;
-                base.DoubleBuffered = true;
+                SetStyle(ControlStyles.UserPaint, true);
+                SetStyle(ControlStyles.AllPaintingInWmPaint, true);
                 }
 
             protected override void OnClick(EventArgs e)
@@ -135,7 +136,7 @@ namespace MouseNet.Logophi.Forms {
                 DrawToBuffer();
                 }
 
-            private void DrawToBuffer()
+            public void DrawToBuffer()
                 {
                 var g = _gBuff.Graphics;
                 g.FillRectangle(

@@ -64,6 +64,7 @@
             // 
             this._cDefList.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this._cDefList.BackColor = System.Drawing.SystemColors.Window;
             this._cDefList.FormattingEnabled = true;
             this._cDefList.Location = new System.Drawing.Point(7, 69);
             this._cDefList.Name = "_cDefList";
@@ -204,14 +205,14 @@
             // 
             this._cBookmarkMenuItem.Enabled = false;
             this._cBookmarkMenuItem.Name = "_cBookmarkMenuItem";
-            this._cBookmarkMenuItem.Size = new System.Drawing.Size(161, 22);
+            this._cBookmarkMenuItem.Size = new System.Drawing.Size(180, 22);
             this._cBookmarkMenuItem.Text = "&Add";
             this._cBookmarkMenuItem.Click += new System.EventHandler(this.InvokeBookmarkClicked);
             // 
             // _cViewBookmarksMenuItem
             // 
             this._cViewBookmarksMenuItem.Name = "_cViewBookmarksMenuItem";
-            this._cViewBookmarksMenuItem.Size = new System.Drawing.Size(161, 22);
+            this._cViewBookmarksMenuItem.Size = new System.Drawing.Size(180, 22);
             this._cViewBookmarksMenuItem.Text = "&View Bookmarks";
             this._cViewBookmarksMenuItem.Click += new System.EventHandler(this.InvokeShowBookmarksClicked);
             // 
@@ -226,7 +227,7 @@
             // _cPreferencesMenuItem
             // 
             this._cPreferencesMenuItem.Name = "_cPreferencesMenuItem";
-            this._cPreferencesMenuItem.Size = new System.Drawing.Size(135, 22);
+            this._cPreferencesMenuItem.Size = new System.Drawing.Size(180, 22);
             this._cPreferencesMenuItem.Text = "&Preferences";
             this._cPreferencesMenuItem.Click += new System.EventHandler(this.InvokeShowPreferencesClicked);
             // 
@@ -243,7 +244,7 @@
             // 
             this._cAboutMenuItem.Image = global::MouseNet.Logophi.Properties.Resources.info;
             this._cAboutMenuItem.Name = "_cAboutMenuItem";
-            this._cAboutMenuItem.Size = new System.Drawing.Size(150, 22);
+            this._cAboutMenuItem.Size = new System.Drawing.Size(180, 22);
             this._cAboutMenuItem.Tag = "";
             this._cAboutMenuItem.Text = "&About";
             this._cAboutMenuItem.Click += new System.EventHandler(this.InvokeShowAboutClicked);
@@ -252,7 +253,7 @@
             // 
             this._cGithubMenuItem.Image = global::MouseNet.Logophi.Properties.Resources.github;
             this._cGithubMenuItem.Name = "_cGithubMenuItem";
-            this._cGithubMenuItem.Size = new System.Drawing.Size(150, 22);
+            this._cGithubMenuItem.Size = new System.Drawing.Size(180, 22);
             this._cGithubMenuItem.Text = "Project Github";
             this._cGithubMenuItem.Click += new System.EventHandler(this.InvokeGithubProjectClicked);
             // 
@@ -277,6 +278,7 @@
             this._cSearchBtn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this._cSearchBtn.AutoSize = true;
             this._cSearchBtn.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this._cSearchBtn.BackColor = System.Drawing.SystemColors.Window;
             this._cSearchBtn.FlatAppearance.BorderSize = 0;
             this._cSearchBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this._cSearchBtn.Image = global::MouseNet.Logophi.Properties.Resources.search;
@@ -285,7 +287,7 @@
             this._cSearchBtn.Size = new System.Drawing.Size(30, 30);
             this._cSearchBtn.TabIndex = 6;
             this._cToolTip.SetToolTip(this._cSearchBtn, "Search");
-            this._cSearchBtn.UseVisualStyleBackColor = true;
+            this._cSearchBtn.UseVisualStyleBackColor = false;
             this._cSearchBtn.Click += new System.EventHandler(this.OnSearchClicked);
             // 
             // _cForwardBtn
@@ -326,6 +328,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BackColor = System.Drawing.SystemColors.Window;
             this.ClientSize = new System.Drawing.Size(407, 504);
             this.Controls.Add(this._cBookmarkBtn);
             this.Controls.Add(this._cSearchText);
