@@ -41,6 +41,7 @@
             this._cMaxHistory = new System.Windows.Forms.NumericUpDown();
             this._cSaveHistory = new System.Windows.Forms.CheckBox();
             this._cTabHotkey = new System.Windows.Forms.TabPage();
+            this._cUseQuickSearch = new System.Windows.Forms.CheckBox();
             this._cHotkeyEdit = new MouseNet.Forms.Controls.HotkeyEdit();
             this._cEnableHotkey = new System.Windows.Forms.CheckBox();
             this._cCancelBtn = new System.Windows.Forms.Button();
@@ -186,6 +187,7 @@
             // 
             // _cTabHotkey
             // 
+            this._cTabHotkey.Controls.Add(this._cUseQuickSearch);
             this._cTabHotkey.Controls.Add(this._cHotkeyEdit);
             this._cTabHotkey.Controls.Add(this._cEnableHotkey);
             this._cTabHotkey.Location = new System.Drawing.Point(4, 22);
@@ -196,23 +198,40 @@
             this._cTabHotkey.Text = "Hotkey";
             this._cTabHotkey.UseVisualStyleBackColor = true;
             // 
+            // _cUseQuickSearch
+            // 
+            this._cUseQuickSearch.AutoSize = true;
+            this._cUseQuickSearch.Checked = global::MouseNet.Logophi.Properties.Settings.Default.UseQuckSearch;
+            this._cUseQuickSearch.CheckState = System.Windows.Forms.CheckState.Checked;
+            this._cUseQuickSearch.DataBindings.Add(new System.Windows.Forms.Binding("Checked", global::MouseNet.Logophi.Properties.Settings.Default, "UseQuckSearch", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this._cUseQuickSearch.DataBindings.Add(new System.Windows.Forms.Binding("Enabled", global::MouseNet.Logophi.Properties.Settings.Default, "EnableHotkey", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this._cUseQuickSearch.Enabled = global::MouseNet.Logophi.Properties.Settings.Default.EnableHotkey;
+            this._cUseQuickSearch.Location = new System.Drawing.Point(37, 48);
+            this._cUseQuickSearch.Name = "_cUseQuickSearch";
+            this._cUseQuickSearch.Size = new System.Drawing.Size(155, 17);
+            this._cUseQuickSearch.TabIndex = 2;
+            this._cUseQuickSearch.Text = "Use Quick Search Window";
+            this._cUseQuickSearch.UseVisualStyleBackColor = true;
+            // 
             // _cHotkeyEdit
             // 
             this._cHotkeyEdit.AllowCtrlOnlyHotkeys = false;
             this._cHotkeyEdit.AllowShiftOnlyHotkeys = false;
             this._cHotkeyEdit.DataBindings.Add(new System.Windows.Forms.Binding("Value", global::MouseNet.Logophi.Properties.Settings.Default, "Hotkey", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this._cHotkeyEdit.Location = new System.Drawing.Point(151, 41);
+            this._cHotkeyEdit.DataBindings.Add(new System.Windows.Forms.Binding("Enabled", global::MouseNet.Logophi.Properties.Settings.Default, "EnableHotkey", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this._cHotkeyEdit.Enabled = global::MouseNet.Logophi.Properties.Settings.Default.EnableHotkey;
+            this._cHotkeyEdit.Location = new System.Drawing.Point(151, 9);
             this._cHotkeyEdit.Name = "_cHotkeyEdit";
             this._cHotkeyEdit.Size = new System.Drawing.Size(133, 29);
             this._cHotkeyEdit.TabIndex = 1;
-            this._cHotkeyEdit.Value = System.Windows.Forms.Keys.None;
+            this._cHotkeyEdit.Value = global::MouseNet.Logophi.Properties.Settings.Default.Hotkey;
             // 
             // _cEnableHotkey
             // 
             this._cEnableHotkey.AutoSize = true;
             this._cEnableHotkey.Checked = global::MouseNet.Logophi.Properties.Settings.Default.EnableHotkey;
             this._cEnableHotkey.DataBindings.Add(new System.Windows.Forms.Binding("Checked", global::MouseNet.Logophi.Properties.Settings.Default, "EnableHotkey", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this._cEnableHotkey.Location = new System.Drawing.Point(20, 48);
+            this._cEnableHotkey.Location = new System.Drawing.Point(20, 16);
             this._cEnableHotkey.Name = "_cEnableHotkey";
             this._cEnableHotkey.Size = new System.Drawing.Size(125, 17);
             this._cEnableHotkey.TabIndex = 0;
@@ -285,5 +304,6 @@
         private System.Windows.Forms.TabPage _cTabHotkey;
         private System.Windows.Forms.CheckBox _cEnableHotkey;
         private MouseNet.Forms.Controls.HotkeyEdit _cHotkeyEdit;
+        private System.Windows.Forms.CheckBox _cUseQuickSearch;
     }
 }

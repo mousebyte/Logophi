@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Windows.Forms;
 using MouseNet.Logophi.Properties;
 using MouseNet.Logophi.Thesaurus;
 using MouseNet.Logophi.Views;
@@ -7,37 +6,31 @@ using MouseNet.Logophi.Views.Presentation;
 
 namespace MouseNet.Logophi {
     internal class Logophi : IDisposable {
-        private readonly Settings _settings = Settings.Default;
         private readonly Browser _browser;
         private readonly MainFormPresenter _mainFormPresenter;
         public SettingsHelper SettingsHelper { get; }
 
-        public NotifyIcon TrayIcon { get; } = new NotifyIcon
-            {
-            Icon = Resources.logophi,
-            Text = Resources.AppName,
-            Visible = true,
-            };
-
-
         public IViewPresenter<IMainFormView> Main => _mainFormPresenter;
         public IViewPresenter<IBookmarksFormView> Bookmarks { get; }
         public IViewPresenter<IPreferencesDialogView> Preferences { get; }
+        public IViewPresenter<IQuickSearchFormView> QuickSearch { get; }
 
-        public Logophi()
+        public Logophi(Settings settings)
             {
             _browser = new Browser(
-                _settings.DataDirectory,
-                _settings.PersistentCache,
-                _settings.SaveHistory);
-            _browser.History.MaxItems = (int) _settings.MaxHistory;
-            SettingsHelper = new SettingsHelper(_settings, _browser);
+                settings.DataDirectory,
+                settings.PersistentCache,
+                settings.SaveHistory);
+            _browser.History.MaxItems = (int) settings.MaxHistory;
+            SettingsHelper = new SettingsHelper(settings, _browser);
             _mainFormPresenter = new MainFormPresenter(_browser);
             Bookmarks = new BookmarksFormPresenter(_browser);
             Bookmarks.ViewPresented += OnBookmarksViewPresented;
             Preferences = new PreferencesDialogPresenter();
             Preferences.ViewPresented += OnPreferencesDialogPresented;
+            QuickSearch = new QuickSearchFormPresenter(_browser);
             }
+
 
         private void OnBookmarksViewPresented(object sender, EventArgs args)
             {
@@ -70,8 +63,6 @@ namespace MouseNet.Logophi {
             _browser.Dispose();
             SettingsHelper.Dispose();
             _mainFormPresenter.Dispose();
-            TrayIcon.Visible = false;
-            TrayIcon.Dispose();
             Bookmarks.Dispose();
             Preferences.Dispose();
             }

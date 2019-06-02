@@ -43,7 +43,7 @@ namespace MouseNet.Logophi.Forms {
 
         public void AddTerm(string term, int similarity)
             {
-            var item = new TermListItem {Text = term, BackColor = BackColor};
+            var item = new TermListItem {BackColor = BackColor, Text = term};
             switch (Math.Abs(similarity))
                 {
                 case 100:

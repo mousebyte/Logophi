@@ -38,7 +38,7 @@
     <AssemblyInfoVersionType>SemVer1</AssemblyInfoVersionType>
     <InheritWinAppVersionFrom>None</InheritWinAppVersionFrom>
     <AssemblyInfoVersionSemVerSettings>AssemblyVersion.IncrementOnce.Beta</AssemblyInfoVersionSemVerSettings>
-    <AssemblyVersion>0.5.7093.31</AssemblyVersion>
+    <AssemblyVersion>0.5.7093.34</AssemblyVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -137,8 +137,8 @@
     <InheritWinAppVersionFrom>None</InheritWinAppVersionFrom>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="MouseNet.Forms, Version=1.0.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>packages\MouseNet.Forms.1.0.1\lib\net40\MouseNet.Forms.dll</HintPath>
+    <Reference Include="MouseNet.Forms, Version=1.1.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\MouseNet.Forms.1.1.2\lib\net40\MouseNet.Forms.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>packages\Newtonsoft.Json.12.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
@@ -256,7 +256,6 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
-    <None Include="App.config" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

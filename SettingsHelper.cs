@@ -7,23 +7,28 @@ using MouseNet.Logophi.Properties;
 using MouseNet.Logophi.Thesaurus;
 using MouseNet.Logophi.Utilities;
 
-namespace MouseNet.Logophi
-{
-    internal class SettingsHelper : IDisposable
-    {
+namespace MouseNet.Logophi {
+    internal class SettingsHelper : IDisposable {
         private readonly Browser _browser;
         private readonly Settings _settings;
         private Keys _registeredHotkey = Keys.None;
 
         public SettingsHelper
-            (Settings settings,
-             Browser browser)
+        (Settings settings,
+         Browser browser)
             {
             _settings = settings;
             _browser = browser;
             _settings.PropertyChanged += OnSettingsPropertyChanged;
             SetupDirectories();
+            var key = OpenAutoRunKey();
+            if (key == null || !_settings.AutoRun || key.ValueCount == 0)
+                return;
+            _settings.AutoRun = true;
+            key.Dispose();
+            _settings.Save();
             }
+
 
         /// <summary>
         ///     If necessary, creates the Logophi directory in local appdata
@@ -56,6 +61,7 @@ namespace MouseNet.Logophi
 
         public void UpdatePreferences()
             {
+            _settings.Save();
             //update hotkey registration
             if (_settings.EnableHotkey)
                 RegisterHotkey();
@@ -65,10 +71,12 @@ namespace MouseNet.Logophi
             var key = OpenAutoRunKey();
             if (key == null) return;
             if (_settings.AutoRun)
-                key.SetValue(Resources.AppName,
-                             Application.ExecutablePath);
+                key.SetValue(
+                    Resources.AppName,
+                    Application.ExecutablePath);
             else if (key.GetValue(Resources.AppName) != null)
                 key.DeleteValue(Resources.AppName);
+            key.Dispose();
             }
 
         public void ReloadPreferences()
@@ -105,8 +113,8 @@ namespace MouseNet.Logophi
             }
 
         private void OnSettingsPropertyChanged
-            (object sender,
-             PropertyChangedEventArgs e)
+        (object sender,
+         PropertyChangedEventArgs e)
             {
             //update browser property values when corresponding
             //settings values are changed.

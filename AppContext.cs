@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
 using MouseNet.Logophi.Forms;
+using MouseNet.Logophi.Properties;
 using MouseNet.Logophi.Utilities;
 
 namespace MouseNet.Logophi {
@@ -11,11 +12,19 @@ namespace MouseNet.Logophi {
     /// </summary>
     internal class AppContext : ApplicationContext {
         private readonly Logophi _logophi;
+        private readonly Settings _settings = Settings.Default;
+
+        private readonly NotifyIcon _trayIcon = new NotifyIcon
+            {
+            Icon = Resources.logophi,
+            Text = Resources.AppName,
+            Visible = true,
+            };
 
         public AppContext()
             {
             Application.ApplicationExit += OnApplicationExit;
-            _logophi = new Logophi();
+            _logophi = new Logophi(_settings);
             //set up the tray icon
             var openMenuItem = new ToolStripMenuItem {Text = @"Open"};
             openMenuItem.Click += OnOpen;
@@ -23,11 +32,11 @@ namespace MouseNet.Logophi {
             exitMenuItem.Click +=
             (sender,
              args) => Application.Exit();
-            _logophi.TrayIcon.ContextMenuStrip = new ContextMenuStrip
+            _trayIcon.ContextMenuStrip = new ContextMenuStrip
                 {
                 Items = {openMenuItem, exitMenuItem}
                 };
-            _logophi.TrayIcon.DoubleClick += OnOpen;
+            _trayIcon.DoubleClick += OnOpen;
             _logophi.SettingsHelper.Hotkey.HotkeyPressed += OnHotkeyPressed;
             PresentMainForm();
             }
@@ -69,15 +78,20 @@ namespace MouseNet.Logophi {
             if (!_logophi.Main.IsPresenting)
                 {
                 var form = new MainForm();
-                form.ExitClicked += (sender, args) => Application.Exit();
-                form.ShowAboutClicked += (sender, args) => PresentAboutDialog();
-                form.ShowBookmarksClicked +=
-                    (sender, args) => PresentBookmarksForm();
-                form.ShowPreferencesClicked +=
-                    (sender, args) => PresentPreferencesForm();
+                ConnectMainFormEvents(form);
                 _logophi.Main.Present(form);
                 }
             else _logophi.Main.View.ToFront();
+            }
+
+        private void ConnectMainFormEvents(MainForm form)
+            {
+            form.ExitClicked += (sender, args) => Application.Exit();
+            form.ShowAboutClicked += (sender, args) => PresentAboutDialog();
+            form.ShowBookmarksClicked +=
+                (sender, args) => PresentBookmarksForm();
+            form.ShowPreferencesClicked +=
+                (sender, args) => PresentPreferencesForm();
             }
 
         /// <summary>
@@ -102,6 +116,8 @@ namespace MouseNet.Logophi {
             base.Dispose(disposing);
             if (!disposing) return;
             _logophi.Dispose();
+            _trayIcon.Visible = false;
+            _trayIcon.Dispose();
             }
 
         private void OnApplicationExit
@@ -115,7 +131,25 @@ namespace MouseNet.Logophi {
         (object sender,
          HotkeyEventArgs e)
             {
-            PresentMainForm();
+            if (_settings.UseQuckSearch) PresentQuickSearchForm();
+            else PresentMainForm();
+            }
+
+        private void PresentQuickSearchForm()
+            {
+            if (_logophi.QuickSearch.IsPresenting) return;
+
+            var form = new QuickSearchForm();
+
+            form.TermListClick += (sender, args) =>
+                                      {
+                                      var text = form.SearchText;
+                                      form.Close();
+                                      if (!_logophi.Main.IsPresenting)
+                                          PresentMainForm();
+                                      _logophi.Main.View.SearchText = text;
+                                      };
+            _logophi.QuickSearch.Present(form);
             }
 
         private void OnOpen
