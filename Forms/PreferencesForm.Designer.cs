@@ -201,11 +201,13 @@
             this._cHotkeyEdit.AllowCtrlOnlyHotkeys = false;
             this._cHotkeyEdit.AllowShiftOnlyHotkeys = false;
             this._cHotkeyEdit.DataBindings.Add(new System.Windows.Forms.Binding("Value", global::MouseNet.Logophi.Properties.Settings.Default, "Hotkey", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this._cHotkeyEdit.DataBindings.Add(new System.Windows.Forms.Binding("Enabled", global::MouseNet.Logophi.Properties.Settings.Default, "EnableHotkey", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this._cHotkeyEdit.Enabled = global::MouseNet.Logophi.Properties.Settings.Default.EnableHotkey;
             this._cHotkeyEdit.Location = new System.Drawing.Point(151, 41);
             this._cHotkeyEdit.Name = "_cHotkeyEdit";
             this._cHotkeyEdit.Size = new System.Drawing.Size(133, 29);
             this._cHotkeyEdit.TabIndex = 1;
-            this._cHotkeyEdit.Value = System.Windows.Forms.Keys.None;
+            this._cHotkeyEdit.Value = global::MouseNet.Logophi.Properties.Settings.Default.Hotkey;
             // 
             // _cEnableHotkey
             // 
