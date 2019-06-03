@@ -21,12 +21,13 @@ namespace MouseNet.Logophi
             _settings = settings;
             _browser = browser;
             _settings.PropertyChanged += OnSettingsPropertyChanged;
+            UpdatePreferences();
             var key = OpenAutoRunKey();
             if (key == null || !_settings.AutoRun || key.ValueCount == 0)
                 return;
             _settings.AutoRun = true;
             key.Dispose();
-            UpdatePreferences();
+            _settings.Save();
             }
 
         public GlobalHotkey Hotkey { get; } = new GlobalHotkey();
